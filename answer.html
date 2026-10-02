@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="format-detection" content="telephone=no">
+<title>怪盗S 目撃情報 | 怪盗Sと消えた記憶</title>
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#0e1320">
+<link id="favicon" rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%23c23232'/%3E%3Ctext x='32' y='45' font-size='38' font-family='serif' font-weight='700' text-anchor='middle' fill='white'%3ES%3C/text%3E%3C/svg%3E">
+<link rel="apple-touch-icon" href="favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@700;800&display=swap" rel="stylesheet">
+
+<style>
+:root{--bg:#0e1320;--panel:#151c2e;--gold:#c9a24b;--gold-l:#ecd9a0;--red:#c23232;--text:#eef1f6;--muted:#97a3b8;--paper:#f3ead3;--ink:#2b2418;--line:rgba(201,162,75,.22)}
+*{box-sizing:border-box;margin:0;padding:0}
+html{background:#080b13}
+body{background:#080b13;color:var(--text);font-family:"Hiragino Sans","Noto Sans JP","Yu Gothic",sans-serif;line-height:1.8;letter-spacing:.03em;-webkit-font-smoothing:antialiased}
+.wrap{max-width:520px;margin:0 auto;background:var(--bg);min-height:100vh;min-height:100dvh;box-shadow:0 0 40px rgba(0,0,0,.6);overflow:hidden}
+.serif{font-family:"Shippori Mincho","Hiragino Mincho ProN","Yu Mincho","Noto Serif JP",serif}
+
+.top{display:flex;justify-content:space-between;align-items:center;padding:12px 20px;border-bottom:1px solid var(--line);font-size:.7rem;color:var(--gold);letter-spacing:.15em}
+.snd{background:none;border:1px solid var(--line);color:var(--gold-l);font:inherit;font-size:.68rem;letter-spacing:.1em;padding:3px 12px;border-radius:20px;cursor:pointer}
+
+/* ===== タブ(目撃掲示板 / 記憶の金庫) ===== */
+.tabs{display:flex;border-bottom:1px solid var(--line);background:#0b0f1a}
+.tab{flex:1;position:relative;padding:13px 8px;background:none;border:none;border-bottom:2px solid transparent;color:var(--muted);font:inherit;font-size:.82rem;letter-spacing:.15em;cursor:pointer}
+.tab[aria-selected="true"]{color:var(--gold-l);border-bottom-color:var(--gold)}
+.dot{position:absolute;top:9px;right:16%;width:8px;height:8px;border-radius:50%;background:var(--red);box-shadow:0 0 8px var(--red)}
+.dot[hidden]{display:none}
+
+h1{font-size:clamp(1.6rem,8vw,2.1rem);line-height:1.3;font-weight:800;letter-spacing:.14em;background:linear-gradient(180deg,#fff 35%,var(--gold-l));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;filter:drop-shadow(0 2px 14px rgba(0,0,0,.6))}
+.sub{margin-top:8px;font-size:.8rem;color:var(--gold-l);letter-spacing:.12em}
+.count{font-size:.72rem;color:var(--muted);letter-spacing:.2em}
+
+/* 入力フォーム(金庫・掲示板で共通) */
+.form{margin:28px auto 0;max-width:340px;display:flex;flex-direction:column;gap:12px}
+.lab{font-size:.7rem;color:var(--gold-l);letter-spacing:.35em}
+.field{width:100%;padding:14px 16px;font-size:1.05rem;text-align:center;letter-spacing:.2em;color:#fff;background:#0b101c;border:1px solid var(--gold);border-radius:10px;outline:none;font-family:"Shippori Mincho",serif}
+.field::placeholder{color:#4a566e;letter-spacing:.15em}
+.field:focus{box-shadow:0 0 0 3px rgba(201,162,75,.25)}
+.go{padding:13px;border:none;border-radius:10px;background:linear-gradient(135deg,#d9b559,#a98128);color:#1a1405;font:inherit;font-weight:700;font-size:.95rem;letter-spacing:.35em;cursor:pointer}
+.go:active{transform:scale(.98)}
+.shake{animation:shake .45s}
+@keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-9px)}40%{transform:translateX(8px)}60%{transform:translateX(-6px)}80%{transform:translateX(4px)}}
+.msg{min-height:1.8em;margin-top:14px;font-size:.82rem;color:#f08a8a;letter-spacing:.08em;text-align:center}
+.btn{display:inline-block;padding:11px 22px;border:1px solid var(--gold);background:rgba(201,162,75,.12);color:var(--gold-l);border-radius:30px;font:inherit;font-size:.85rem;letter-spacing:.15em;cursor:pointer}
+.btn:disabled{opacity:.5;cursor:default}
+
+/* ===== 目撃掲示板 ===== */
+.board-head{padding:38px 24px 20px;text-align:center;background:radial-gradient(ellipse 80% 60% at 50% 0%,rgba(194,50,50,.16),transparent 70%)}
+.feed{padding:6px 16px 10px}
+.post{margin:0 0 20px;padding:16px 16px 18px;background:var(--panel);border:1px solid var(--line);border-radius:12px;box-shadow:0 8px 22px rgba(0,0,0,.35);animation:rise .8s ease both}
+.post-h{display:flex;flex-wrap:wrap;gap:4px 10px;align-items:center;font-size:.72rem;color:var(--muted)}
+.tag{background:var(--red);color:#fff;padding:1px 11px;border-radius:12px;font-size:.68rem;letter-spacing:.12em}
+.shot{position:relative;margin:12px 0 4px;border-radius:6px;overflow:hidden;background:#0b101c;box-shadow:0 8px 22px rgba(0,0,0,.5),0 0 0 1px rgba(255,255,255,.08);cursor:zoom-in;min-height:60px}
+.shot img{display:block;width:100%;height:auto}
+.shot .zoom{display:block;padding:5px 10px;font-size:.62rem;letter-spacing:.1em;text-align:right;background:#0b101c;color:var(--gold-l);pointer-events:none}
+.shot.miss{padding:22px 14px;font-size:.72rem;color:var(--muted);text-align:center;cursor:default}
+.post-b{margin-top:10px}
+.post-b p{font-size:.9rem;line-height:1.95;color:#dfe5f0}
+.post-b p+p{margin-top:8px}
+.post-b .quote{margin-top:10px;padding:8px 14px;border-left:3px solid var(--gold);background:rgba(201,162,75,.08);font-family:"Shippori Mincho",serif;font-size:.92rem}
+.gate{margin-top:14px;text-align:center}
+.gate .note{margin-bottom:10px;font-size:.74rem;color:var(--muted)}
+.ask .form{margin:14px auto 0}
+.reply{margin-top:14px;padding:12px 14px;background:rgba(194,50,50,.1);border-left:3px solid var(--red);font-family:"Shippori Mincho",serif;font-size:.95rem;line-height:1.95}
+.reply .hint2{margin-top:8px;font-family:inherit;font-size:.85rem;color:var(--gold-l)}
+.reply .btn{margin-top:12px}
+
+/* 画像の拡大 */
+#lb{position:fixed;inset:0;z-index:300;display:flex;align-items:center;justify-content:center;padding:14px;background:rgba(5,8,14,.96);cursor:zoom-out}
+#lb[hidden]{display:none}
+#lb img{max-width:100%;max-height:100%;object-fit:contain;border-radius:4px}
+
+/* ===== 金庫 ===== */
+.vault{padding:44px 24px 36px;text-align:center;background:radial-gradient(ellipse 80% 50% at 50% 0%,rgba(194,50,50,.16),transparent 70%),radial-gradient(ellipse 70% 40% at 50% 100%,rgba(201,162,75,.08),transparent 70%)}
+.lock{display:block;width:84px;height:auto;margin:0 auto 18px;filter:drop-shadow(0 0 16px rgba(201,162,75,.3))}
+.shackle{transition:transform .6s cubic-bezier(.3,1.4,.5,1)}
+.keyhole{transition:fill .4s}
+.lock.open .shackle{transform:translateY(-13px)}
+.lock.open .keyhole{fill:#ecd9a0}
+
+/* 五つのカケラ */
+.shards{list-style:none;display:flex;justify-content:center;gap:10px;margin:26px 0 8px}
+.sh{transition:filter .5s}
+.sh.on{filter:drop-shadow(0 0 8px rgba(236,217,160,.75))}
+.shard{position:relative;display:block;width:46px;height:46px;padding:0;border:none;cursor:pointer;font-family:"Shippori Mincho",serif;background:rgba(201,162,75,.35);clip-path:polygon(50% 0,100% 38%,82% 100%,18% 100%,0 38%);-webkit-tap-highlight-color:transparent}
+.shard::before{content:"";position:absolute;inset:2px;background:#101728;clip-path:inherit;transition:background .6s}
+.shard span{position:relative;z-index:1;font-size:.85rem;color:var(--muted)}
+.sh.on .shard{background:linear-gradient(135deg,var(--gold-l),var(--gold))}
+.sh.on .shard::before{background:radial-gradient(circle at 40% 30%,#ecd9a0,#c9a24b 60%,#8a6a22)}
+.sh.on .shard span{color:#2b2418;font-weight:700}
+.wob{animation:wob .4s}
+@keyframes wob{0%,100%{transform:rotate(0)}25%{transform:rotate(-8deg)}75%{transform:rotate(8deg)}}
+
+/* 怪盗Sのことば(開いたカケラ) */
+.card{margin:6px 24px 0;padding:24px 22px;background-color:var(--paper);background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .3 0 0 0 0 .22 0 0 0 0 .1 0 0 0 .25 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");color:var(--ink);border-radius:6px;text-align:left;font-family:"Shippori Mincho","Hiragino Mincho ProN","Yu Mincho",serif;line-height:2;transform:rotate(-.6deg);box-shadow:inset 0 0 40px rgba(120,90,40,.18),0 8px 24px rgba(0,0,0,.5)}
+.card.pop{animation:pop .8s cubic-bezier(.2,.8,.2,1) both}
+@keyframes pop{0%{opacity:0;transform:perspective(900px) translateY(-30px) rotateX(-70deg) rotate(-.6deg)}60%{opacity:1;transform:perspective(900px) translateY(4px) rotateX(6deg) rotate(-.6deg)}100%{opacity:1;transform:perspective(900px) rotateX(0) rotate(-.6deg)}}
+.card h3{font-size:1rem;text-align:center;letter-spacing:.2em;margin-bottom:12px;padding-bottom:10px;border-bottom:1px solid #b9a577}
+.card .ln{display:block;opacity:0;animation:lineIn .8s ease forwards}
+.card .note{display:block;font-size:.75rem;color:#7a6a48;margin-bottom:6px}
+.card .hint{margin-top:14px;padding:10px 12px;background:rgba(194,50,50,.1);border-left:3px solid var(--red);font-size:.92rem;opacity:0;animation:lineIn .8s ease forwards}
+.card .card-go{margin-top:14px;display:block;margin-left:auto;margin-right:auto;border-color:#8a6a22;color:#5a4414;background:rgba(138,106,34,.12)}
+@keyframes lineIn{from{opacity:0;transform:translateY(8px);filter:blur(3px)}to{opacity:1;transform:none;filter:blur(0)}}
+
+/* 最後の扉 */
+.final{margin:34px 24px 0;text-align:center;animation:rise 1s ease both}
+.final p{font-family:"Shippori Mincho",serif;color:var(--gold-l);letter-spacing:.15em;margin-bottom:16px}
+.door{padding:15px 34px;border:1px solid var(--red);background:rgba(194,50,50,.18);color:#fff;border-radius:40px;font:inherit;letter-spacing:.3em;cursor:pointer;animation:pulseGlow 2.2s ease-in-out infinite}
+@keyframes pulseGlow{0%,100%{box-shadow:0 0 0 0 rgba(194,50,50,.5)}50%{box-shadow:0 0 22px 4px rgba(194,50,50,.5)}}
+@keyframes rise{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+
+.foot{padding:36px 24px 44px;text-align:center;font-size:.7rem;color:#64748b;line-height:1.9}
+
+/* ===== エンディング ===== */
+#ending{position:fixed;inset:0;z-index:100;overflow-y:auto;-webkit-overflow-scrolling:touch;background:radial-gradient(ellipse 70% 45% at 50% 30%,rgba(194,50,50,.22),transparent 70%),#080b13;opacity:0;transition:opacity .9s ease}
+#ending.show{opacity:1}
+#ending[hidden]{display:none}
+.end-in{position:relative;max-width:520px;margin:0 auto;padding:56px 28px 70px;text-align:center}
+.end-in::before{content:"";position:absolute;left:50%;top:36%;width:150%;aspect-ratio:1075/650;background:url(card.png) center/cover no-repeat;opacity:.3;transform:translate(-50%,-50%) rotate(-12deg);-webkit-mask-image:radial-gradient(ellipse 58% 58% at 50% 50%,#000 30%,transparent 100%);mask-image:radial-gradient(ellipse 58% 58% at 50% 50%,#000 30%,transparent 100%);pointer-events:none}
+.end-in>*{position:relative}
+
+/* 怪盗Sの正体: kaitou.png が、きらりと光って shunichi.png に変わる */
+.end-stage{position:relative;width:128px;height:128px;margin:0 auto 18px;animation:rise 1s ease both}
+.end-stage[hidden]{display:none}
+.end-stage img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;transition:opacity .6s ease .12s,transform .8s ease .12s,filter .6s ease .12s}
+.end-char{filter:drop-shadow(0 0 12px rgba(236,217,160,.7))}
+.end-stage .end-true{object-fit:cover;opacity:0;transform:scale(.7);border-radius:50%;border:2px solid var(--gold);box-shadow:0 0 26px rgba(236,217,160,.65)}
+.end-stage.reveal .end-char{opacity:0;transform:scale(1.25);filter:brightness(3) blur(3px)}
+.end-stage.reveal .end-true{opacity:1;transform:scale(1)}
+.end-flash{position:absolute;left:50%;top:50%;width:280px;height:280px;margin:-140px 0 0 -140px;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.95),rgba(236,217,160,.5) 35%,transparent 70%);opacity:0;pointer-events:none}
+.end-stage.reveal .end-flash{animation:flashPop 1.1s ease-out}
+@keyframes flashPop{0%{opacity:0;transform:scale(.3)}25%{opacity:1}100%{opacity:0;transform:scale(1.4)}}
+.twink{position:absolute;left:50%;top:50%;width:14px;height:14px;margin:-7px 0 0 -7px;clip-path:polygon(50% 0,62% 38%,100% 50%,62% 62%,50% 100%,38% 62%,0 50%,38% 38%);pointer-events:none;animation:twink 1.1s ease-out forwards}
+@keyframes twink{
+  0%{opacity:1;transform:translate(0,0) scale(.4) rotate(0)}
+  30%{opacity:1;transform:translate(calc(var(--dx)*.5),calc(var(--dy)*.5)) scale(1.3) rotate(90deg)}
+  100%{opacity:0;transform:translate(var(--dx),var(--dy)) scale(.3) rotate(180deg)}
+}
+
+.end-cap{font-family:"Shippori Mincho",serif;font-size:.85rem;letter-spacing:.3em;color:var(--gold-l);transition:opacity .6s ease}
+.end-date{margin:8px 0 36px;font-family:"Shippori Mincho",serif;font-size:2rem;letter-spacing:.18em;color:#fff;font-variant-numeric:tabular-nums}
+.end-lines p{font-family:"Shippori Mincho",serif;font-size:1rem;line-height:2.2;color:var(--text);letter-spacing:.08em;opacity:0;transform:translateY(10px);transition:opacity 1s ease,transform 1s ease}
+.end-lines p.in{opacity:1;transform:none}
+.end-lines p+p{margin-top:20px}
+.end-photo{margin:34px auto 0;border-radius:8px;overflow:hidden;box-shadow:0 10px 30px rgba(0,0,0,.55),0 0 0 1px var(--line);opacity:0;transition:opacity 1.2s ease}
+.end-photo.in{opacity:1}
+.end-photo[hidden]{display:none}
+.end-photo img{display:block;width:100%;height:auto}
+.end-sign{margin-top:34px;font-family:"Shippori Mincho",serif;font-size:1.05rem;letter-spacing:.2em;color:var(--gold-l);opacity:0;transition:opacity 1.2s ease}
+.end-sign.in{opacity:1}
+.end-close{margin-top:46px;background:none;border:none;color:#64748b;font:inherit;font-size:.72rem;letter-spacing:.2em;text-decoration:underline;cursor:pointer;opacity:0;transition:opacity 1s ease}
+.end-close.in{opacity:1}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <span>UMEDA MYSTERY PROJECT</span>
+    <button type="button" class="snd" id="snd" aria-pressed="false">音 ON</button>
+  </header>
+
+  <nav class="tabs" role="tablist" aria-label="ページの切り替え">
+    <button type="button" class="tab" id="tabB" role="tab" aria-selected="true">目撃掲示板<i class="dot" id="dotB" hidden></i></button>
+    <button type="button" class="tab" id="tabV" role="tab" aria-selected="false">記憶の金庫</button>
+  </nav>
+
+  <!-- ===== 目撃掲示板 ===== -->
+  <div id="viewBoard">
+    <div class="board-head">
+      <h1 class="serif">怪盗S 目撃情報</h1>
+      <p class="sub">黒い影を見かけたら、情報をお寄せください。</p>
+    </div>
+    <div class="feed" id="feed"></div>
+    <p class="foot">投稿は、届いた順に並んでいます。<br>© 2026 SCRAP</p>
+  </div>
+
+  <!-- ===== 記憶の金庫 ===== -->
+  <div id="viewVault" hidden>
+    <main class="vault">
+      <svg class="lock" id="lock" viewBox="0 0 80 96" aria-hidden="true">
+        <path class="shackle" d="M22 44V30a18 18 0 0 1 36 0v14" fill="none" stroke="#c9a24b" stroke-width="7" stroke-linecap="round"/>
+        <rect x="10" y="42" width="60" height="46" rx="8" fill="#151c2e" stroke="#c9a24b" stroke-width="3"/>
+        <circle class="keyhole" cx="40" cy="62" r="6" fill="#c23232"/>
+        <rect class="keyhole" x="37.5" y="64" width="5" height="13" rx="2" fill="#c23232"/>
+      </svg>
+      <h1 class="serif">記憶の金庫</h1>
+      <p class="sub">合言葉を入力して、奪われたカケラを取り戻せ</p>
+
+      <ul class="shards" id="shards"></ul>
+      <p class="count" id="count"></p>
+
+      <form class="form" id="form" autocomplete="off">
+        <label class="lab" for="kotoba">合言葉</label>
+        <input class="field" id="kotoba" type="text" placeholder="ここに入力" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" enterkeyhint="go">
+        <button class="go" type="submit">開く</button>
+      </form>
+      <p class="msg" id="msg" role="status" aria-live="polite"></p>
+    </main>
+
+    <!-- 開いたカケラに入っている、怪盗Sのことば -->
+    <section class="card" id="card" hidden>
+      <h3 id="cardTitle"></h3>
+      <div id="cardBody"></div>
+      <p class="hint" id="cardHint" hidden></p>
+      <button type="button" class="btn card-go" id="cardGo" hidden>目撃掲示板を見る</button>
+    </section>
+
+    <!-- 五つ揃ったあとに現れる -->
+    <section class="final" id="final" hidden>
+      <p>五つのカケラが、すべて揃った。</p>
+      <button type="button" class="door" id="door">最後の扉を開く</button>
+    </section>
+
+    <footer class="foot">
+      ハガキの答えを入力すると、怪盗Sのことばが開きます。<br>
+      © 2026 SCRAP
+    </footer>
+  </div>
+</div>
+
+<!-- 証拠写真の拡大 -->
+<div id="lb" hidden><img id="lbImg" alt=""></div>
+
+<!-- エンディング(最後の扉) -->
+<div id="ending" hidden>
+  <div class="end-in">
+    <!-- 怪盗S(kaitou.png)が、きらりと光って正体(shunichi.png)に変わる -->
+    <div class="end-stage" id="endStage" hidden>
+      <img class="end-char" id="endChar" alt="" hidden>
+      <img class="end-true" id="endTrue" alt="" hidden>
+      <span class="end-flash"></span>
+    </div>
+    <p class="end-cap" id="endCap">時間が、いま、追いつく。</p>
+    <p class="end-date" id="endDate"></p>
+    <div class="end-lines" id="endLines"></div>
+    <figure class="end-photo" id="endPhoto" hidden><img id="endPhotoImg" alt=""></figure>
+    <p class="end-sign" id="endSign"></p>
+    <button type="button" class="end-close" id="endClose">金庫にもどる</button>
+  </div>
+</div>
+
+<script>
+(function(){
+  /* =====================================================
+     設定(ここを書き換えてください)
+     ===================================================== */
+
+  // ---------- 目撃掲示板の投稿 ----------
+  // gate: 'button' = ボタンを押すと次の投稿が出る / 'ask' = 答えを入力すると次の投稿が出る
+  // requires: {kakera:0} = 金庫のカケラ①(配列の0番目)を取り戻すと、この投稿が出る
+  // 投稿の順番は、配列の順番です。img は同じフォルダの画像ファイル名。
+  var POSTS=[
+    {
+      id:'p1', tag:'目撃', who:'通りすがりの会社員', when:'昨夜 21:47',
+      img:'saidaizi_01.png', alt:'大和西大寺駅を出て左へ進んだ先の景色。奥に、うっすらと黒い影',
+      text:[
+        '大和西大寺の改札を出て、左へ歩いていたら、黒い影が見えました。',
+        '写真を撮ったのですが、うっすらとしか写っていません。',
+        '影は、そのまま次の交差点を左へ曲がっていきました。'
+      ],
+      gate:'button', btn:'歩いて確かめた。続報を見る',
+      note:'(次の交差点を左に曲がったら、押してください)'
+    },
+    {
+      id:'p2', tag:'続報', who:'買い物帰りの人', when:'昨夜 21:58',
+      img:'saidaizi_02.png', alt:'建物の屋上に黒い影。建物の名前は、大きな黒い「S」の影に隠されている',
+      text:[
+        'その先の大きな建物の屋上に、黒い影が立っていました。',
+        '建物の名前が書いてあるところは、黒い「S」の影に隠されて、読めません。',
+        'この建物の名前を、投稿してください。'
+      ],
+      gate:'ask', label:'建物の名前', placeholder:'建物の名前',
+      answers:['ならふぁみりー','ならファミリー','narafamily'],
+      ok:'……そう、その建物だ。黒い影は、屋上へ向かったという。'
+    },
+    {
+      id:'p3', tag:'続報', who:'屋上にいた3人', when:'昨夜 22:10',
+      text:[
+        '屋上にいた3人が、同じ「あるもの」を見たそうです。'
+      ],
+      quotes:[
+        '証言A「頭に鹿の角が生えた、子どもみたいなのが立っていた」',
+        '証言B「2010年の、奈良の大きなお祭りの顔だったはずだ」',
+        '証言C「怪盗は、その足元に、何かを置いていった」'
+      ],
+      gate:'ask', label:'3人が見たものの名前', placeholder:'名前',
+      answers:['せんとくん','せんと','sentokun'],
+      ok:'……見つけたか。足元を探せ。',
+      hint:'足元の封筒かQRコードを、見つけたら、金庫を開こう。',
+      toVault:'記憶の金庫を開く'
+    },
+    {
+      id:'p4', tag:'新着', who:'(ここに書く)', when:'今朝',
+      requires:{kakera:0},
+      text:[
+        '(次の目撃情報を、ここに書く)'
+      ]
+    }
+  ];
+
+  // ---------- 五つのカケラ(金庫) ----------
+  // answers に入れた言葉が「合言葉」です。
+  // ・ひらがな/カタカナ、全角/半角、空白や「・」「.」「/」は区別されません。
+  // ・答えが複数あってもOK。
+  // board:true にすると、カケラを取り戻したあとに「目撃掲示板を見る」ボタンが出ます。
+  var KAKERA=[
+    {
+      answers:['710','せんと','遷都'],
+      title:'カケラ① ── はじまりの都',
+      lines:['……710年。都が遷された、はじまりの年。','最初のカケラは、返してやろう。'],
+      hint:'次の目撃情報が、掲示板に届いた。',
+      board:true
+    },
+    {
+      answers:['かびごん'],
+      title:'カケラ② ── (題をここに書く)',
+      lines:['ほう。二つ目も取り戻したか。','だが、時間は、まだ先へ進む。'],
+      hint:'次の行き先:(ここに書く)'
+    },
+    {
+      answers:['こたえ3'],
+      title:'カケラ③ ── (題をここに書く)',
+      lines:['三つ目。','あの頃の景色を、覚えていたようだな。'],
+      hint:'次の行き先:(ここに書く)'
+    },
+    {
+      answers:['こたえ4'],
+      title:'カケラ④ ── (題をここに書く)',
+      lines:['四つ目。','記憶は、もうすぐ、今に追いつく。'],
+      hint:'次の行き先:(ここに書く)'
+    },
+    {
+      answers:['20210401','2021年4月1日','2021.4.1'],
+      title:'カケラ⑤ ── はじまりの日',
+      lines:['最後のカケラは、二人のはじまり。','時間は、ここまで遡った。'],
+      hint:'五つのカケラを持って、最後の扉へ。'
+    }
+  ];
+
+  // ---------- エンディング(最後の扉) ----------
+  var ENDING={
+    from:new Date(2021,3,1),   // 日付が追いつく、はじまりの日(月は0始まりなので4月は3)
+    cap:'怪盗Sの正体は──',      // 日付が追いついたあと、正体が明かされる前に出る一言
+    lines:[
+      '怪盗Sが盗んだのは、二人で過ごしてきた時間の記憶。',
+      '街のあちこちに隠したのは、もう一度、一緒に辿りたかったから。',
+      '五つのカケラを集めてくれて、ありがとう。',
+      'この記憶は、返すだけじゃ足りない。これからも、二人で増やしていきたい。'
+    ],
+    sign:'怪盗S ── 〇〇より'     // 〇〇をあなたの名前に
+  };
+
+  var CHAR_SRC='kaitou.png';    // 怪盗Sのイラスト
+  var TRUE_SRC='shunichi.png';  // 正体(あなた)の画像。怪盗Sがきらりと光って、これに変わる
+  var PHOTO_SRC='ending.jpg';   // 最後に出す写真(なければ表示しない)
+  var FAVICON_SRC='favicon.png'; // タブのアイコン(なければ赤丸のSのまま)
+
+  var BFAILS=['……その名前ではないようだ。','もう一度、写真をよく見てほしい。','管理人: 名前が違うようです。'];
+
+  /* ===================================================== */
+
+  var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+  function $(id){return document.getElementById(id);}
+  function mk(tag,cls,text){var e=document.createElement(tag);if(cls){e.className=cls;}if(text!=null){e.textContent=text;}return e;}
+  var form=$('form'),input=$('kotoba'),msg=$('msg'),lock=$('lock'),card=$('card'),cardTitle=$('cardTitle'),cardBody=$('cardBody'),cardHint=$('cardHint'),cardGo=$('cardGo'),count=$('count'),finalArea=$('final'),door=$('door'),ending=$('ending'),endDate=$('endDate'),endLines=$('endLines'),endSign=$('endSign'),endClose=$('endClose'),endStage=$('endStage'),endChar=$('endChar'),endTrue=$('endTrue'),endCap=$('endCap'),endPhoto=$('endPhoto'),endPhotoImg=$('endPhotoImg'),snd=$('snd'),shardsEl=$('shards');
+  var viewBoard=$('viewBoard'),viewVault=$('viewVault'),tabB=$('tabB'),tabV=$('tabV'),dotB=$('dotB'),feed=$('feed'),lb=$('lb'),lbImg=$('lbImg');
+
+  /* ---------- ファビコン(画像があれば差し替え) ---------- */
+  if(FAVICON_SRC){
+    var fi=new Image();
+    fi.onload=function(){$('favicon').href=FAVICON_SRC;};
+    fi.src=FAVICON_SRC;
+  }
+
+  /* ---------- 音(Web Audio。ファイル不要) ---------- */
+  var AC=null,muted=false;
+  function ensureAudio(){
+    if(muted) return;
+    try{
+      if(!AC){AC=new (window.AudioContext||window.webkitAudioContext)();}
+      if(AC&&AC.state==='suspended'){AC.resume();}
+    }catch(e){}
+  }
+  function tone(freq,t0,dur,type,vol){
+    if(!AC||muted) return;
+    var o=AC.createOscillator(),g=AC.createGain(),t=AC.currentTime+t0;
+    o.type=type||'sine';o.frequency.value=freq;
+    g.gain.setValueAtTime(0.0001,t);
+    g.gain.exponentialRampToValueAtTime(vol||0.15,t+0.02);
+    g.gain.exponentialRampToValueAtTime(0.0001,t+dur);
+    o.connect(g);g.connect(AC.destination);
+    o.start(t);o.stop(t+dur+0.05);
+  }
+  function chime(){ensureAudio();tone(659.25,0,.9,'sine',.16);tone(987.77,.12,1.1,'sine',.12);tone(1318.5,.26,1.3,'sine',.08);}
+  function soft(){ensureAudio();tone(784,0,.5,'sine',.08);}
+  function buzz(){ensureAudio();tone(110,0,.28,'sawtooth',.09);tone(98,.1,.3,'sawtooth',.07);}
+  function fanfare(){ensureAudio();[523.25,659.25,783.99,1046.5].forEach(function(f,i){tone(f,i*.18,1.4,'triangle',.1);});}
+  function kirari(){ensureAudio();tone(1318.5,0,.6,'sine',.09);tone(1568,.09,.6,'sine',.08);tone(2093,.18,1.1,'sine',.07);}
+  snd.addEventListener('click',function(){
+    muted=!muted;
+    snd.textContent=muted?'音 OFF':'音 ON';
+    snd.setAttribute('aria-pressed',muted?'true':'false');
+    if(!muted){ensureAudio();tone(880,0,.2,'sine',.08);}
+  });
+
+  /* ---------- 合言葉の正規化 ---------- */
+  function norm(s){
+    s=(s||'');
+    if(s.normalize){s=s.normalize('NFKC');}
+    s=s.toLowerCase();
+    s=s.replace(/[\u30a1-\u30f6]/g,function(c){return String.fromCharCode(c.charCodeAt(0)-0x60);}); // カタカナ→ひらがな
+    s=s.replace(/[\s.,\-_\/:;!?'"「」『』()・、。]/g,'');
+    return s;
+  }
+  function same(list,v){
+    for(var j=0;j<list.length;j++){if(norm(list[j])===v){return true;}}
+    return false;
+  }
+
+  /* ---------- 進行状況(URLの # に保存) ---------- */
+  // 例: #t=v&k=10000&b=4  (t=表示中のタブ、k=取り戻したカケラ、b=掲示板の進み具合)
+  var N=KAKERA.length,got=[],stage=1,tab='b',i;
+  for(i=0;i<N;i++){got.push(false);}
+  function bits(){return got.map(function(v){return v?1:0;}).join('');}
+  function loadState(){
+    var h=location.hash||'',m,j;
+    try{
+      m=/[#&]k=([01]+)/.exec(h);
+      if(m&&m[1].length===N){for(j=0;j<N;j++){got[j]=m[1].charAt(j)==='1';}}
+      m=/[#&]b=(\d+)/.exec(h);
+      if(m){stage=Math.max(1,Math.min(POSTS.length+1,parseInt(m[1],10)));}
+      m=/[#&]t=([bv])/.exec(h);
+      if(m){tab=m[1];}
+    }catch(e){}
+  }
+  function saveState(){
+    try{history.replaceState(null,'','#t='+tab+'&k='+bits()+'&b='+stage);}catch(e){}
+  }
+  function all(){return got.every(function(v){return v;});}
+
+  /* ---------- タブ ---------- */
+  function setTab(t,noScroll){
+    tab=t;
+    viewBoard.hidden=(t!=='b');
+    viewVault.hidden=(t!=='v');
+    tabB.setAttribute('aria-selected',t==='b'?'true':'false');
+    tabV.setAttribute('aria-selected',t==='v'?'true':'false');
+    if(t==='b'){dotB.hidden=true;}
+    saveState();
+    if(!noScroll){window.scrollTo(0,0);}
+  }
+  tabB.addEventListener('click',function(){setTab('b');});
+  tabV.addEventListener('click',function(){setTab('v');});
+
+  /* ---------- 証拠写真の拡大 ---------- */
+  function openLb(src,alt){lbImg.src=src;lbImg.alt=alt||'';lb.hidden=false;}
+  lb.addEventListener('click',function(){lb.hidden=true;});
+
+  /* ---------- 目撃掲示板 ---------- */
+  var shown={};
+  function visible(idx){var p=POSTS[idx];return stage>=idx+1&&(!p.requires||got[p.requires.kakera]);}
+  function solvedPost(idx){return stage>=idx+2;}
+
+  function makeFigure(p){
+    var f=mk('figure','shot');
+    var im=new Image();
+    im.alt=p.alt||'';
+    im.onerror=function(){f.className='shot miss';f.textContent='(画像 '+p.img+' が見つかりません)';};
+    im.src=p.img;
+    f.appendChild(im);
+    f.appendChild(mk('span','zoom','タップで拡大'));
+    f.addEventListener('click',function(){if(f.className.indexOf('miss')<0){openLb(p.img,p.alt);}});
+    return f;
+  }
+  function advance(idx){
+    stage=Math.max(stage,idx+2);
+    saveState();
+    renderNew(true);
+  }
+  function replyBox(p){
+    var r=mk('div','reply');
+    r.appendChild(mk('p',null,p.ok));
+    if(p.hint){r.appendChild(mk('p','hint2',p.hint));}
+    if(p.toVault){
+      var g=mk('button','btn',p.toVault);g.type='button';
+      g.addEventListener('click',function(){setTab('v');});
+      r.appendChild(g);
+    }
+    return r;
+  }
+  function makeGate(p,idx){
+    var box;
+    if(p.gate==='button'){
+      box=mk('div','gate');
+      if(solvedPost(idx)){return box;}
+      if(p.note){box.appendChild(mk('p','note',p.note));}
+      var bt=mk('button','btn',p.btn);bt.type='button';
+      bt.addEventListener('click',function(){
+        bt.disabled=true;bt.textContent='確認した';
+        soft();advance(idx);
+      });
+      box.appendChild(bt);
+      return box;
+    }
+    box=mk('div','ask');
+    if(solvedPost(idx)){box.appendChild(replyBox(p));return box;}
+    var fm=mk('form','form');fm.setAttribute('autocomplete','off');
+    fm.appendChild(mk('label','lab',p.label));
+    var inp=mk('input','field');
+    inp.type='text';inp.placeholder=p.placeholder||'ここに入力';
+    inp.setAttribute('autocomplete','off');inp.setAttribute('autocapitalize','off');inp.setAttribute('autocorrect','off');inp.setAttribute('spellcheck','false');inp.setAttribute('enterkeyhint','go');
+    fm.appendChild(inp);
+    var go=mk('button','go','投稿する');go.type='submit';
+    fm.appendChild(go);
+    var ms=mk('p','msg','');
+    fm.appendChild(ms);
+    fm.addEventListener('submit',function(e){
+      e.preventDefault();
+      var v=norm(inp.value);
+      if(!v){return;}
+      ensureAudio();
+      if(!same(p.answers,v)){
+        ms.textContent=BFAILS[Math.floor(Math.random()*BFAILS.length)];
+        fm.classList.remove('shake');void fm.offsetWidth;fm.classList.add('shake');
+        buzz();
+        try{if(navigator.vibrate){navigator.vibrate(60);}}catch(err){}
+        return;
+      }
+      chime();
+      box.innerHTML='';
+      box.appendChild(replyBox(p));
+      advance(idx);
+    });
+    box.appendChild(fm);
+    return box;
+  }
+  function makePost(p,idx){
+    var a=mk('article','post');
+    var h=mk('div','post-h');
+    h.appendChild(mk('span','tag',p.tag));
+    h.appendChild(mk('span',null,p.who));
+    h.appendChild(mk('span',null,p.when));
+    a.appendChild(h);
+    if(p.img){a.appendChild(makeFigure(p));}
+    var b=mk('div','post-b');
+    p.text.forEach(function(t){b.appendChild(mk('p',null,t));});
+    if(p.quotes){p.quotes.forEach(function(q){b.appendChild(mk('p','quote',q));});}
+    a.appendChild(b);
+    if(p.gate){a.appendChild(makeGate(p,idx));}
+    return a;
+  }
+  function renderNew(scroll){
+    var added=0,last=null;
+    POSTS.forEach(function(p,idx){
+      if(visible(idx)&&!shown[p.id]){
+        shown[p.id]=1;
+        last=makePost(p,idx);
+        feed.appendChild(last);
+        added++;
+      }
+    });
+    if(added&&scroll&&tab==='b'&&last){
+      setTimeout(function(){last.scrollIntoView({behavior:reduce?'auto':'smooth',block:'start'});},200);
+    }
+    return added;
+  }
+  cardGo.addEventListener('click',function(){setTab('b');renderNew(true);});
+
+  /* ---------- カケラの描画(金庫) ---------- */
+  KAKERA.forEach(function(k,idx){
+    var li=mk('li','sh');
+    var b=mk('button','shard');b.type='button';b.setAttribute('aria-label','カケラ'+(idx+1));
+    b.appendChild(mk('span',null,String(idx+1)));
+    li.appendChild(b);shardsEl.appendChild(li);
+    b.addEventListener('click',function(){
+      if(got[idx]){showCard(idx,false);}
+      else{
+        msg.textContent='このカケラは、まだ眠っている。';
+        li.classList.remove('wob');void li.offsetWidth;li.classList.add('wob');
+      }
+    });
+  });
+  function render(){
+    var n=0,els=shardsEl.children;
+    for(var j=0;j<els.length;j++){
+      if(got[j]){els[j].classList.add('on');n++;}else{els[j].classList.remove('on');}
+    }
+    count.textContent='取り戻したカケラ '+n+' / '+N;
+  }
+
+  /* ---------- 怪盗Sのことば ---------- */
+  function showCard(idx,fresh){
+    var k=KAKERA[idx],d,j;
+    cardTitle.textContent=k.title;
+    cardBody.innerHTML='';
+    if(!fresh){
+      cardBody.appendChild(mk('span','note','(すでに取り戻したカケラです)'));
+    }
+    for(j=0;j<k.lines.length;j++){
+      var s=mk('span','ln',k.lines[j]);
+      d=reduce?0:(0.45+j*0.6);
+      s.style.animationDelay=d+'s';
+      cardBody.appendChild(s);
+    }
+    if(k.hint){
+      cardHint.textContent=k.hint;cardHint.hidden=false;
+      cardHint.style.animationDelay=(reduce?0:(0.45+k.lines.length*0.6))+'s';
+    }else{cardHint.hidden=true;}
+    cardGo.hidden=!k.board;
+    card.hidden=false;
+    card.classList.remove('pop');void card.offsetWidth;card.classList.add('pop');
+    setTimeout(function(){card.scrollIntoView({behavior:reduce?'auto':'smooth',block:'center'});},150);
+  }
+  function openLock(){
+    lock.classList.add('open');
+    setTimeout(function(){lock.classList.remove('open');},1800);
+  }
+
+  /* ---------- 金庫の入力 ---------- */
+  var FAILS=['……違う。そのカケラは、まだ眠っている。','合言葉が、違うようだ。','ハガキをもう一度、よく見てみろ。'];
+  function fail(){
+    msg.textContent=FAILS[Math.floor(Math.random()*FAILS.length)];
+    form.classList.remove('shake');void form.offsetWidth;form.classList.add('shake');
+    buzz();
+    try{if(navigator.vibrate){navigator.vibrate(60);}}catch(e){}
+  }
+  form.addEventListener('submit',function(e){
+    e.preventDefault();
+    var v=norm(input.value),hit=-1,a;
+    if(!v){return;}
+    ensureAudio();
+    for(a=0;a<N&&hit<0;a++){
+      if(same(KAKERA[a].answers,v)){hit=a;}
+    }
+    if(hit<0){fail();return;}
+    var fresh=!got[hit];
+    got[hit]=true;saveState();render();
+    msg.textContent='';input.value='';
+    openLock();showCard(hit,fresh);
+    if(fresh){
+      chime();
+      var added=renderNew(false);   // 掲示板に新しい投稿が増えたら、タブに赤い点を出す
+      if(added>0&&tab!=='b'){dotB.hidden=false;}
+    }else{soft();}
+    if(all()&&finalArea.hidden){setTimeout(showFinal,reduce?0:2600);}
+  });
+  function showFinal(){
+    finalArea.hidden=false;
+    setTimeout(function(){finalArea.scrollIntoView({behavior:reduce?'auto':'smooth',block:'center'});},150);
+  }
+
+  /* ---------- エンディング ---------- */
+  function fmt(d){return d.getFullYear()+'.'+('0'+(d.getMonth()+1)).slice(-2)+'.'+('0'+d.getDate()).slice(-2);}
+  function ease(t){return t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2;}
+  var photoOK=false,charOK=false,trueOK=false,timers=[],token=0;
+  var pi=new Image();pi.onload=function(){photoOK=true;endPhotoImg.src=PHOTO_SRC;endPhoto.hidden=false;};pi.src=PHOTO_SRC;
+  var ci=new Image();ci.onload=function(){charOK=true;endChar.src=CHAR_SRC;endChar.hidden=false;};ci.src=CHAR_SRC;
+  var ti=new Image();ti.onload=function(){trueOK=true;endTrue.src=TRUE_SRC;endTrue.hidden=false;};ti.src=TRUE_SRC;
+  function later(fn,ms){timers.push(setTimeout(fn,ms));}
+  function stopTimers(){timers.forEach(function(t){clearTimeout(t);});timers=[];}
+
+  // きらり: 光と星がはじけて、怪盗Sが正体に変わる
+  function sparkle(){
+    var colors=['#ffffff','#ecd9a0','#c9a24b'];
+    for(var j=0;j<18;j++){
+      var s=document.createElement('i');s.className='twink';
+      var a=(Math.PI*2*j/18)+Math.random()*.3,r=60+Math.random()*70;
+      s.style.setProperty('--dx',Math.round(Math.cos(a)*r)+'px');
+      s.style.setProperty('--dy',Math.round(Math.sin(a)*r)+'px');
+      s.style.background=colors[j%3];
+      s.style.animationDelay=(Math.random()*.15)+'s';
+      endStage.appendChild(s);
+      (function(node){setTimeout(function(){if(node.parentNode){node.parentNode.removeChild(node);}},1400);})(s);
+    }
+  }
+  function reveal(){
+    endStage.classList.add('reveal');
+    if(!reduce){sparkle();kirari();}
+  }
+
+  function playEnding(){
+    ensureAudio();stopTimers();
+    var my=++token;
+    ending.hidden=false;
+    document.body.style.overflow='hidden';
+    ending.scrollTop=0;
+    endLines.innerHTML='';
+    endSign.className='end-sign';endClose.className='end-close';endPhoto.className='end-photo';
+    endSign.textContent=ENDING.sign;
+    endCap.textContent='時間が、いま、追いつく。';
+    // 怪盗Sの画像だけ/正体の画像だけ、の場合にも対応
+    endStage.className='end-stage';
+    endStage.hidden=!(charOK||trueOK);
+    if(trueOK&&!charOK){endStage.classList.add('reveal');}
+    var from=ENDING.from,n=new Date(),today=new Date(n.getFullYear(),n.getMonth(),n.getDate());
+    var days=Math.round((today-from)/86400000);
+    endDate.textContent=fmt(from);
+    requestAnimationFrame(function(){ending.classList.add('show');});
+    fanfare();
+
+    var DUR=reduce?0:3200,DEL=reduce?0:900,t0=null;
+    function step(ts){
+      if(my!==token||ending.hidden){return;}
+      if(t0===null){t0=ts;}
+      var p=DUR===0?1:Math.min(Math.max((ts-t0-DEL)/DUR,0),1);
+      endDate.textContent=fmt(new Date(from.getFullYear(),from.getMonth(),from.getDate()+Math.round(ease(p)*days)));
+      if(p<1){requestAnimationFrame(step);}else{finish();}
+    }
+    function finish(){
+      var t=reduce?0:500;
+      // 日付が追いついたあと「怪盗Sの正体は──」→ きらり → 正体が現れる
+      if(charOK&&trueOK){
+        later(function(){endCap.textContent=ENDING.cap;},t);
+        t+=reduce?0:1500;
+        later(reveal,t);
+        t+=reduce?0:2400;
+      }
+      ENDING.lines.forEach(function(txt){
+        var p=document.createElement('p');p.textContent=txt;endLines.appendChild(p);
+        later(function(){p.classList.add('in');p.scrollIntoView({behavior:reduce?'auto':'smooth',block:'nearest'});},t);
+        t+=reduce?0:1500;
+      });
+      if(photoOK){
+        later(function(){endPhoto.classList.add('in');endPhoto.scrollIntoView({behavior:reduce?'auto':'smooth',block:'nearest'});},t);
+        t+=reduce?0:1500;
+      }
+      later(function(){endSign.classList.add('in');endSign.scrollIntoView({behavior:reduce?'auto':'smooth',block:'nearest'});},t);
+      t+=reduce?0:1300;
+      later(function(){endClose.classList.add('in');},t);
+    }
+    requestAnimationFrame(step);
+  }
+  door.addEventListener('click',playEnding);
+  endClose.addEventListener('click',function(){
+    stopTimers();token++;
+    ending.classList.remove('show');
+    setTimeout(function(){ending.hidden=true;document.body.style.overflow='';},reduce?0:800);
+  });
+
+  /* ---------- 起動 ---------- */
+  loadState();
+  render();
+  renderNew(false);
+  setTab(tab,true);
+  if(all()){finalArea.hidden=false;}
+})();
+</script>
+</body>
+</html>

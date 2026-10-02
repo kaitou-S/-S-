@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="format-detection" content="telephone=no">
+<title>怪盗Sと消えた記憶</title>
+<meta name="description" content="梅田の街に隠された記憶のカケラを集める、期間限定の周遊型リアル謎解き。抽選で当選したモニターの方のみ参加できます。">
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#0e1320">
+
+<!-- LINEなどで共有したときのプレビュー(OGP)。
+     og:image は「https://から始まる絶対URL」で、公開後のURLに書き換えてください。
+     例: https://あなたのサイト/ogp.png (横1200×630px推奨) -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="怪盗Sと消えた記憶">
+<meta property="og:description" content="期間限定・参加無料。モニター当選者限定の、梅田周遊型リアル謎解き。">
+<meta property="og:image" content="https://example.com/ogp.png">
+<meta name="twitter:card" content="summary_large_image">
+
+<!-- ファビコン: favicon.png があればそれを使い、なければ下の赤丸Sを使います(切り替えはスクリプト内) -->
+<link id="favicon" rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%23c23232'/%3E%3Ctext x='32' y='45' font-size='38' font-family='serif' font-weight='700' text-anchor='middle' fill='white'%3ES%3C/text%3E%3C/svg%3E">
+<link rel="apple-touch-icon" href="favicon.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@700;800&display=swap" rel="stylesheet">
+
+<style>
+:root{--bg:#0e1320;--panel:#151c2e;--gold:#c9a24b;--gold-l:#ecd9a0;--red:#c23232;--text:#eef1f6;--muted:#97a3b8;--paper:#f3ead3;--ink:#2b2418;--line:rgba(201,162,75,.22)}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;background:#080b13}
+body{background:#080b13;color:var(--text);font-family:"Hiragino Sans","Noto Sans JP","Yu Gothic",sans-serif;line-height:1.8;letter-spacing:.03em;-webkit-font-smoothing:antialiased}
+.wrap{max-width:520px;margin:0 auto;background:var(--bg);min-height:100vh;min-height:100dvh;box-shadow:0 0 40px rgba(0,0,0,.6);overflow:hidden}
+.serif{font-family:"Shippori Mincho","Hiragino Mincho ProN","Yu Mincho","Noto Serif JP",serif}
+
+.top{display:flex;justify-content:space-between;align-items:center;padding:14px 20px;border-bottom:1px solid var(--line);font-size:.7rem;color:var(--gold);letter-spacing:.15em}
+.badge{background:var(--gold);color:#1a1405;padding:3px 12px;border-radius:20px;font-weight:700;letter-spacing:.08em;font-size:.75rem}
+
+.hero{position:relative;padding:52px 24px 44px;text-align:center;background:radial-gradient(ellipse 80% 50% at 50% 0%,rgba(194,50,50,.16),transparent 70%),radial-gradient(ellipse 70% 40% at 50% 100%,rgba(201,162,75,.08),transparent 70%)}
+
+/* ===== 梅田のスカイライン(ヒーロー最上部) ===== */
+.skyline{margin:-52px -24px 30px;border-bottom:1px solid var(--line);background:linear-gradient(180deg,rgba(194,50,50,.1),transparent 70%)}
+.skyline svg{display:block;width:100%;height:auto}
+.wheel{transform-box:view-box;transform-origin:178px 70px;animation:spin 70s linear infinite}
+.tw{animation:tw 3.4s ease-in-out infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes tw{0%,100%{opacity:.2}50%{opacity:.9}}
+
+.kicker{display:inline-block;font-size:.8rem;color:var(--gold-l);letter-spacing:.2em;margin-bottom:16px;padding-bottom:6px;border-bottom:1px solid var(--red)}
+h1{font-size:clamp(1.5rem,7.6vw,2.2rem);line-height:1.3;font-weight:800;letter-spacing:.08em;color:#fff;background:linear-gradient(180deg,#fff 35%,var(--gold-l));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;filter:drop-shadow(0 2px 14px rgba(0,0,0,.6))}
+.sub{margin-top:10px;font-size:.85rem;color:var(--gold-l);letter-spacing:.12em}
+.period{display:inline-block;margin-top:22px;padding:6px 18px;border:1px solid var(--gold);border-radius:30px;font-size:.8rem;color:var(--gold-l)}
+.countdown{margin-top:12px;font-size:.78rem;color:#fff}
+.countdown b{display:inline-block;margin:0 4px;padding:1px 10px;background:var(--red);border-radius:4px;font-size:.95rem;letter-spacing:.05em}
+.countdown[hidden]{display:none}
+
+/* ヒーローの文字を順番にふわっと表示 */
+.hero .kicker,.hero h1,.hero .sub,.hero .period,.hero .seal-area{animation:rise .9s ease both}
+.hero .kicker{animation-delay:.1s}
+.hero h1{animation-delay:.25s}
+.hero .sub{animation-delay:.4s}
+.hero .period{animation-delay:.55s}
+.hero .seal-area{animation-delay:.75s}
+@keyframes rise{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+
+.seal-area{position:relative;margin-top:38px}
+.seal-area::before{content:"";position:absolute;left:50%;top:46%;width:300px;height:220px;transform:translate(-50%,-50%);background:radial-gradient(ellipse,rgba(201,162,75,.22),transparent 68%);pointer-events:none;animation:glow 3.2s ease-in-out infinite}
+
+/* ===== 封筒ボタン =====
+   envelope.png があれば画像、なければCSSで描いた封筒を表示します */
+.envelope{position:relative;display:block;width:240px;height:156px;margin:0 auto;padding:0;border:none;background:none;cursor:pointer;animation:float 3.6s ease-in-out infinite;-webkit-tap-highlight-color:transparent}
+.envelope.open,.envelope:hover{animation-play-state:paused}
+.envelope:focus-visible{outline:3px solid var(--gold-l);outline-offset:8px}
+.envelope span{display:block;position:absolute}
+.envelope .env-img{display:none}
+
+/* 画像モード */
+.envelope.has-img{width:min(280px,72vw);height:auto}
+.envelope.has-img .css-env{display:none}
+.envelope.has-img .env-img{display:block;width:100%;height:auto;transition:opacity .55s ease,transform .6s ease;filter:drop-shadow(0 10px 22px rgba(0,0,0,.5))}
+.envelope.has-img .env-open{position:absolute;left:0;top:0;height:100%;object-fit:contain;opacity:0}
+.envelope.has-img.open.has-open-img .env-closed{opacity:0}
+.envelope.has-img.open.has-open-img .env-open{opacity:1}
+.envelope.has-img.open:not(.has-open-img) .env-closed{opacity:.3;transform:scale(.92)}
+
+/* CSS封筒(画像がない時の予備) */
+.css-env{inset:0}
+.env-back{inset:0;background:#d9cba6;border:1px solid #b7a579;border-radius:4px;box-shadow:0 10px 26px rgba(0,0,0,.5)}
+.env-front{inset:0;background:#f3e9cf;clip-path:polygon(0 0,50% 56%,100% 0,100% 100%,0 100%);z-index:2}
+.env-flap{left:0;top:0;width:100%;height:60%;background:#ece0c2;clip-path:polygon(0 0,100% 0,50% 100%);transform-origin:top center;transform:perspective(700px) rotateX(0deg);transition:transform .6s ease,opacity .6s ease .1s;z-index:3}
+.envelope.open .env-flap{transform:perspective(700px) rotateX(180deg);opacity:0}
+.env-wax{left:50%;top:60%;width:38px;height:38px;margin:-19px 0 0 -19px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#b13a46,#8e2a35 55%,#6f1f29);border:2px solid #6f1f29;z-index:4;transition:opacity .3s,transform .3s;box-shadow:0 2px 6px rgba(0,0,0,.4)}
+.env-wax::before{content:"S";position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font:700 1rem/1 "Shippori Mincho","Hiragino Mincho ProN",serif;color:rgba(255,255,255,.6)}
+.env-wax::after{content:"";position:absolute;inset:4px;border-radius:50%;border:1.5px solid rgba(255,255,255,.28)}
+.envelope.open .env-wax{opacity:0;transform:scale(.6);animation:crack .5s ease both}
+
+/* 封蝋の画像(seal.png)があるとき: CSS封筒の上に画像の封蝋を重ねる */
+.env-wax.has-seal{width:64px;height:64px;margin:-32px 0 0 -32px;background:center/contain no-repeat;border:none;border-radius:0;box-shadow:none}
+.env-wax.has-seal::before,.env-wax.has-seal::after{display:none}
+/* 封蝋の画像の背景が白く四角に見える時は、次の行のコメントを外してください */
+/* .env-wax.has-seal{mix-blend-mode:multiply} */
+
+.hint{margin-top:14px;font-size:.75rem;color:var(--muted);letter-spacing:.2em;animation:pulse 2.6s ease-in-out infinite}
+.envelope.open + .hint{animation:none;opacity:1}
+@keyframes pulse{0%,100%{opacity:.5}50%{opacity:1}}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+@keyframes glow{0%,100%{opacity:.55}50%{opacity:1}}
+
+.letter-box{position:relative;max-height:0;overflow:hidden;transition:max-height .9s ease}
+.letter-box.open{max-height:1600px}
+
+/* 封を切った瞬間の光 */
+.letter-box.open::before{content:"";position:absolute;left:50%;top:-20px;width:380px;height:280px;margin-left:-190px;background:radial-gradient(ellipse,rgba(236,217,160,.5),transparent 68%);pointer-events:none;animation:flash 1.5s ease-out both}
+@keyframes flash{0%{opacity:0;transform:scale(.4)}25%{opacity:1}100%{opacity:0;transform:scale(1.7)}}
+
+/* 封蝋が割れる + 火花 */
+@keyframes crack{
+  0%{opacity:1;transform:scale(1)}
+  35%{opacity:1;transform:scale(1.15) rotate(-8deg)}
+  100%{opacity:0;transform:scale(.4) rotate(14deg) translateY(10px)}
+}
+.spark{position:absolute;left:50%;top:60%;width:5px;height:5px;margin:-2.5px 0 0 -2.5px;border-radius:50%;box-shadow:0 0 6px rgba(236,217,160,.8);pointer-events:none;z-index:6;animation:burst .9s ease-out forwards}
+@keyframes burst{0%{opacity:1;transform:translate(0,0) scale(1)}100%{opacity:0;transform:translate(var(--dx),var(--dy)) scale(.2)}}
+
+/* 予告状: 封筒から滑り出て、ふわっと開く */
+.notice{margin:28px 0 8px;transform:rotate(-.8deg)}
+.letter-box.open .notice,.letter-box.open .letter{transform-origin:50% 0;animation:unfold 1.2s cubic-bezier(.2,.8,.2,1) .35s both}
+@keyframes unfold{
+  0%{opacity:0;transform:perspective(900px) translateY(-46px) rotateX(-80deg) scale(.92) rotate(-.8deg)}
+  55%{opacity:1;transform:perspective(900px) translateY(6px) rotateX(7deg) scale(1.01) rotate(-.8deg)}
+  100%{opacity:1;transform:perspective(900px) translateY(0) rotateX(0) scale(1) rotate(-.8deg)}
+}
+
+/* 文章版の予告状: 一行ずつ浮かび上がり、最後に署名が押される */
+.letter-box.open .letter>*{animation:lineIn .8s ease both}
+.letter-box.open .letter>:nth-child(1){animation-delay:1s}
+.letter-box.open .letter>:nth-child(2){animation-delay:1.4s}
+.letter-box.open .letter>:nth-child(3){animation-delay:1.8s}
+.letter-box.open .letter>:nth-child(4){animation-delay:2.2s}
+.letter-box.open .letter>:nth-child(5){animation-delay:2.6s}
+.letter-box.open .letter>:nth-child(6){animation-delay:3s}
+.letter-box.open .letter>:nth-child(7){animation-delay:3.4s}
+.letter-box.open .letter>:nth-child(8){animation-delay:3.8s}
+.letter-box.open .letter>:nth-child(9){animation-delay:4.2s}
+.letter-box.open .letter .sign{animation:stamp .7s cubic-bezier(.2,1.4,.4,1) 5s both}
+@keyframes lineIn{from{opacity:0;transform:translateY(8px);filter:blur(3px)}to{opacity:1;transform:none;filter:blur(0)}}
+@keyframes stamp{0%{opacity:0;transform:scale(1.7) rotate(-8deg)}60%{opacity:1;transform:scale(.94) rotate(1deg)}100%{opacity:1;transform:none}}
+
+/* 予告状(画像) */
+.notice[hidden]{display:none}
+.notice img{display:block;width:100%;height:auto;border-radius:6px;box-shadow:0 10px 30px rgba(0,0,0,.6),0 0 0 1px rgba(255,255,255,.06)}
+
+/* 予告状(文章・画像が読み込めない時の予備)。紙のざらつきと古びた縁つき */
+.letter{margin:28px 0 0;padding:28px 24px;background-color:var(--paper);background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .3 0 0 0 0 .22 0 0 0 0 .1 0 0 0 .25 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");color:var(--ink);border-radius:6px;text-align:left;font-family:"Shippori Mincho","Hiragino Mincho ProN","Yu Mincho",serif;line-height:2;transform:rotate(-.8deg);box-shadow:inset 0 0 40px rgba(120,90,40,.18),0 8px 24px rgba(0,0,0,.5)}
+.letter[hidden]{display:none}
+.letter h2{font-size:1.15rem;text-align:center;letter-spacing:.4em;margin-bottom:14px;border-bottom:1px solid #b9a577;padding-bottom:10px}
+.letter p+p{margin-top:8px}
+.letter .sign{margin-top:16px;text-align:right;font-size:1.05rem;letter-spacing:.2em}
+
+section{padding:40px 24px;border-top:1px solid var(--line)}
+.st{text-align:center;margin-bottom:26px}
+.st h2{font-size:1.2rem;color:var(--gold-l);letter-spacing:.15em}
+.st span{display:block;font-size:.68rem;color:var(--muted);letter-spacing:.25em}
+.st::after{content:"";display:block;width:28px;height:2px;margin:12px auto 0;background:var(--red)}
+
+/* 屋上の怪盗S: オープニングのあとにふわっと現れ、ゆっくり息をする */
+.kaito{transform-box:fill-box;transform-origin:50% 100%;animation:kaitoIn 1.2s ease .3s both,kaitoBreath 3.6s ease-in-out 1.6s infinite}
+body.intro .kaito{animation-play-state:paused}
+@keyframes kaitoIn{from{opacity:0}to{opacity:1}}
+@keyframes kaitoBreath{0%,100%{transform:scaleY(1)}50%{transform:scaleY(1.05)}}
+
+/* プロローグの背景: 傾けた怪盗Sのエンブレム(card.png)をうっすら敷く */
+.prologue{position:relative;overflow:hidden;padding-bottom:64px}
+/* 上下の端をなだらかに背景色へ溶かす(境目をなくす) */
+.prologue::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,var(--bg) 0,transparent 14%,transparent 70%,var(--bg) 100%);pointer-events:none;z-index:0}
+.prologue::before{content:"";position:absolute;left:50%;top:62%;width:150%;aspect-ratio:1075/650;background:url(card.png) center/cover no-repeat;opacity:.4;transform:translate(-50%,-50%) rotate(-12deg);-webkit-mask-image:radial-gradient(ellipse 58% 58% at 50% 50%,#000 30%,transparent 100%);mask-image:radial-gradient(ellipse 58% 58% at 50% 50%,#000 30%,transparent 100%);pointer-events:none;z-index:0;animation:cardDrift 18s ease-in-out infinite alternate}
+.prologue .st,.prologue .story-fig,.prologue .story-text{position:relative;z-index:1}
+@keyframes cardDrift{from{transform:translate(-50%,-50%) rotate(-13deg)}to{transform:translate(-50%,-50%) rotate(-10deg)}}
+
+/* 手紙のセクション(プロローグの下) */
+.letter-section{border-top:none;padding-top:28px;text-align:center}
+.letter-section .seal-area{margin-top:0}
+
+/* プロローグ(怪盗Sの画像 + 物語) */
+.story-fig{margin:0 0 26px;border-radius:8px;overflow:hidden;box-shadow:0 10px 30px rgba(0,0,0,.55),0 0 0 1px var(--line)}
+.story-fig[hidden]{display:none}
+.story-fig img{display:block;width:100%;height:auto}
+.story-text{text-align:center;font-size:.95rem;line-height:2.2;color:#dfe5f0;letter-spacing:.08em}
+.story-text p+p{margin-top:18px}
+
+/* 参加の流れ(番号を線でつなぐ) */
+.step{position:relative;display:flex;gap:16px;margin-bottom:22px;align-items:flex-start}
+.step:last-child{margin-bottom:0}
+.step:not(:last-child)::before{content:"";position:absolute;left:20px;top:48px;bottom:-18px;width:1px;background:linear-gradient(var(--gold),transparent);opacity:.45}
+.num{flex-shrink:0;width:42px;height:42px;border:1px solid var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--gold);font-weight:700;font-size:.9rem;background:rgba(201,162,75,.1);box-shadow:0 0 14px rgba(201,162,75,.18)}
+.step h3{font-size:.95rem;color:#fff}
+.step p{font-size:.85rem;color:var(--muted);line-height:1.6}
+
+dl{background:var(--panel);border:1px solid var(--line);border-radius:10px;overflow:hidden;font-size:.85rem}
+dl div{display:flex;padding:13px 16px;border-bottom:1px solid rgba(255,255,255,.06)}
+dl div:last-child{border-bottom:none}
+dt{width:30%;color:var(--gold-l);flex-shrink:0}
+dd{color:#e2e8f0}
+
+/* よくある質問 */
+details{background:var(--panel);border:1px solid var(--line);border-radius:10px;margin-bottom:10px;overflow:hidden}
+details:last-child{margin-bottom:0}
+summary{list-style:none;cursor:pointer;position:relative;display:flex;gap:10px;align-items:baseline;padding:14px 44px 14px 16px;font-size:.88rem;color:#fff}
+summary::-webkit-details-marker{display:none}
+summary::before{content:"Q";font-family:"Shippori Mincho",serif;font-weight:700;color:var(--gold)}
+summary::after{content:"+";position:absolute;right:16px;top:50%;transform:translateY(-50%);color:var(--gold);font-size:1.2rem;transition:transform .25s}
+details[open] summary::after{transform:translateY(-50%) rotate(45deg)}
+summary:focus-visible{outline:2px solid var(--gold-l);outline-offset:-2px}
+details p{padding:0 16px 16px 40px;font-size:.82rem;color:var(--muted);line-height:1.7}
+
+ul.notes{list-style:none;font-size:.8rem;color:var(--muted);line-height:1.8}
+ul.notes li{position:relative;padding-left:18px;margin-bottom:8px}
+ul.notes li::before{content:"\25C6";position:absolute;left:0;color:var(--red);font-size:.6rem;top:.45em}
+
+footer{padding:34px 24px 48px;text-align:center;font-size:.75rem;color:var(--muted);border-top:1px solid var(--line);background:#0b0f1a}
+.credit{color:var(--gold-l);font-size:.9rem;letter-spacing:.1em}
+.fine{margin-top:12px;font-size:.7rem;color:#64748b;line-height:1.7}
+
+/* スクロールで順番にふわっと表示(JSが動いた時だけ) */
+.rv{opacity:0;transform:translateY(18px);transition:opacity .7s ease,transform .7s ease}
+.rv.in{opacity:1;transform:none}
+
+/* ===== オープニング(時計が巻き戻る) ===== */
+body.intro{overflow:hidden}
+#intro{position:fixed;inset:0;z-index:1000;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px;background:radial-gradient(ellipse 60% 40% at 50% 45%,rgba(194,50,50,.18),transparent 70%),#080b13;transition:opacity .7s ease,visibility .7s;cursor:pointer}
+#intro.done{opacity:0;visibility:hidden;pointer-events:none}
+.intro-clock{width:min(220px,56vw);height:auto;filter:drop-shadow(0 0 18px rgba(201,162,75,.35));animation:rise .8s ease .1s both}
+.hand-min,.hand-hour{transform-box:view-box;transform-origin:100px 100px}
+.hand-min{animation:rwMin 3s cubic-bezier(.65,0,.35,1) .4s both}
+.hand-hour{animation:rwHour 3s cubic-bezier(.65,0,.35,1) .4s both}
+@keyframes rwMin{from{transform:rotate(0)}to{transform:rotate(-1800deg)}}
+@keyframes rwHour{from{transform:rotate(0)}to{transform:rotate(-150deg)}}
+.intro-date{font-family:"Shippori Mincho","Hiragino Mincho ProN",serif;font-size:1.5rem;letter-spacing:.2em;color:var(--gold-l);font-variant-numeric:tabular-nums;animation:rise .8s ease .3s both}
+.intro-cap{font-size:.78rem;letter-spacing:.35em;color:var(--muted);animation:rise .8s ease .5s both}
+.intro-skip{position:absolute;bottom:28px;font-size:.68rem;letter-spacing:.2em;color:#64748b;animation:rise .8s ease 1.6s both}
+/* オープニング中は、ヒーローの文字の表示を待機させる */
+body.intro .hero .kicker,body.intro .hero h1,body.intro .hero .sub,body.intro .hero .period,body.intro .hero .seal-area{animation-play-state:paused}
+
+@media (prefers-reduced-motion:reduce){
+  #intro{display:none}
+  .letter-box.open .notice,.letter-box.open .letter,.letter-box.open .letter>*,.letter-box.open .letter .sign,.envelope.open .env-wax,.spark{animation:none}
+  .letter-box.open::before{display:none}
+  .kaito,.prologue::before{animation:none}
+  .envelope,.seal-area::before,.wheel,.tw,.hint,
+  .hero .kicker,.hero h1,.hero .sub,.hero .period,.hero .seal-area{animation:none}
+  .letter-box,.notice,.rv,.env-flap,.envelope .env-img{transition:none}
+  html{scroll-behavior:auto}
+}
+</style>
+</head>
+<body class="intro">
+
+<!-- オープニング: 時計が巻き戻る演出(タップでスキップ) -->
+<div id="intro" aria-hidden="true">
+  <svg class="intro-clock" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="100" cy="100" r="92" fill="rgba(14,19,32,.85)" stroke="#c9a24b" stroke-width="2"/>
+    <circle cx="100" cy="100" r="84" fill="none" stroke="#c9a24b" stroke-width=".8" opacity=".35"/>
+    <g stroke="#c9a24b" stroke-width="2" stroke-linecap="round">
+      <line x1="100" y1="18" x2="100" y2="30" stroke="#c23232" stroke-width="3"/>
+      <line x1="100" y1="18" x2="100" y2="30" transform="rotate(30 100 100)"/>
+      <line x1="100" y1="18" x2="100" y2="30" transform="rotate(60 100 100)"/>
+      <line x1="100" y1="18" x2="100" y2="30" transform="rotate(90 100 100)"/>
+      <line x1="100" y1="18" x2="100" y2="30" transform="rotate(120 100 100)"/>
+      <line x1="100" y1="18" x2="100" y2="30" transform="rotate(150 100 100)"/>
+      <line x1="100" y1="18" x2="100" y2="30" transform="rotate(180 100 100)"/>
+      <line x1="100" y1="18" x2="100" y2="30" transform="rotate(210 100 100)"/>
+      <line x1="100" y1="18" x2="100" y2="30" transform="rotate(240 100 100)"/>
+      <line x1="100" y1="18" x2="100" y2="30" transform="rotate(270 100 100)"/>
+      <line x1="100" y1="18" x2="100" y2="30" transform="rotate(300 100 100)"/>
+      <line x1="100" y1="18" x2="100" y2="30" transform="rotate(330 100 100)"/>
+    </g>
+    <g transform="rotate(150 100 100)"><g class="hand-hour"><line x1="100" y1="100" x2="100" y2="58" stroke="#ecd9a0" stroke-width="4.5" stroke-linecap="round"/></g></g>
+    <g class="hand-min"><line x1="100" y1="100" x2="100" y2="34" stroke="#ecd9a0" stroke-width="3" stroke-linecap="round"/></g>
+    <circle cx="100" cy="100" r="5" fill="#c23232"/>
+  </svg>
+  <p class="intro-date" id="intro-date">2026.10.01</p>
+  <p class="intro-cap">記憶を、巻き戻す</p>
+  <p class="intro-skip">タップでスキップ</p>
+</div>
+<noscript><style>#intro{display:none}body.intro .hero .kicker,body.intro .hero h1,body.intro .hero .sub,body.intro .hero .period,body.intro .hero .seal-area{animation-play-state:running}</style></noscript>
+
+<div class="wrap">
+  <header class="top">
+    <span>UMEDA MYSTERY PROJECT</span>
+    <span class="badge">期間限定開催</span>
+  </header>
+
+  <div class="hero">
+
+    <!-- 梅田のスカイライン: 赤い月・観覧車・空中庭園の双子タワー -->
+    <div class="skyline" aria-hidden="true">
+      <svg viewBox="0 0 520 130" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <pattern id="win" width="6" height="12" patternUnits="userSpaceOnUse">
+            <rect x="1.5" y="3" width="2.5" height="4" fill="#c9a24b" opacity=".5"/>
+          </pattern>
+        </defs>
+
+        <!-- 星 -->
+        <g fill="#ecd9a0">
+          <circle cx="30" cy="14" r="1" opacity=".5"/>
+          <circle class="tw" cx="110" cy="22" r="1.2"/>
+          <circle cx="150" cy="10" r="1" opacity=".5"/>
+          <circle class="tw" style="animation-delay:1.2s" cx="240" cy="18" r="1.2"/>
+          <circle cx="272" cy="8" r="1" opacity=".5"/>
+          <circle class="tw" style="animation-delay:2s" cx="420" cy="16" r="1.2"/>
+          <circle cx="470" cy="28" r="1" opacity=".5"/>
+          <circle class="tw" style="animation-delay:.6s" cx="500" cy="12" r="1.2"/>
+        </g>
+
+        <!-- 怪盗の赤い月 -->
+        <circle cx="64" cy="44" r="34" fill="#c23232" opacity=".12"/>
+        <circle cx="64" cy="44" r="20" fill="#c23232" opacity=".9"/>
+
+        <!-- 奥のビル -->
+        <g fill="#121a2b">
+          <rect x="0" y="84" width="30" height="46"/>
+          <rect x="28" y="70" width="26" height="60"/>
+          <rect x="52" y="90" width="24" height="40"/>
+          <rect x="380" y="80" width="26" height="50"/>
+          <rect x="404" y="62" width="24" height="68"/>
+          <rect x="426" y="88" width="30" height="42"/>
+          <rect x="454" y="72" width="28" height="58"/>
+          <rect x="480" y="92" width="40" height="38"/>
+        </g>
+        <g fill="url(#win)">
+          <rect x="28" y="70" width="26" height="60"/>
+          <rect x="404" y="62" width="24" height="68"/>
+          <rect x="454" y="72" width="28" height="58"/>
+        </g>
+
+        <!-- 怪盗S(kaitou.png)。左のビルの屋上、赤い月の前に立つ。ファイルがなければ何も表示されません -->
+        <filter id="rim" x="-30%" y="-30%" width="160%" height="160%">
+          <feDropShadow dx="0" dy="0" stdDeviation="1" flood-color="#ecd9a0" flood-opacity=".75"/>
+        </filter>
+        <image class="kaito" href="kaitou.png" x="26" y="39" width="30" height="30" preserveAspectRatio="xMidYMax meet" filter="url(#rim)"/>
+
+        <!-- 手前のビル -->
+        <g fill="#182136">
+          <rect x="96" y="100" width="34" height="30"/>
+          <rect x="236" y="90" width="30" height="40"/>
+          <rect x="364" y="98" width="22" height="32"/>
+        </g>
+        <rect x="236" y="90" width="30" height="40" fill="url(#win)"/>
+
+        <!-- 観覧車 -->
+        <path d="M178 70 L160 130 M178 70 L196 130" stroke="#c9a24b" stroke-width="1.5" fill="none" opacity=".6"/>
+        <g class="wheel">
+          <circle cx="178" cy="70" r="36" fill="none" stroke="#ecd9a0" stroke-width="1.5" opacity=".75"/>
+          <path d="M142 70H214M178 34V106M152.5 44.5L203.5 95.5M152.5 95.5L203.5 44.5" stroke="#ecd9a0" stroke-width="1" opacity=".5"/>
+          <g fill="#c23232">
+            <circle cx="214" cy="70" r="2.4"/><circle cx="203.5" cy="95.5" r="2.4"/>
+            <circle cx="178" cy="106" r="2.4"/><circle cx="152.5" cy="95.5" r="2.4"/>
+            <circle cx="142" cy="70" r="2.4"/><circle cx="152.5" cy="44.5" r="2.4"/>
+            <circle cx="178" cy="34" r="2.4"/><circle cx="203.5" cy="44.5" r="2.4"/>
+          </g>
+        </g>
+
+        <!-- 空中庭園(双子タワー) -->
+        <rect x="302" y="40" width="18" height="90" fill="#1f2a42"/>
+        <rect x="340" y="40" width="18" height="90" fill="#1f2a42"/>
+        <rect x="302" y="40" width="18" height="90" fill="url(#win)"/>
+        <rect x="340" y="40" width="18" height="90" fill="url(#win)"/>
+        <path d="M296 22h68v28h-68z M312 29h36v14h-36z" fill="#1f2a42" fill-rule="evenodd"/>
+        <rect x="296" y="22" width="68" height="1.5" fill="#c9a24b" opacity=".7"/>
+      </svg>
+    </div>
+
+    <p class="kicker">あなたに、一通の手紙が届いた</p>
+    <h1 class="serif">怪盗Sと消えた記憶</h1>
+    <p class="sub">〜梅田に眠る時間のカケラ〜</p>
+    <p class="period">開催期間 10月1日(木) 〜 10月18日(日)</p>
+    <p class="countdown" id="countdown" hidden></p>
+
+  </div>
+
+  <section class="prologue">
+    <div class="st"><h2 class="serif">プロローグ</h2><span>PROLOGUE</span></div>
+    <!-- 怪盗Sが記憶を盗む画像(prologue.png)。ファイルがなければ表示されません -->
+    <figure class="story-fig" id="story-fig" hidden>
+      <img id="story-img" alt="記憶を盗む怪盗Sのイラスト">
+    </figure>
+    <div class="story-text serif">
+      <p>その夜、梅田の街から、ひとつの記憶が消えた。</p>
+      <p>誰のものとも知れない。<br>けれど、きっと誰かにとって、いちばん大切な記憶。</p>
+      <p>現場に残されていたのは、「S」とだけ記された署名。<br>怪盗Sは、何を盗み、なぜ梅田を選んだのか。</p>
+      <p>怪盗Sの目撃情報が、次々と寄せられている。<br>カケラは、いちばん古い場所から順に隠されたらしい。</p>
+      <p>そして今日、同じ赤い封蝋の手紙が、<br>あなたのもとに届いた。</p>
+    </div>
+  </section>
+
+  <!-- 手紙(プロローグの下)。封を切ると予告状が開く -->
+  <section class="letter-section">
+    <div class="seal-area">
+      <button class="envelope" id="seal" aria-expanded="false" aria-controls="letter-box" aria-label="封筒を開けて予告状を読む">
+        <img class="env-img env-closed" id="env-closed" alt="">
+        <img class="env-img env-open" id="env-open" alt="">
+        <span class="css-env"><span class="env-back"></span><span class="env-front"></span><span class="env-flap"></span><span class="env-wax"></span></span>
+      </button>
+      <p class="hint" id="hint">封を切る</p>
+    </div>
+
+    <div class="letter-box" id="letter-box">
+      <!-- 予告状(画像)。読み込めたらこちらを表示 -->
+      <figure class="notice" id="notice" hidden>
+        <img id="notice-img" alt="怪盗Sからの予告状">
+      </figure>
+
+      <!-- 予備の文章版。画像が読み込めない時だけ表示 -->
+      <div class="letter" id="letter" role="region" aria-label="怪盗Sからの予告状">
+        <h2>予告状</h2>
+        <p>やがて、あなたは気づくだろう。</p>
+        <p>まだ誰も知らない、大切な記憶をいただいた。</p>
+        <p>ときを遡り、五つのカケラを集めてみせよ。</p>
+        <p>さあ、まずは、はじまりの場所へ向かうがいい。</p>
+        <p>いくつもの足跡を、街に残しておいた。</p>
+        <p>だが、ひとつだけ、ヒントをやろう。</p>
+        <p>いちばん大切なものは、いつも頭にある。</p>
+        <p>じっくり探せ。</p>
+        <p class="sign">怪盗S</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="st"><h2 class="serif">参加の流れ</h2><span>HOW TO PLAY</span></div>
+    <div class="step"><div class="num">01</div><div><h3>謎解きキットが届く</h3><p>モニターに当選した方のご自宅へ、最初のハガキとアイテムをお届けします。</p></div></div>
+    <div class="step"><div class="num">02</div><div><h3>暗号を解いて、梅田を歩く</h3><p>ハガキの謎を解き、次の場所へ向かいます。</p></div></div>
+    <div class="step"><div class="num">03</div><div><h3>スマホと連動する</h3><p>途中でQRコードやSNSが登場します。スマホを持参してください。</p></div></div>
+    <div class="step"><div class="num">04</div><div><h3>最後の扉を開く</h3><p>すべてのカケラが揃ったとき、ある場所で待つものにたどり着きます。</p></div></div>
+  </section>
+
+  <section>
+    <div class="st"><h2 class="serif">開催概要</h2><span>OUTLINE</span></div>
+    <dl>
+      <div><dt>開催期間</dt><dd>10月1日(木) 〜 10月18日(日)</dd></div>
+      <div><dt>参加方法</dt><dd>モニター抽選<br>(募集は終了しました。当選者のみ参加できます)</dd></div>
+      <div><dt>エリア</dt><dd>大阪・梅田周辺(屋外周遊型)</dd></div>
+      <div><dt>参加費</dt><dd>無料(モニター参加枠)</dd></div>
+      <div><dt>参加人数</dt><dd>当選者さま + 同行者1名(最大2名)</dd></div>
+      <div><dt>難易度</dt><dd>★★★☆☆(ふつう)</dd></div>
+      <div><dt>所要時間</dt><dd>約5〜6時間(昼食・休憩を含む)</dd></div>
+      <div><dt>キット</dt><dd>当選者さまのご自宅へ配送(送料無料)</dd></div>
+      <div><dt>スタート</dt><dd>届いたキットを持って梅田駅周辺へ(10:00 〜 12:00)</dd></div>
+      <div><dt>持ち物</dt><dd>届いたキット一式、スマートフォン、筆記用具<br>歩きやすい服装・靴でお越しください</dd></div>
+    </dl>
+  </section>
+
+  <section>
+    <div class="st"><h2 class="serif">よくある質問</h2><span>FAQ</span></div>
+    <details>
+      <summary>雨の日でも参加できますか?</summary>
+      <p>雨でも実施しています。傘をお持ちください。荒天の場合は、期間中の別の日にご参加ください。</p>
+    </details>
+    <details>
+      <summary>途中で休憩してもいいですか?</summary>
+      <p>はい。食事や休憩の時間は自由にお取りください。所要時間にも含まれています。</p>
+    </details>
+    <details>
+      <summary>謎が解けないときはどうすればいいですか?</summary>
+      <p>届いたキットやスマホの案内をもう一度見直してみてください。ご一緒の方と相談しながら進めるのもおすすめです。</p>
+    </details>
+    <details>
+      <summary>同行者と一緒に参加できますか?</summary>
+      <p>はい。当選者さまとあわせて、最大2名でご参加いただけます。</p>
+    </details>
+  </section>
+
+  <section>
+    <div class="st"><h2 class="serif">お願い</h2><span>ATTENTION</span></div>
+    <ul class="notes">
+      <li>歩きながらのスマホ操作は危険です。立ち止まって、周囲の安全を確認してから操作してください。</li>
+      <li>お店や公共の場では、周りの方の迷惑にならないようにしてください。</li>
+      <li>お店のスタッフの方に、謎の答えを尋ねないでください。</li>
+      <li>謎の答えは、怪盗Sだけの秘密です。</li>
+    </ul>
+  </section>
+
+  <footer>
+    <p class="credit serif">企画・制作 SCRAP</p>
+    <p class="fine">※内容は予告なく変更される場合があります。<br>© 2026 SCRAP</p>
+  </footer>
+</div>
+
+<!-- オープニングの制御(本編のスクリプトとは別にして、エラーの影響を受けないようにしています) -->
+<script>
+(function(){
+  var intro=document.getElementById('intro');
+  if(!intro) return;
+  var ended=false;
+  function end(){
+    if(ended) return; ended=true;
+    intro.classList.add('done');
+    document.body.classList.remove('intro');
+  }
+  var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+  if(reduce){end();return;}
+
+  // ===== 設定 =====
+  var TARGET=new Date(2021,3,1); // 巻き戻す先の日付: 2021年4月1日(月は0始まりなので4月は3)。使わない場合は null にする
+  var DUR=3000;      // 巻き戻しにかける時間(ミリ秒)
+  var DELAY=400;     // 開始までの待ち時間(ミリ秒)
+
+  var el=document.getElementById('intro-date');
+  var n=new Date();
+  var start=new Date(n.getFullYear(),n.getMonth(),n.getDate());
+  var DAYS=TARGET?Math.round((start-TARGET)/86400000):2400;
+  function fmt(d){return d.getFullYear()+'.'+('0'+(d.getMonth()+1)).slice(-2)+'.'+('0'+d.getDate()).slice(-2);}
+  function ease(t){return t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2;}
+  el.textContent=fmt(start);
+
+  var t0=null;
+  function tick(ts){
+    if(ended) return;
+    if(t0===null) t0=ts;
+    var p=Math.min(Math.max((ts-t0-DELAY)/DUR,0),1);
+    var d=new Date(start.getFullYear(),start.getMonth(),start.getDate()-Math.round(ease(p)*DAYS));
+    el.textContent=fmt(d);
+    if(p<1){requestAnimationFrame(tick);}else{setTimeout(end,600);}
+  }
+  requestAnimationFrame(tick);
+  intro.addEventListener('click',end);
+  setTimeout(end,6500); // 念のための保険
+})();
+</script>
+
+<script>
+(function(){
+  // ===== 設定(画像ファイル名はここで変えられます) =====
+  var NOTICE_SRC='invitation.png';        // 予告状の画像
+  var ENVELOPE_CLOSED_SRC='';             // 封筒まるごとの画像。使わないので空にしています
+  var ENVELOPE_OPEN_SRC='envelope-open.png'; // 封筒(開いた状態)。ENVELOPE_CLOSED_SRCが空なら使われません
+  var SEAL_SRC='seal.png';                // 封蝋の画像(CSS封筒の上に重ねる)
+  var FAVICON_SRC='favicon.png';          // ファビコン
+  var END_DATE=new Date(2026,9,18,23,59,59); // 開催終了日(月は0始まり: 9=10月)
+
+  // ===== 予告状の画像(読み込めたら文章版を隠して画像を表示) =====
+  var notice=document.getElementById('notice');
+  var noticeImg=document.getElementById('notice-img');
+  var letter=document.getElementById('letter');
+  if(NOTICE_SRC){
+    noticeImg.onload=function(){notice.hidden=false;letter.hidden=true;};
+    noticeImg.onerror=function(){notice.hidden=true;letter.hidden=false;};
+    noticeImg.src=NOTICE_SRC;
+  }
+
+  // ===== 封筒ボタンの画像(なければCSSの封筒のまま) =====
+  var seal=document.getElementById('seal');
+  var envClosed=document.getElementById('env-closed');
+  var envOpen=document.getElementById('env-open');
+  if(ENVELOPE_CLOSED_SRC){
+    envClosed.onload=function(){seal.classList.add('has-img');};
+    envClosed.onerror=function(){seal.classList.remove('has-img');};
+    envClosed.src=ENVELOPE_CLOSED_SRC;
+    if(ENVELOPE_OPEN_SRC){
+      envOpen.onload=function(){seal.classList.add('has-open-img');};
+      envOpen.onerror=function(){seal.classList.remove('has-open-img');};
+      envOpen.src=ENVELOPE_OPEN_SRC;
+    }
+  }
+
+  // ===== 封蝋の画像(CSS封筒の上に重ねる。なければCSSの封蝋のまま) =====
+  var wax=document.querySelector('.env-wax');
+  if(SEAL_SRC){
+    var si=new Image();
+    si.onload=function(){
+      wax.style.backgroundImage='url('+SEAL_SRC+')';
+      wax.classList.add('has-seal');
+    };
+    si.src=SEAL_SRC;
+  }
+
+  // ===== プロローグの画像(ファイルがなければ表示しない) =====
+  var STORY_SRC='prologue.png';
+  var storyFig=document.getElementById('story-fig');
+  var storyImg=document.getElementById('story-img');
+  if(STORY_SRC){
+    storyImg.onload=function(){storyFig.hidden=false;};
+    storyImg.src=STORY_SRC;
+  }
+
+  // ===== ファビコン(画像があれば差し替え) =====
+  if(FAVICON_SRC){
+    var fi=new Image();
+    fi.onload=function(){document.getElementById('favicon').href=FAVICON_SRC;};
+    fi.src=FAVICON_SRC;
+  }
+
+  // ===== 残り日数 =====
+  var cd=document.getElementById('countdown');
+  var now=new Date();
+  var today=new Date(now.getFullYear(),now.getMonth(),now.getDate());
+  var endDay=new Date(END_DATE.getFullYear(),END_DATE.getMonth(),END_DATE.getDate());
+  var left=Math.round((endDay-today)/86400000);
+  if(left>0){cd.innerHTML='開催終了まで あと<b>'+left+'日</b>';cd.hidden=false;}
+  else if(left===0){cd.innerHTML='<b>本日まで</b>';cd.hidden=false;}
+
+  // ===== 封筒の開閉 =====
+  var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+  var box=document.getElementById('letter-box');
+  var hint=document.getElementById('hint');
+  seal.addEventListener('click',function(){
+    var open=box.classList.toggle('open');
+    seal.classList.toggle('open',open);
+    seal.setAttribute('aria-expanded',open?'true':'false');
+    hint.textContent=open?'もう一度押すと閉じます':'封を切る';
+    if(open){
+      setTimeout(function(){
+        var target=notice.hidden?letter:notice;
+        target.scrollIntoView({behavior:reduce?'auto':'smooth',block:'center'});
+      },650);
+    }
+  });
+
+  // ===== 封を切った時の火花(封蝋の位置から金と赤の粒がはじける) =====
+  function burst(){
+    var colors=['#ecd9a0','#c9a24b','#c23232'];
+    for(var i=0;i<16;i++){
+      var s=document.createElement('i');
+      s.className='spark';
+      var a=(Math.PI*2*i/16)+Math.random()*.4;
+      var r=50+Math.random()*60;
+      s.style.setProperty('--dx',Math.round(Math.cos(a)*r)+'px');
+      s.style.setProperty('--dy',Math.round(Math.sin(a)*r)+'px');
+      s.style.background=colors[i%3];
+      seal.appendChild(s);
+      (function(el){setTimeout(function(){if(el.parentNode)el.parentNode.removeChild(el);},1000);})(s);
+    }
+  }
+  seal.addEventListener('click',function(){
+    if(seal.classList.contains('open')&&!reduce) burst();
+  });
+
+  // ===== スクロールでふわっと表示 =====
+  var items=document.querySelectorAll('section .st,.story-fig,.story-text p,.seal-area,.step,dl,details,ul.notes,footer p');
+  if('IntersectionObserver' in window){
+    var io=new IntersectionObserver(function(es){
+      es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});
+    },{threshold:.15});
+    items.forEach(function(el,i){el.classList.add('rv');el.style.transitionDelay=(i%4)*70+'ms';io.observe(el);});
+  }
+})();
+</script>
+</body>
+</html>
