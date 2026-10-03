@@ -52,6 +52,11 @@ h1{font-size:clamp(1.6rem,8vw,2.1rem);line-height:1.3;font-weight:800;letter-spa
 /* ===== 目撃掲示板(枠は共通。投稿の中に入る「添付資料」で見た目を変える) ===== */
 .board-head{padding:38px 24px 20px;text-align:center;background:radial-gradient(ellipse 80% 60% at 50% 0%,rgba(194,50,50,.16),transparent 70%)}
 .feed{padding:6px 16px 10px}
+/* 章の切り替え(第一章、第二章 …) */
+.chs{display:flex;gap:8px;padding:0 16px 14px;overflow-x:auto;-webkit-overflow-scrolling:touch}
+.chs[hidden]{display:none}
+.chp{flex:none;padding:7px 16px;border:1px solid var(--line);border-radius:20px;background:transparent;color:var(--muted);font:inherit;font-size:.78rem;letter-spacing:.12em;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.chp[aria-selected="true"]{color:#1a1405;background:var(--gold);border-color:var(--gold);font-weight:700}
 .post{margin:0 0 20px;padding:16px 16px 18px;background:var(--panel);border:1px solid var(--line);border-radius:12px;box-shadow:0 8px 22px rgba(0,0,0,.35);animation:rise .8s ease both}
 .post-h{display:flex;flex-wrap:wrap;gap:4px 10px;align-items:center;font-size:.72rem;color:var(--muted)}
 .tag{background:var(--red);color:#fff;padding:1px 11px;border-radius:12px;font-size:.68rem;letter-spacing:.12em}
@@ -251,7 +256,7 @@ h1{font-size:clamp(1.6rem,8vw,2.1rem);line-height:1.3;font-weight:800;letter-spa
 <body>
 <div class="wrap">
   <header class="top">
-    <span>UMEDA MYSTERY PROJECT</span>
+    <span>KANSAI MYSTERY PROJECT</span>
     <button type="button" class="snd" id="snd" aria-pressed="false">音 ON</button>
   </header>
 
@@ -266,6 +271,7 @@ h1{font-size:clamp(1.6rem,8vw,2.1rem);line-height:1.3;font-weight:800;letter-spa
       <h1 class="serif">怪盗S 目撃情報</h1>
       <p class="sub">黒い影を見かけたら、情報をお寄せください。</p>
     </div>
+    <div class="chs" id="chs" hidden></div>
     <div class="feed" id="feed"></div>
     <p class="foot">投稿は、届いた順に並んでいます。<br>© 2026 SCRAP</p>
   </div>
@@ -380,6 +386,16 @@ h1{font-size:clamp(1.6rem,8vw,2.1rem);line-height:1.3;font-weight:800;letter-spa
   //        mailBtn … 予告状を見るボタン(演出なしで、表向きの予告状が出る)
   // 投稿の順番は、配列の順番です。img は同じフォルダの画像ファイル名。
   var POSTS=[
+    {
+      // QRコードで掲示板に入ったときの、最初のあいさつ(名乗りは、本文の「管理人の奥です」だけ。表示名は、ほかの投稿と同じ「管理人」)
+      id:'p0', tag:'ご挨拶', who:'管理人', when:'今朝',
+      text:[
+        'はじめまして、管理人の奥です。',
+        'あの謎を解ける名探偵のあなたを信頼して、怪盗Sの目撃情報を、共有します。',
+        'まずは、大和西大寺の駅から、最初の目撃情報を確認してください。'
+      ],
+      gate:'button', btn:'目撃情報を見る'
+    },
     {
       id:'p1', tag:'目撃', who:'通りすがりの会社員', when:'昨夜 21:47',
       img:'saidaizi_01.png', alt:'大和西大寺駅を出て左へ進んだ先の景色。奥に、うっすらと黒い影',
@@ -1015,6 +1031,69 @@ h1{font-size:clamp(1.6rem,8vw,2.1rem);line-height:1.3;font-weight:800;letter-spa
     var n=renderNew0(scroll);
     if(all()&&finalArea.hidden){finalArea.hidden=false;}
     return n;
+  };
+
+  // ===== 掲示板を、章ごとに分けて表示する =====
+  // 各章の最初の投稿の id を、順番に並べます(下の例: 第一章は p1 から、第二章は p4 から …)。
+  var CHAPTER_STARTS=['p0','p4','p9','p11','p13','p15'];
+  var KANJI=['','一','二','三','四','五','六','七','八','九'];
+  var chs=$('chs'),curCh=0,pendingCh=0;
+  function chapterOf(idx){
+    if(ALL[idx].demo){return 99;}
+    var c=1,k,j;
+    for(k=0;k<CHAPTER_STARTS.length;k++){
+      for(j=0;j<ALL.length;j++){if(ALL[j].id===CHAPTER_STARTS[k]&&idx>=j){c=k+1;}}
+    }
+    return c;
+  }
+  function chapterList(){
+    var set={},arr=[],n;
+    ALL.forEach(function(p,idx){if(visible(idx)){set[chapterOf(idx)]=1;}});
+    for(n=1;n<KANJI.length;n++){if(set[n]){arr.push(n);}}
+    if(set[99]){arr.push(99);}
+    return arr;
+  }
+  function latestCh(){
+    var l=chapterList(),m=0;
+    l.forEach(function(n){if(n!==99&&n>m){m=n;}});
+    return m||(l.length?99:1);
+  }
+  function renderPills(){
+    var list=chapterList();
+    chs.innerHTML='';
+    chs.hidden=list.length<2;
+    list.forEach(function(n){
+      var b=mk('button','chp',n===99?'見本':'第'+KANJI[n]+'章');
+      b.type='button';b.setAttribute('aria-selected',n===curCh?'true':'false');
+      b.addEventListener('click',function(){showChapter(n);});
+      chs.appendChild(b);
+    });
+  }
+  function showChapter(n){
+    curCh=n;
+    var els=feed.children,j;
+    for(j=0;j<els.length;j++){els[j].hidden=(Number(els[j].getAttribute('data-ch'))!==n);}
+    renderPills();
+  }
+  var makePost0=makePost;
+  makePost=function(p,idx){
+    var a=makePost0(p,idx);
+    a.setAttribute('data-ch',String(chapterOf(idx)));
+    return a;
+  };
+  var renderNew1=renderNew;
+  renderNew=function(scroll){
+    var n=renderNew1(scroll);
+    if(n>0){
+      var latest=latestCh();
+      if(tab==='b'){showChapter(latest);}else{pendingCh=latest;}   // 新しい章が増えたら、その章を開く
+    }
+    return n;
+  };
+  var setTab1=setTab;
+  setTab=function(t,noScroll){
+    setTab1(t,noScroll);
+    if(t==='b'&&pendingCh){showChapter(pendingCh);pendingCh=0;}
   };
   function solvedPost(idx){
     var p=ALL[idx];
