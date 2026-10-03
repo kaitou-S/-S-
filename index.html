@@ -2,8 +2,9 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="format-detection" content="telephone=no">
+<meta name="color-scheme" content="dark">
 <title>怪盗Sと消えた記憶</title>
 <meta name="description" content="関西の街に隠された記憶のカケラを集める、期間限定の周遊型リアル謎解き。抽選で当選したモニターの方のみ参加できます。">
 <meta name="robots" content="noindex,nofollow">
@@ -22,6 +23,11 @@
 <link id="favicon" rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%23c23232'/%3E%3Ctext x='32' y='45' font-size='38' font-family='serif' font-weight='700' text-anchor='middle' fill='white'%3ES%3C/text%3E%3C/svg%3E">
 <link rel="apple-touch-icon" href="favicon.png">
 
+<!-- 大事な画像を、先に読み込んでおく(ファイルがなくても、動作には影響しません) -->
+<link rel="preload" as="image" href="kaitou.png">
+<link rel="preload" as="image" href="seal.png">
+<link rel="preload" as="image" href="card.png">
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@700;800&display=swap" rel="stylesheet">
@@ -29,18 +35,19 @@
 <style>
 :root{--bg:#0e1320;--panel:#151c2e;--gold:#c9a24b;--gold-l:#ecd9a0;--red:#c23232;--text:#eef1f6;--muted:#97a3b8;--paper:#f3ead3;--ink:#2b2418;--line:rgba(201,162,75,.22)}
 *{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth;background:#080b13}
+html{scroll-behavior:smooth;background:#080b13;color-scheme:dark}
 body{background:#080b13;color:var(--text);font-family:"Hiragino Sans","Noto Sans JP","Yu Gothic",sans-serif;line-height:1.8;letter-spacing:.03em;-webkit-font-smoothing:antialiased}
+button,a,summary{touch-action:manipulation}
 .wrap{max-width:520px;margin:0 auto;background:var(--bg);min-height:100vh;min-height:100dvh;box-shadow:0 0 40px rgba(0,0,0,.6);overflow:hidden}
 .serif{font-family:"Shippori Mincho","Hiragino Mincho ProN","Yu Mincho","Noto Serif JP",serif}
 
-.top{display:flex;justify-content:space-between;align-items:center;padding:14px 20px;border-bottom:1px solid var(--line);font-size:.7rem;color:var(--gold);letter-spacing:.15em}
+.top{display:flex;justify-content:space-between;align-items:center;padding:max(14px,env(safe-area-inset-top)) 20px 14px;border-bottom:1px solid var(--line);font-size:.7rem;color:var(--gold);letter-spacing:.15em}
 .badge{background:var(--gold);color:#1a1405;padding:3px 12px;border-radius:20px;font-weight:700;letter-spacing:.08em;font-size:.75rem}
 
 .hero{position:relative;padding:52px 24px 44px;text-align:center;background:radial-gradient(ellipse 80% 50% at 50% 0%,rgba(194,50,50,.16),transparent 70%),radial-gradient(ellipse 70% 40% at 50% 100%,rgba(201,162,75,.08),transparent 70%)}
 
 /* ===== スカイライン(ヒーロー最上部) ===== */
-.skyline{margin:-52px -24px 30px;border-bottom:1px solid var(--line);background:linear-gradient(180deg,rgba(194,50,50,.1),transparent 70%)}
+.skyline{position:relative;margin:-52px -24px 30px;border-bottom:1px solid var(--line);background:linear-gradient(180deg,rgba(194,50,50,.1),transparent 70%)}
 .skyline svg{display:block;width:100%;height:auto;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
 .wheel{transform-box:view-box;transform-origin:178px 70px;animation:spin 70s linear infinite}
 .tw{animation:tw 3.4s ease-in-out infinite}
@@ -51,6 +58,9 @@ body{background:#080b13;color:var(--text);font-family:"Hiragino Sans","Noto Sans
 .moon-ring{transform:rotate(-90deg);transform-origin:64px 44px;stroke-dasharray:157;stroke-dashoffset:157;opacity:0;transition:stroke-dashoffset .35s ease,opacity .35s ease}
 .moon-ring.hold{opacity:1;stroke-dashoffset:0;transition:stroke-dashoffset 3s linear,opacity .2s ease}
 #moonHit{-webkit-tap-highlight-color:transparent}
+/* 短くタップを繰り返したときに、月のそばに淡く出る、ささやき */
+.whisper{position:absolute;left:3%;top:60%;font-family:"Shippori Mincho",serif;font-size:.78rem;letter-spacing:.2em;color:var(--gold-l);opacity:0;pointer-events:none;transition:opacity .7s ease;text-shadow:0 0 8px rgba(0,0,0,.85)}
+.whisper.on{opacity:.9}
 
 .kicker{display:inline-block;font-size:.8rem;color:var(--gold-l);letter-spacing:.2em;margin-bottom:16px;padding-bottom:6px;border-bottom:1px solid var(--red)}
 h1{font-size:clamp(1.5rem,7.6vw,2.2rem);line-height:1.3;font-weight:800;letter-spacing:.08em;color:#fff;background:linear-gradient(180deg,#fff 35%,var(--gold-l));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;filter:drop-shadow(0 2px 14px rgba(0,0,0,.6))}
@@ -253,7 +263,7 @@ ul.notes{list-style:none;font-size:.8rem;color:var(--muted);line-height:1.8}
 ul.notes li{position:relative;padding-left:18px;margin-bottom:8px}
 ul.notes li::before{content:"\25C6";position:absolute;left:0;color:var(--red);font-size:.6rem;top:.45em}
 
-footer{padding:34px 24px 48px;text-align:center;font-size:.75rem;color:var(--muted);border-top:1px solid var(--line);background:#0b0f1a}
+footer{padding:34px 24px max(48px,calc(env(safe-area-inset-bottom) + 28px));text-align:center;font-size:.75rem;color:var(--muted);border-top:1px solid var(--line);background:#0b0f1a}
 .credit{color:var(--gold-l);font-size:.9rem;letter-spacing:.1em}
 .fine{margin-top:12px;font-size:.7rem;color:#64748b;line-height:1.7}
 
@@ -409,6 +419,7 @@ body.intro .hero .kicker,body.intro .hero h1,body.intro .hero .sub,body.intro .h
         <circle id="moonRing" class="moon-ring" cx="64" cy="44" r="25" fill="none" stroke="#ecd9a0" stroke-width="1.6" stroke-linecap="round"/>
         <circle id="moonHit" cx="64" cy="44" r="28" fill="transparent" pointer-events="all" style="cursor:pointer;touch-action:none"/>
       </svg>
+      <div class="whisper" id="whisper">……もう少し、長く。</div>
     </div>
 
     <p class="kicker">あなたに、一通の手紙が届いた</p>
@@ -455,7 +466,7 @@ body.intro .hero .kicker,body.intro .hero h1,body.intro .hero .sub,body.intro .h
       <div class="letter" id="letter" role="region" aria-label="怪盗Sからの予告状">
         <h2>予告状</h2>
         <p>やがて、あなたの大切な記憶を、頂戴いたします。</p>
-        <p>まだ誰も知らない、その記憶は、五つに砕きました。</p>
+        <p>まだ誰も知らない、その記憶は、五つに砕いた。</p>
         <p>ときを遡り、カケラを集めてみなさい。</p>
         <p>さあ、まずは、はじまりの場所へ向かうがいい。</p>
         <p>いくつもの足跡を、街に残しておいた。</p>
@@ -541,7 +552,8 @@ body.intro .hero .kicker,body.intro .hero h1,body.intro .hero .sub,body.intro .h
   <div class="moon-card">
     <div class="moon-seal" id="moonSeal">S</div>
     <p class="moon-l serif">……よくここがわかったな。</p>
-    <p class="moon-l serif">では、最初の行き先を、答えてみよ。</p>
+    <p class="moon-l serif">最初の目的地は、このサイトに隠した。</p>
+    <p class="moon-l serif">それを読み解き、ここに入力できたなら、案内してやろう。</p>
     <form class="moon-form" id="moonForm" autocomplete="off">
       <input id="moonInput" type="text" placeholder="最初の行き先" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" enterkeyhint="go">
       <button type="submit">答える</button>
@@ -664,6 +676,38 @@ body.intro .hero .kicker,body.intro .hero h1,body.intro .hero .sub,body.intro .h
   if(left>0){cd.innerHTML='開催終了まで あと<b>'+left+'日</b>';cd.hidden=false;}
   else if(left===0){cd.innerHTML='<b>本日まで</b>';cd.hidden=false;}
 
+  // ===== 音(Web Audio。ファイル不要) =====
+  var AC=null;
+  function audio(){
+    try{
+      if(!AC){AC=new (window.AudioContext||window.webkitAudioContext)();}
+      if(AC.state==='suspended'){AC.resume();}
+    }catch(e){AC=null;}
+    return AC;
+  }
+  // 封蝋が割れる音: ぱきっという短い音 + 低い響き + 紙がこすれる音
+  function crackSound(){
+    var ac=audio();
+    if(!ac){return;}
+    var t=ac.currentTime,j;
+    var len=Math.floor(ac.sampleRate*0.12),buf=ac.createBuffer(1,len,ac.sampleRate),d=buf.getChannelData(0);
+    for(j=0;j<len;j++){d[j]=(Math.random()*2-1)*Math.pow(1-j/len,3);}
+    var src=ac.createBufferSource();src.buffer=buf;
+    var f=ac.createBiquadFilter();f.type='bandpass';f.frequency.value=2200;f.Q.value=0.9;
+    var g=ac.createGain();g.gain.value=0.5;
+    src.connect(f);f.connect(g);g.connect(ac.destination);src.start(t);
+    var o=ac.createOscillator(),og=ac.createGain();
+    o.type='sine';o.frequency.setValueAtTime(160,t);o.frequency.exponentialRampToValueAtTime(70,t+0.18);
+    og.gain.setValueAtTime(0.0001,t);og.gain.exponentialRampToValueAtTime(0.18,t+0.01);og.gain.exponentialRampToValueAtTime(0.0001,t+0.22);
+    o.connect(og);og.connect(ac.destination);o.start(t);o.stop(t+0.25);
+    var len2=Math.floor(ac.sampleRate*0.4),b2=ac.createBuffer(1,len2,ac.sampleRate),d2=b2.getChannelData(0);
+    for(j=0;j<len2;j++){d2[j]=(Math.random()*2-1)*Math.sin(Math.PI*j/len2);}
+    var s2=ac.createBufferSource();s2.buffer=b2;
+    var hp=ac.createBiquadFilter();hp.type='highpass';hp.frequency.value=3000;
+    var g2=ac.createGain();g2.gain.value=0.09;
+    s2.connect(hp);hp.connect(g2);g2.connect(ac.destination);s2.start(t+0.12);
+  }
+
   // ===== 封筒の開閉 =====
   var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion:reduce)').matches;
   var box=document.getElementById('letter-box');
@@ -681,7 +725,7 @@ body.intro .hero .kicker,body.intro .hero h1,body.intro .hero .sub,body.intro .h
     }
   });
 
-  // ===== 封を切った時の火花(封蝋の位置から金と赤の粒がはじける) =====
+  // ===== 封を切った時の火花(封蝋の位置から金と赤の粒がはじける)と、割れる音 =====
   function burst(){
     var colors=['#ecd9a0','#c9a24b','#c23232'];
     for(var i=0;i<16;i++){
@@ -697,7 +741,10 @@ body.intro .hero .kicker,body.intro .hero h1,body.intro .hero .sub,body.intro .h
     }
   }
   seal.addEventListener('click',function(){
-    if(seal.classList.contains('open')&&!reduce) burst();
+    if(seal.classList.contains('open')){
+      crackSound();
+      if(!reduce){burst();}
+    }
   });
 
   // ===== ナレーション(天の声): 封を切って、予告状を読み終えるころに、そっと現れる =====
@@ -710,6 +757,7 @@ body.intro .hero .kicker,body.intro .hero h1,body.intro .hero .sub,body.intro .h
 
   // ===== 赤い月を、3秒押し続けると、怪盗Sの隠しページが開く =====
   // 押し間違いを防ぐため、短くタップしただけでは、何も起きません(押している間だけ、輪が満ちていきます)。
+  // 短く3回タップすると、月のそばに「……もう少し、長く。」と、淡く出ます。
   var MOON_HOLD=3000;                                                    // 押し続ける時間(ミリ秒)
   var MOON_ANSWERS=['やまとさいだいじ','大和西大寺','大和西大寺駅','yamatosaidaiji']; // 最初の行き先(いくつ書いてもOK)
   var BOARD_URL='answer.html';                                           // 正解したあとに、移動するページ
@@ -717,7 +765,8 @@ body.intro .hero .kicker,body.intro .hero h1,body.intro .hero .sub,body.intro .h
   var MOON_NUDGE=['私の予告状には、見落としがある。「頭」という言葉に、気をつけることだ。','各行の、いちばん最初の文字を、縦に読んでみなさい。'];
   var moonHit=document.getElementById('moonHit'),moonRing=document.getElementById('moonRing');
   var moonfx=document.getElementById('moonfx'),moonForm=document.getElementById('moonForm'),moonInput=document.getElementById('moonInput'),moonMsg=document.getElementById('moonMsg'),moonClose=document.getElementById('moonClose');
-  var holdTimer=null,holding=false,moonWrong=0;
+  var holdTimer=null,holding=false,moonWrong=0,pressAt=0,shortTaps=0,whisperTimer=null;
+  var whisperEl=document.getElementById('whisper');
 
   // ===== 怪盗Sのカードのアイコン(画像があれば、「S」の丸のかわりに表示) =====
   var MOON_ICON_SRC='kaitou.png';   // 好きな画像のファイル名に変えられます(背景が透過のPNGがおすすめ)
@@ -727,6 +776,7 @@ body.intro .hero .kicker,body.intro .hero h1,body.intro .hero .sub,body.intro .h
     mi.onload=function(){moonSeal.textContent='';mi.alt='';moonSeal.appendChild(mi);moonSeal.classList.add('img');};
     mi.src=MOON_ICON_SRC;
   }
+
   function vib(ms){try{if(navigator.vibrate){navigator.vibrate(ms);}}catch(e){}}
   function moonNorm(s){
     s=(s||'');
@@ -736,9 +786,15 @@ body.intro .hero .kicker,body.intro .hero h1,body.intro .hero .sub,body.intro .h
     s=s.replace(/[\s.,\-_\/:;!?'"「」『』()・、。]/g,'');
     return s;
   }
-  function startHold(e){
+  function whisper(){
+    whisperEl.classList.add('on');
+    clearTimeout(whisperTimer);
+    whisperTimer=setTimeout(function(){whisperEl.classList.remove('on');},2600);
+  }
+  function startHold(){
     if(holding){return;}
     holding=true;
+    pressAt=Date.now();
     moonRing.classList.add('hold');
     vib(20);
     holdTimer=setTimeout(openMoon,MOON_HOLD);
@@ -748,9 +804,14 @@ body.intro .hero .kicker,body.intro .hero h1,body.intro .hero .sub,body.intro .h
     holding=false;
     clearTimeout(holdTimer);
     moonRing.classList.remove('hold');
+    if(Date.now()-pressAt<700){
+      shortTaps++;
+      if(shortTaps>=3){shortTaps=0;whisper();}
+    }
   }
   function openMoon(){
     holding=false;
+    shortTaps=0;
     moonRing.classList.remove('hold');
     vib(90);
     moonfx.hidden=false;
@@ -787,6 +848,11 @@ body.intro .hero .kicker,body.intro .hero h1,body.intro .hero .sub,body.intro .h
     moonfx.classList.remove('on');
     setTimeout(function(){moonfx.hidden=true;},reduce?0:700);
   });
+
+  // ===== 掲示板で使う画像を、先に読み込んでおく(電波が弱い場所でも、すぐ表示できるように) =====
+  // 掲示板(answer.html)で使う画像を、ここに書き足せます。ファイルがなくても、動作には影響しません。
+  var WARM=['saidaizi_01.png','saidaizi_02.png','yokoku_ura.png','yokoku_omote_01.png','card.png','kaitou.png'];
+  setTimeout(function(){WARM.forEach(function(s){var w=new Image();w.src=s;});},reduce?0:4000);
 
   // ===== スクロールでふわっと表示 =====
   var items=document.querySelectorAll('section .st,.story-fig,.story-text p,.seal-area,.step,dl,details,ul.notes,footer p');
