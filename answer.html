@@ -49,7 +49,7 @@ h1{font-size:clamp(1.6rem,8vw,2.1rem);line-height:1.3;font-weight:800;letter-spa
 .btn{display:inline-block;padding:11px 22px;border:1px solid var(--gold);background:rgba(201,162,75,.12);color:var(--gold-l);border-radius:30px;font:inherit;font-size:.85rem;letter-spacing:.15em;cursor:pointer}
 .btn:disabled{opacity:.5;cursor:default}
 
-/* ===== 目撃掲示板 ===== */
+/* ===== 目撃掲示板(枠は共通。投稿の中に入る「添付資料」で見た目を変える) ===== */
 .board-head{padding:38px 24px 20px;text-align:center;background:radial-gradient(ellipse 80% 60% at 50% 0%,rgba(194,50,50,.16),transparent 70%)}
 .feed{padding:6px 16px 10px}
 .post{margin:0 0 20px;padding:16px 16px 18px;background:var(--panel);border:1px solid var(--line);border-radius:12px;box-shadow:0 8px 22px rgba(0,0,0,.35);animation:rise .8s ease both}
@@ -70,10 +70,96 @@ h1{font-size:clamp(1.6rem,8vw,2.1rem);line-height:1.3;font-weight:800;letter-spa
 .reply .hint2{margin-top:8px;font-family:inherit;font-size:.85rem;color:var(--gold-l)}
 .reply .btn{margin-top:12px}
 
+/* 添付: SNS風 */
+.att{margin:12px 0 4px;border-radius:10px;overflow:hidden}
+.att .shot{margin:10px 0 0}
+.att-sns{background:#0f1420;border:1px solid #26304a;padding:12px 14px}
+.sns-h{display:flex;align-items:center;gap:10px}
+.sns-av{flex:none;width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#3a4668,#1f2740);color:#dfe5f0;display:flex;align-items:center;justify-content:center;font-size:.85rem}
+.sns-nm{display:flex;flex-direction:column;line-height:1.35;font-size:.82rem;min-width:0}
+.sns-nm b{color:#fff;font-weight:700}
+.sns-hd{color:var(--muted);font-size:.7rem}
+.sns-app{margin-left:auto;font-size:.62rem;color:var(--muted);border:1px solid #26304a;padding:1px 8px;border-radius:10px;white-space:nowrap}
+.sns-t{margin-top:8px;font-size:.88rem;line-height:1.8;color:#e6ebf5}
+.sns-tags{margin-top:6px;font-size:.8rem;color:#7fa8ff}
+.sns-f{display:flex;gap:18px;margin-top:10px;font-size:.74rem;color:var(--muted)}
+/* 添付: 防犯カメラ風 */
+.att-cctv{background:#05070a;border:1px solid #1b2a22;padding:10px;font-family:ui-monospace,Menlo,Consolas,monospace}
+.cc-h{display:flex;justify-content:space-between;font-size:.68rem;color:#8fd7a8;letter-spacing:.08em}
+.cc-h .rec{color:#ff5a5a;animation:hintBlink 1.4s ease-in-out infinite}
+.cc-g{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:8px}
+.cc-f{position:relative;aspect-ratio:4/3;background:#0d1410;border:1px solid #1f3328;overflow:hidden;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.cc-f img{display:block;width:100%;height:100%;object-fit:cover;filter:grayscale(1) contrast(1.1)}
+.cc-f::after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(0deg,rgba(0,0,0,.18) 0 2px,transparent 2px 4px);pointer-events:none}
+.cc-t{position:absolute;left:4px;bottom:3px;font-size:.58rem;color:#8fd7a8;z-index:1;text-shadow:0 0 3px #000}
+.cc-n{position:absolute;right:4px;top:3px;min-width:18px;height:18px;padding:0 4px;border-radius:9px;background:var(--gold);color:#1a1405;font-weight:700;font-size:.7rem;display:none;align-items:center;justify-content:center;z-index:2}
+.cc-f.picked{outline:2px solid var(--gold)}
+.cc-f.picked .cc-n{display:flex}
+/* 添付: 号外風 */
+.att-news{background:#efe6cf;color:#2b2418;border:1px solid #b9a577;padding:12px 14px;font-family:"Shippori Mincho",serif}
+.nw-top{display:inline-block;background:var(--red);color:#fff;padding:0 12px;font-size:.78rem;letter-spacing:.3em}
+.nw-h{margin-top:8px;font-size:1.35rem;line-height:1.35;border-bottom:2px solid #2b2418;padding-bottom:6px;font-weight:800}
+.nw-s{margin-top:6px;font-size:.9rem;font-weight:700}
+.nw-b{margin-top:8px;font-size:.84rem;line-height:1.85;color:#3a3220}
+.nw-d{margin-top:8px;font-size:.7rem;color:#7a6a48;text-align:right}
+/* 添付: 落とし物の写真 */
+.att-lost{background:#f4f1ea;color:#2b2418;border:1px dashed #9a8f78;padding:10px}
+.att-lost .shot{margin:0 0 8px}
+.lost-tag{background:#fff;border:1px solid #cfc7b4;border-radius:6px;padding:8px 12px;font-size:.8rem;line-height:1.7}
+.lost-tag b{display:inline-block;background:var(--red);color:#fff;padding:0 10px;border-radius:3px;font-size:.7rem;letter-spacing:.2em;margin-bottom:4px}
+/* 解き方: 画像の中をタップして探す */
+.shot.finder{cursor:crosshair;touch-action:manipulation}
+.shot.finder img{width:100%;height:auto}
+.ring{position:absolute;aspect-ratio:1;border:2px solid var(--gold);border-radius:50%;transform:translate(-50%,-50%);pointer-events:none;box-shadow:0 0 12px rgba(236,217,160,.8)}
+.ring.hint{animation:hintBlink 1.2s ease-in-out infinite}
+.ripple{position:absolute;width:30px;height:30px;margin:-15px 0 0 -15px;border-radius:50%;border:2px solid rgba(255,255,255,.75);pointer-events:none;animation:ripple .7s ease-out forwards}
+.ripple.ok{border-color:var(--gold)}
+@keyframes ripple{from{opacity:1;transform:scale(.3)}to{opacity:0;transform:scale(1.6)}}
+.find-tools{display:flex;gap:10px;justify-content:center;margin-top:10px;flex-wrap:wrap}
+@keyframes hintBlink{0%,100%{opacity:.45}50%{opacity:1}}
+
 /* 画像の拡大 */
 #lb{position:fixed;inset:0;z-index:300;display:flex;align-items:center;justify-content:center;padding:14px;background:rgba(5,8,14,.96);cursor:zoom-out}
 #lb[hidden]{display:none}
 #lb img{max-width:100%;max-height:100%;object-fit:contain;border-radius:4px}
+
+/* ===== 予告状が届く演出(右上から3回転して届き、裏向きで止まる → タップでめくる) ===== */
+#mailfx{position:fixed;inset:0;z-index:250;display:flex;align-items:center;justify-content:center;background:rgba(5,8,14,0);transition:background .6s ease;overflow:hidden}
+#mailfx.on{background:rgba(5,8,14,.9)}
+#mailfx[hidden]{display:none}
+.mail-stage{display:flex;flex-direction:column;align-items:center;gap:26px;width:100%;perspective:1300px}
+.mail-fly,.mail-spin{transform-style:preserve-3d}
+.mail-fly{opacity:0}
+.mail-fly.fly{animation:mailFly 1.7s cubic-bezier(.2,.8,.25,1) both}
+.mail-spin.in{animation:mailSpinIn 1.7s cubic-bezier(.2,.8,.25,1) both}
+.mail-card{position:relative;width:min(86vw,420px);aspect-ratio:91/55;transform-style:preserve-3d;transform:rotateY(180deg);cursor:pointer;transition:transform .9s cubic-bezier(.3,1.25,.4,1);-webkit-tap-highlight-color:transparent}
+@keyframes mailFly{
+  0%{opacity:0;transform:translate(55vw,-65vh) scale(.3)}
+  12%{opacity:1}
+  100%{opacity:1;transform:translate(0,0) scale(1)}
+}
+@keyframes mailSpinIn{from{transform:rotate(-1080deg)}to{transform:rotate(-4deg)}}
+
+/* めくる動きは、.mail-card の transition(.9s)で行う。表になったときの光や星は、下のスタイルと、JSで出す */
+.mail-fly{position:relative}
+.mail-front::after{content:"";position:absolute;inset:0;background:linear-gradient(115deg,transparent 34%,rgba(255,255,255,.6) 47%,rgba(236,217,160,.4) 53%,transparent 66%);transform:translateX(-130%);pointer-events:none}
+.mail-card.flipf .mail-front::after{animation:mailShine 1.1s ease-out .75s both}
+@keyframes mailShine{from{transform:translateX(-130%)}to{transform:translateX(130%)}}
+.mail-glow{position:absolute;left:50%;top:50%;width:150%;aspect-ratio:1;border-radius:50%;transform:translate(-50%,-50%) scale(.4);opacity:0;background:radial-gradient(circle,rgba(236,217,160,.6),rgba(201,162,75,.18) 40%,transparent 68%);pointer-events:none}
+.mail-glow.pulse{animation:mailGlowPulse 1.4s ease-out both}
+@keyframes mailGlowPulse{0%{opacity:0;transform:translate(-50%,-50%) scale(.4)}35%{opacity:1}100%{opacity:0;transform:translate(-50%,-50%) scale(1.15)}}
+.mail-shadow{position:absolute;left:8%;right:8%;bottom:-18px;height:20px;border-radius:50%;background:rgba(0,0,0,.6);filter:blur(10px);pointer-events:none}
+.mail-face{position:absolute;inset:0;border-radius:8px;overflow:hidden;backface-visibility:hidden;-webkit-backface-visibility:hidden;box-shadow:0 22px 44px rgba(0,0,0,.6),0 0 0 1px rgba(255,255,255,.12)}
+.mail-front{transform:rotateY(0deg)}
+.mail-back{transform:rotateY(180deg)}
+.mail-face img{display:block;width:100%;height:100%;object-fit:cover}
+.mail-back .fb{display:flex;align-items:center;justify-content:center;width:100%;height:100%;background:radial-gradient(ellipse at 50% 40%,#2c1520,#120b14);box-shadow:inset 0 0 0 6px rgba(201,162,75,.18)}
+.seal-s{width:24%;aspect-ratio:1;border-radius:50%;background:radial-gradient(circle at 35% 30%,#b13a46,#8e2a35 55%,#6f1f29);display:flex;align-items:center;justify-content:center;font:700 clamp(1.2rem,7vw,2rem)/1 "Shippori Mincho",serif;color:rgba(255,255,255,.7);box-shadow:0 3px 10px rgba(0,0,0,.5)}
+.mail-front .fb-front{width:100%;height:100%;padding:6% 8%;display:flex;flex-direction:column;justify-content:center;gap:.4em;background-color:var(--paper);background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .3 0 0 0 0 .22 0 0 0 0 .1 0 0 0 .25 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");color:var(--ink);font-family:"Shippori Mincho",serif;font-size:clamp(.72rem,3.4vw,1rem);line-height:1.8;box-shadow:inset 0 0 30px rgba(120,90,40,.2)}
+.fb-front .fb-sign{text-align:right;margin-top:.3em;letter-spacing:.2em}
+.mail-hint{font-size:.78rem;letter-spacing:.3em;color:var(--gold-l);animation:hintBlink 2s ease-in-out infinite}
+.mail-hint[hidden]{display:none}
+.mail-close[hidden]{display:none}
 
 /* ===== 金庫 ===== */
 .vault{padding:44px 24px 36px;text-align:center;background:radial-gradient(ellipse 80% 50% at 50% 0%,rgba(194,50,50,.16),transparent 70%),radial-gradient(ellipse 70% 40% at 50% 100%,rgba(201,162,75,.08),transparent 70%)}
@@ -105,6 +191,7 @@ h1{font-size:clamp(1.6rem,8vw,2.1rem);line-height:1.3;font-weight:800;letter-spa
 .card .note{display:block;font-size:.75rem;color:#7a6a48;margin-bottom:6px}
 .card .hint{margin-top:14px;padding:10px 12px;background:rgba(194,50,50,.1);border-left:3px solid var(--red);font-size:.92rem;opacity:0;animation:lineIn .8s ease forwards}
 .card .card-go{margin-top:14px;display:block;margin-left:auto;margin-right:auto;border-color:#8a6a22;color:#5a4414;background:rgba(138,106,34,.12)}
+.card .card-go[hidden]{display:none}
 @keyframes lineIn{from{opacity:0;transform:translateY(8px);filter:blur(3px)}to{opacity:1;transform:none;filter:blur(0)}}
 
 /* 最後の扉 */
@@ -129,7 +216,7 @@ h1{font-size:clamp(1.6rem,8vw,2.1rem);line-height:1.3;font-weight:800;letter-spa
 .end-stage[hidden]{display:none}
 .end-stage img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;transition:opacity .6s ease .12s,transform .8s ease .12s,filter .6s ease .12s}
 .end-char{filter:drop-shadow(0 0 12px rgba(236,217,160,.7))}
-.end-stage .end-true{object-fit:cover;opacity:0;transform:scale(.7);border-radius:50%;border:2px solid var(--gold);box-shadow:0 0 26px rgba(236,217,160,.65)}
+.end-stage .end-true{object-fit:contain;opacity:0;transform:scale(.7);filter:drop-shadow(0 0 12px rgba(236,217,160,.7))}
 .end-stage.reveal .end-char{opacity:0;transform:scale(1.25);filter:brightness(3) blur(3px)}
 .end-stage.reveal .end-true{opacity:1;transform:scale(1)}
 .end-flash{position:absolute;left:50%;top:50%;width:280px;height:280px;margin:-140px 0 0 -140px;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.95),rgba(236,217,160,.5) 35%,transparent 70%);opacity:0;pointer-events:none}
@@ -212,6 +299,7 @@ h1{font-size:clamp(1.6rem,8vw,2.1rem);line-height:1.3;font-weight:800;letter-spa
       <div id="cardBody"></div>
       <p class="hint" id="cardHint" hidden></p>
       <button type="button" class="btn card-go" id="cardGo" hidden>目撃掲示板を見る</button>
+      <button type="button" class="btn card-go" id="cardMail" hidden>予告状をもう一度見る</button>
     </section>
 
     <!-- 五つ揃ったあとに現れる -->
@@ -224,6 +312,24 @@ h1{font-size:clamp(1.6rem,8vw,2.1rem);line-height:1.3;font-weight:800;letter-spa
       ハガキの答えを入力すると、怪盗Sのことばが開きます。<br>
       © 2026 SCRAP
     </footer>
+  </div>
+</div>
+
+<!-- 予告状が届く演出 -->
+<div id="mailfx" hidden role="dialog" aria-label="予告状">
+  <div class="mail-stage">
+    <div class="mail-fly" id="mailFly">
+      <span class="mail-glow" id="mailGlow"></span>
+      <span class="mail-shadow" id="mailShadow"></span>
+      <div class="mail-spin" id="mailSpin">
+        <div class="mail-card" id="mailCard">
+          <div class="mail-face mail-front" id="mailFront"></div>
+          <div class="mail-face mail-back" id="mailBack"></div>
+        </div>
+      </div>
+    </div>
+    <p class="mail-hint" id="mailHint" hidden>タップして、めくる</p>
+    <button type="button" class="btn mail-close" id="mailClose" hidden>しまう</button>
   </div>
 </div>
 
@@ -255,8 +361,23 @@ h1{font-size:clamp(1.6rem,8vw,2.1rem);line-height:1.3;font-weight:800;letter-spa
      ===================================================== */
 
   // ---------- 目撃掲示板の投稿 ----------
-  // gate: 'button' = ボタンを押すと次の投稿が出る / 'ask' = 答えを入力すると次の投稿が出る
-  // requires: {kakera:0} = 金庫のカケラ①(配列の0番目)を取り戻すと、この投稿が出る
+  // 掲示板の「枠」は共通で、投稿の中に入る「添付資料(attach)」と「解き方(gate)」で変化をつけます。
+  //
+  // 【添付資料 attach】(どれか1つ)
+  //   {type:'sns',  name, handle, text:[...], tags:[...], likes, rt, img}   … SNS風の投稿(架空の「ひとことSNS」)
+  //   {type:'cctv', place, frames:[{src,time,label,n}, ...]}                 … 防犯カメラ風(n = 並べる順番 1,2,3)
+  //   {type:'news', head, sub, body:[...], date}                             … 号外風
+  //   {type:'lost', img, alt, item, found, date}                             … 落とし物の写真
+  //
+  // 【解き方 gate】
+  //   'button' … ボタンを押す(btn, note)
+  //   'ask'    … 言葉を入力する(label, placeholder, answers, nudge)
+  //   'find'   … 画像の中を指でタップして探す(img, find:{hot:[{x,y,r}], hintAfter})  x,y,r は画像に対する%
+  //   'order'  … 防犯カメラの写真を、時刻順にタップする(attach が cctv のとき。各 frames に n)
+  //
+  // 【答えが合ったあとの返信】 replyWho(返信する人) / ok(返信) / hint(管理人のひとこと) / toVault(金庫へのボタン)
+  // 【ほか】 requires:{kakera:0} … 金庫のカケラ①を取り戻すと出る / mail … 答えのあとに予告状が届く演出
+  //        mailBtn … 予告状を見るボタン(演出なしで、表向きの予告状が出る)
   // 投稿の順番は、配列の順番です。img は同じフォルダの画像ファイル名。
   var POSTS=[
     {
@@ -280,30 +401,272 @@ h1{font-size:clamp(1.6rem,8vw,2.1rem);line-height:1.3;font-weight:800;letter-spa
       ],
       gate:'ask', label:'建物の名前', placeholder:'建物の名前',
       answers:['ならふぁみりー','ならファミリー','narafamily'],
-      ok:'……そう、その建物だ。黒い影は、屋上へ向かったという。'
+      replyWho:'買い物帰りの人',
+      ok:'そうそう、その建物!怪しい人は、屋上へ向かってたわよ。'
     },
     {
       id:'p3', tag:'続報', who:'屋上にいた3人', when:'昨夜 22:10',
       text:[
-        '屋上にいた3人が、同じ「あるもの」を見たそうです。'
+        '屋上にいた3人が、黒い影の近くで、何かを見たそうです。',
+        'ただ、3人の証言が、どうもかみ合いません。'
       ],
       quotes:[
-        '証言A「頭に鹿の角が生えた、子どもみたいなのが立っていた」',
-        '証言B「2010年の、奈良の大きなお祭りの顔だったはずだ」',
-        '証言C「怪盗は、その足元に、何かを置いていった」'
+        '証言A「鹿を見ました。奈良ですからね。でも、二本足で立っていました」',
+        '証言B「いえ、子どもでした。男の子です。ずっと笑ったまま、動きませんでした」',
+        '証言C「私は、お坊さんを見ました。お坊さんにしては、ずいぶん小さかったですが……」'
       ],
       gate:'ask', label:'3人が見たものの名前', placeholder:'名前',
+      nudge:[
+        '管理人: 3人とも、同じものを見ているようです。',
+        '管理人: 鹿でもあり、子どもでもあり、お坊さんでもある。奈良県の、あの子ですよ。'
+      ],
       answers:['せんとくん','せんと','sentokun'],
-      ok:'……見つけたか。足元を探せ。',
-      hint:'足元の封筒かQRコードを、見つけたら、金庫を開こう。',
+      replyWho:'屋上にいた人',
+      ok:'せんとくん!そうそう、確かその子の足元に、何かを置いてたような気がします。',
+      hint:'管理人: 足元に何かあるようです。見つけたら、記憶の金庫で確認してみてください。',
       toVault:'記憶の金庫を開く'
     },
     {
-      id:'p4', tag:'新着', who:'(ここに書く)', when:'今朝',
+      id:'p4', tag:'新着', who:'管理人', when:'今朝',
       requires:{kakera:0},
       text:[
-        '(次の目撃情報を、ここに書く)'
-      ]
+        '怪盗Sから、新しい予告状が届いたようです。',
+        '予告状を読んで、黒い影の次の行き先を、投稿してください。',
+        '(ここに、あなたが作った謎の文章を入れる。謎が予告状の画像にあるなら、この3行目は消す)'
+      ],
+      mailBtn:{kakera:0,label:'予告状を見る'},
+      gate:'ask', label:'黒い影の行き先', placeholder:'行き先',
+      nudge:[
+        '管理人: 予告状を、もう一度、よく読んでみてください。',
+        '管理人: 行き先は、駅の名前です。'
+      ],
+      answers:['なんば','おおさかなんば','難波','大阪難波','なんばえき','namba'],
+      replyWho:'電車の乗客',
+      ok:'そうそう、難波ね!黒い影、難波行きの電車に乗ってたわよ。',
+      hint:'管理人: 難波へ向かう情報が、集まっています。電車で向かってみましょう。'
+    },
+    {
+      // 難波編: SNS風の添付資料で見せる(枠は他の投稿と同じ)
+      id:'p5', tag:'続報', who:'なんばの買い物客', when:'昨夜 22:48',
+      attach:{
+        type:'sns', name:'なんばの買い物客', handle:'@namba_shop',
+        text:[
+          '難波の駅出て、地上に上がったら、でっかい建物の屋上に黒い影おった!',
+          '建物の名前、また「S」で隠れてるやん笑',
+          'これ何て建物か、わかる人おる?'
+        ],
+        tags:['#怪盗S','#難波'], likes:128, rt:34,
+        img:'namba_01.png', alt:'大阪難波の駅の近くの大きな建物。屋上に黒い影。建物の名前は黒い「S」の影に隠されている'
+      },
+      text:[
+        'この建物の名前を、投稿してください。'
+      ],
+      gate:'ask', label:'建物の名前', placeholder:'建物の名前',
+      nudge:[
+        '管理人: 建物の形と、屋上の緑に、注目してみてください。',
+        '管理人: 屋上庭園で有名な、難波の建物です。'
+      ],
+      answers:['なんばぱーくす','なんばパークス','nambaparks'],
+      replyWho:'なんばの買い物客',
+      ok:'そうそう、なんばパークス!屋上のガーデンに、怪しい人が上っていったわよ。'
+    },
+    {
+      // ===== ここから先の投稿と答えは、すべて「仮」です。あなたの謎に合わせて書き換えてください =====
+      // 難波(②): 号外風で見せる → ガーデンに着いたらボタン
+      id:'p6', tag:'続報', who:'管理人', when:'昨夜 23:05',
+      attach:{
+        type:'news', head:'怪盗S、パークスガーデンに出没!', sub:'屋上の緑の中で、黒い影が目撃される',
+        body:['昨夜遅く、難波の大きな商業施設の屋上庭園で、黒い影が目撃された。','影は、ベンチの近くに、何かを置いていったという。'],
+        date:'号外'
+      },
+      text:['屋上庭園(パークスガーデン)に着いたら、ボタンを押してください。'],
+      gate:'button', btn:'ガーデンに着いた。続報を見る'
+    },
+    {
+      // 落とし物の写真 + 3桁の番号(ポーチの南京錠の答え)
+      id:'p7', tag:'続報', who:'園内のスタッフ', when:'昨夜 23:20',
+      attach:{
+        type:'lost',
+        img:svgURI(300,160,'<rect width="300" height="160" fill="#e9e3d3"/><rect x="85" y="50" width="130" height="80" rx="18" fill="#1c1c1f"/><rect x="92" y="62" width="116" height="6" rx="3" fill="#3a3a40"/><rect x="138" y="26" width="24" height="36" rx="10" fill="none" stroke="#b9b9c4" stroke-width="5"/><rect x="132" y="56" width="36" height="28" rx="5" fill="#b9b9c4"/><text x="150" y="150" font-size="12" text-anchor="middle" fill="#8a8068">(仮の画像)</text>'),
+        alt:'黒いポーチ。3桁の南京錠がかかっている',
+        item:'黒いポーチ(3桁の南京錠つき)', found:'庭園のベンチ', date:'昨夜 23:15'
+      },
+      text:['ベンチで、こんなポーチが見つかりました。3桁の鍵がかかっています。','開けられる番号がわかったら、投稿してください。'],
+      gate:'ask', label:'3桁の番号', placeholder:'000',
+      nudge:[
+        '管理人: ポーチに付いていた、マッチ棒のカードを見てみてください。',
+        '管理人: マッチ棒を動かすと、3つの数字になります。'
+      ],
+      answers:['440'],
+      replyWho:'園内のスタッフ', ok:'開きました!中に、カードが入っています。'
+    },
+    {
+      // この投稿のあと、物(ポケカ)の謎を解いて、答えを金庫へ入れる
+      id:'p8', tag:'新着', who:'管理人', when:'昨夜 23:30',
+      text:['ポーチの中のカードを、調べてみてください。','答えがわかったら、記憶の金庫へ。'],
+      vaultBtn:'記憶の金庫を開く'
+    },
+    {
+      // 梅田(③): 防犯カメラ風 + 時刻順に並べる(カケラ②を取り戻すと出る)
+      id:'p9', tag:'新着', who:'梅田の警備員', when:'昨夜 23:55',
+      requires:{kakera:1},
+      attach:{
+        type:'cctv', place:'CAM 07 / 梅田の商業施設',
+        frames:[
+          {src:demoCam(2), time:'23:48:05', label:'C', n:3},
+          {src:demoCam(0), time:'23:46:12', label:'A', n:1},
+          {src:demoCam(1), time:'23:47:31', label:'B', n:2}
+        ]
+      },
+      text:['防犯カメラの写真が、3枚、バラバラの順番で届きました。'],
+      gate:'order', note:'時刻の早い順に、タップしてください。',
+      replyWho:'梅田の警備員', ok:'時刻の順に見ると、黒い影は、建物の中へ入っていきました。'
+    },
+    {
+      // Instagramで「怪盗S」を検索する(実際の謎は、Instagramの投稿のほうに置く)
+      id:'p10', tag:'続報', who:'茶屋町の学生', when:'今朝',
+      attach:{
+        type:'sns', name:'茶屋町の学生', handle:'@chayamachi_gk',
+        text:['Instagramで「怪盗S」って検索したら、怪しいアカウント出てきた!','投稿見てみたら、なんか謎かけてくるんやけど…'],
+        tags:['#怪盗S','#梅田'], likes:210, rt:58
+      },
+      text:['Instagramで、「怪盗S」を検索してみてください。'],
+      gate:'button', btn:'Instagramで見つけた', note:'(見つけたら、押してください)',
+      vaultBtn:'謎の答えがわかったら、金庫へ'
+    },
+    {
+      // 梅田(④): 号外風 + 町の名前を答える(カケラ③を取り戻すと出る)
+      id:'p11', tag:'新着', who:'管理人', when:'今朝',
+      requires:{kakera:2},
+      attach:{
+        type:'news', head:'怪盗S、次は静かな路地へ?', sub:'古い町並みのカフェ街で、目撃情報',
+        body:['関係者によると、怪盗Sは、駅から少し歩いた、静かな路地に現れる可能性が高いという。','古い家を生かした、カフェの多い町だ。'],
+        date:'号外'
+      },
+      text:['号外を読んで、黒い影が向かう町の名前を、投稿してください。'],
+      gate:'ask', label:'町の名前', placeholder:'町の名前',
+      nudge:[
+        '管理人: 梅田から、歩いて行ける町です。',
+        '管理人: 細い路地と、古い家のカフェで有名な町です。'
+      ],
+      answers:['なかざきちょう','中崎町','nakazakicho'],
+      replyWho:'地元の人', ok:'そうそう、中崎町!あの辺は、細い路地がいっぱいあるのよ。'
+    },
+    {
+      // 怪盗Sにメールを送る(自動返信に、次の謎を入れる)
+      id:'p12', tag:'新着', who:'管理人', when:'今朝',
+      text:['怪盗Sの連絡先が、公開されました。','何か送ってみると、返事が来るかもしれません。','返事の謎を解いて、答えを金庫へ。'],
+      linkBtn:{label:'怪盗Sにメールを送る', href:'mailto:kaito.s.example@example.com?subject=%E6%80%AA%E7%9B%97S'},
+      vaultBtn:'記憶の金庫を開く'
+    },
+    {
+      // 梅田(⑤): 落とし物の写真 + 持ち主の名前(カケラ④を取り戻すと出る)
+      id:'p13', tag:'新着', who:'カフェの店員', when:'今朝',
+      requires:{kakera:3},
+      attach:{
+        type:'lost',
+        img:svgURI(300,160,'<rect width="300" height="160" fill="#e9e3d3"/><circle cx="150" cy="72" r="50" fill="#c23232"/><text x="150" y="94" font-size="64" text-anchor="middle" fill="#fff" font-family="serif" font-weight="700">S</text><text x="150" y="150" font-size="12" text-anchor="middle" fill="#8a8068">(仮の画像)</text>'),
+        alt:'ステッカーの落とし物', item:'ステッカー(1枚)', found:'カフェのテーブル', date:'昨日'
+      },
+      text:['テーブルに、こんなステッカーが落ちていました。持ち主の名前は、わかりますか?'],
+      gate:'ask', label:'持ち主の名前', placeholder:'名前',
+      answers:['怪盗s','怪盗えす','かいとうえす'],
+      replyWho:'カフェの店員', ok:'……ああ、あの有名な。取りに来るかなあ。'
+    },
+    {
+      // 画像の中をタップして探す + ブラックライト(透明ペン)の謎へ
+      id:'p14', tag:'続報', who:'北館の利用客', when:'今朝',
+      text:['大きな建物の前の人混みに、黒い影が紛れていました。','指でタップして、探してください。'],
+      gate:'find', img:demoCrowd(), alt:'人混みの写真。どこかに、黒い影',
+      find:{hot:[{x:62,y:46,r:6}], hintAfter:5},
+      replyWho:'北館の利用客', ok:'そこそこ!建物の上のほうへ向かっていったわ。',
+      hint:'管理人: 予告状に、ライトを当ててみてください。答えがわかったら、金庫へ。',
+      toVault:'記憶の金庫を開く'
+    },
+    {
+      // 最終謎: カケラの答えの「隠れた意味」から、ロッカーの番号を出す(カケラ⑤を取り戻すと出る)
+      id:'p15', tag:'新着', who:'管理人', when:'今朝',
+      requires:{kakera:4},
+      text:['五つのカケラが、揃いました。','カケラの答えの、隠れた意味を並べると、ロッカーの4桁の番号になるようです。','番号を、投稿してください。'],
+      gate:'ask', label:'ロッカーの番号', placeholder:'0000',
+      nudge:[
+        '管理人: 五つの答えを、もう一度、見直してみてください。',
+        '管理人: 月と日の、4桁の数字です。'
+      ],
+      answers:['0517','517'],
+      replyWho:'管理人', ok:'ロッカーが開きました!中に、最後の予告状が入っています。',
+      mail:{
+        back:'yokoku_ura.png',
+        front:'yokoku_omote_03.png',
+        text:['よくここまで辿り着いたな。','最後に、私の正体を、見つけてみせよ。','怪盗S']
+      }
+    },
+    {
+      // 最後の問題: 怪盗Sの正体(答えを入れると、最後の扉が現れる)
+      id:'p16', tag:'新着', who:'管理人', when:'今朝',
+      text:['最後の予告状を、読んでください。','怪盗Sの正体は、誰でしょう? 名前を、投稿してください。'],
+      mailBtn:{label:'最後の予告状を見る', postId:'p15'},
+      gate:'ask', label:'怪盗Sの正体', placeholder:'名前',
+      nudge:[
+        '管理人: 最後の予告状を、もう一度、よく読んでください。',
+        '管理人: 予告状の、各行の頭の文字を、縦に読んでみてください。'
+      ],
+      answers:['しゅんいち','shunichi'],
+      replyWho:'管理人', ok:'……正体を、暴きましたね。最後の扉が、開こうとしています。',
+      toVault:'最後の扉へ'
+    }
+  ];
+
+  // ---------- 見本(URLの末尾に #demo を付けると、掲示板の最後に表示されます) ----------
+  // 新しい見た目と解き方の見本です。気に入ったものを、上の POSTS にコピーして使います。
+  function svgURI(w,h,body){return 'data:image/svg+xml,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 '+w+' '+h+'">'+body+'</svg>');}
+  function demoCrowd(){
+    var s='<rect width="300" height="200" fill="#d8dde6"/>',i,x,y;
+    for(i=0;i<46;i++){x=(i*53%280)+10;y=(i*37%160)+30;s+='<circle cx="'+x+'" cy="'+(y-9)+'" r="6" fill="#6b7385"/><rect x="'+(x-6)+'" y="'+(y-3)+'" width="12" height="20" rx="5" fill="'+(i%3?'#8a93a8':'#59627a')+'"/>';}
+    s+='<circle cx="186" cy="84" r="5" fill="#111"/><rect x="181" y="89" width="10" height="18" rx="4" fill="#111"/>';
+    return svgURI(300,200,s);
+  }
+  function demoCam(k){
+    var xs=[40,95,150],ys=[110,70,30],s='<rect width="200" height="150" fill="#2a3a30"/><path d="M0 150L200 60V150Z" fill="#1c2820"/>';
+    s+='<circle cx="'+xs[k]+'" cy="'+(ys[k]+60)+'" r="7" fill="#050505"/><rect x="'+(xs[k]-7)+'" y="'+(ys[k]+66)+'" width="14" height="24" rx="6" fill="#050505"/>';
+    return svgURI(200,150,s);
+  }
+  function demoLost(){
+    return svgURI(300,160,'<rect width="300" height="160" fill="#e9e3d3"/><rect x="95" y="38" width="110" height="84" rx="26" fill="#1c1c1f"/><rect x="190" y="62" width="44" height="22" rx="11" fill="#1c1c1f"/><text x="150" y="150" font-size="12" text-anchor="middle" fill="#8a8068">(見本の画像)</text>');
+  }
+  var DEMO=[
+    {
+      id:'d1', demo:true, tag:'見本', who:'SNS風 + 画像の中をタップして探す', when:'',
+      attach:{type:'sns', name:'なんばの会社員', handle:'@namba_salary', text:['難波で黒い影おった!めっちゃ足速い。','写真撮ったけど、人多すぎて見つけられへん…'], tags:['#怪盗S','#難波'], likes:128, rt:34},
+      text:['人混みの写真から、怪盗Sを探して、指でタップしてください。'],
+      gate:'find', img:demoCrowd(), alt:'人混みの写真。どこかに、黒い影',
+      find:{hot:[{x:62,y:46,r:6}], hintAfter:5},
+      replyWho:'なんばの会社員', ok:'そこや!よう見つけたな。あっちの大きな建物に入っていったで。'
+    },
+    {
+      id:'d2', demo:true, tag:'見本', who:'防犯カメラ風 + 時刻順に並べる', when:'',
+      attach:{type:'cctv', place:'CAM 03 / 駅の北出口', frames:[
+        {src:demoCam(2), time:'22:46:05', label:'C', n:3},
+        {src:demoCam(0), time:'22:44:12', label:'A', n:1},
+        {src:demoCam(1), time:'22:45:31', label:'B', n:2}
+      ]},
+      text:['3枚の防犯カメラの写真が、バラバラの順番で届きました。'],
+      gate:'order', note:'時刻の早い順に、タップしてください。',
+      replyWho:'管理人', ok:'時刻の順に並べると、黒い影は、階段を上へ上がっていきました。'
+    },
+    {
+      id:'d3', demo:true, tag:'見本', who:'号外風', when:'',
+      attach:{type:'news', head:'怪盗S、難波に出没!', sub:'屋上庭園で目撃相次ぐ',
+        body:['昨夜遅く、難波の駅前で、黒い影を見たという情報が相次いだ。','影は、緑の多い大きな建物の屋上へ向かったという。'], date:'号外'},
+      text:['号外が、掲示板に貼られました。見出しや本文から、場所を読み取る形にもできます。']
+    },
+    {
+      id:'d4', demo:true, tag:'見本', who:'落とし物の写真 + 名前を入力', when:'',
+      attach:{type:'lost', img:demoLost(), alt:'落とし物の写真', item:'黒い手袋(片方)', found:'難波駅 構内', date:'昨夜 23:10'},
+      text:['駅に、こんな落とし物が届いています。持ち主の名前は、何でしょう?'],
+      gate:'ask', label:'持ち主の名前', placeholder:'名前',
+      answers:['怪盗s','怪盗えす','かいとうえす'],
+      replyWho:'駅員さん', ok:'……ああ、あの有名な。取りに来るかなあ。'
     }
   ];
 
@@ -312,37 +675,56 @@ h1{font-size:clamp(1.6rem,8vw,2.1rem);line-height:1.3;font-weight:800;letter-spa
   // ・ひらがな/カタカナ、全角/半角、空白や「・」「.」「/」は区別されません。
   // ・答えが複数あってもOK。
   // board:true にすると、カケラを取り戻したあとに「目撃掲示板を見る」ボタンが出ます。
+  // mail を書くと、カケラを取り戻したあとに「予告状が右上から回って届く演出」が出ます。
+  //   back : 予告状の裏の画像(名刺サイズ)   front: 予告状の表の画像(名刺サイズ)
+  //   ratio: 画像の縦横比(省略すると名刺の 91/55)
+  //   text : 画像がないときに、表に出る文章(最後の行が署名になります)
+  //   届いたカードは、裏向きで止まります。タップすると、表を向いて読めます。
   var KAKERA=[
     {
       answers:['710','せんと','遷都'],
       title:'カケラ① ── はじまりの都',
       lines:['……710年。都が遷された、はじまりの年。','最初のカケラは、返してやろう。'],
       hint:'次の目撃情報が、掲示板に届いた。',
-      board:true
+      board:true,
+      mail:{
+        back:'yokoku_ura.png',
+        front:'yokoku_omote_01.png',
+        text:['最初のカケラは、返してやろう。','だが、記憶の続きは、人の波の向こうにある。','怪盗S']
+      }
     },
     {
       answers:['かびごん'],
-      title:'カケラ② ── (題をここに書く)',
-      lines:['ほう。二つ目も取り戻したか。','だが、時間は、まだ先へ進む。'],
-      hint:'次の行き先:(ここに書く)'
+      title:'カケラ② ── いちばん重い子',
+      lines:['……カビゴン。眠ってばかりの、いちばん重い子。','二つ目のカケラも、返してやろう。'],
+      hint:'次の目撃情報が、掲示板に届いた。',
+      board:true,
+      mail:{
+        back:'yokoku_ura.png',
+        front:'yokoku_omote_02.png',
+        text:['二つ目も、取り戻したか。','次の舞台は、梅田だ。','怪盗S']
+      }
     },
     {
-      answers:['こたえ3'],
-      title:'カケラ③ ── (題をここに書く)',
-      lines:['三つ目。','あの頃の景色を、覚えていたようだな。'],
-      hint:'次の行き先:(ここに書く)'
+      answers:['ゆき','雪'],
+      title:'カケラ③ ── 白い景色',
+      lines:['……雪。白く、静かな景色。','三つ目のカケラだ。'],
+      hint:'次の目撃情報が、掲示板に届いた。',
+      board:true
     },
     {
-      answers:['こたえ4'],
-      title:'カケラ④ ── (題をここに書く)',
-      lines:['四つ目。','記憶は、もうすぐ、今に追いつく。'],
-      hint:'次の行き先:(ここに書く)'
+      answers:['しる','知る'],
+      title:'カケラ④ ── 知らなかった頃',
+      lines:['……知る。まだ何も知らなかった頃の、記憶。','四つ目のカケラだ。'],
+      hint:'次の目撃情報が、掲示板に届いた。',
+      board:true
     },
     {
-      answers:['20210401','2021年4月1日','2021.4.1'],
-      title:'カケラ⑤ ── はじまりの日',
-      lines:['最後のカケラは、二人のはじまり。','時間は、ここまで遡った。'],
-      hint:'五つのカケラを持って、最後の扉へ。'
+      answers:['たちまちづき','立待月','立待ち月'],
+      title:'カケラ⑤ ── 満ちゆく月',
+      lines:['……立待月。月は、満ちてから、また満ちる。','最後のカケラだ。'],
+      hint:'最後の問題が、掲示板に届いた。',
+      board:true
     }
   ];
 
@@ -364,15 +746,17 @@ h1{font-size:clamp(1.6rem,8vw,2.1rem);line-height:1.3;font-weight:800;letter-spa
   var PHOTO_SRC='ending.jpg';   // 最後に出す写真(なければ表示しない)
   var FAVICON_SRC='favicon.png'; // タブのアイコン(なければ赤丸のSのまま)
 
-  var BFAILS=['……その名前ではないようだ。','もう一度、写真をよく見てほしい。','管理人: 名前が違うようです。'];
+  var BFAILS=['管理人: その名前では、ないようです。','管理人: もう一度、写真をよく見てもらえますか?','管理人: 名前が違うようです。'];
+  var BFIND=['……そこには、いないようです。','管理人: もう少し、よく探してみてください。','管理人: 人の少ないところも、見てみましょう。'];
 
   /* ===================================================== */
 
   var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion:reduce)').matches;
   function $(id){return document.getElementById(id);}
   function mk(tag,cls,text){var e=document.createElement(tag);if(cls){e.className=cls;}if(text!=null){e.textContent=text;}return e;}
-  var form=$('form'),input=$('kotoba'),msg=$('msg'),lock=$('lock'),card=$('card'),cardTitle=$('cardTitle'),cardBody=$('cardBody'),cardHint=$('cardHint'),cardGo=$('cardGo'),count=$('count'),finalArea=$('final'),door=$('door'),ending=$('ending'),endDate=$('endDate'),endLines=$('endLines'),endSign=$('endSign'),endClose=$('endClose'),endStage=$('endStage'),endChar=$('endChar'),endTrue=$('endTrue'),endCap=$('endCap'),endPhoto=$('endPhoto'),endPhotoImg=$('endPhotoImg'),snd=$('snd'),shardsEl=$('shards');
+  var form=$('form'),input=$('kotoba'),msg=$('msg'),lock=$('lock'),card=$('card'),cardTitle=$('cardTitle'),cardBody=$('cardBody'),cardHint=$('cardHint'),cardGo=$('cardGo'),cardMail=$('cardMail'),count=$('count'),finalArea=$('final'),door=$('door'),ending=$('ending'),endDate=$('endDate'),endLines=$('endLines'),endSign=$('endSign'),endClose=$('endClose'),endStage=$('endStage'),endChar=$('endChar'),endTrue=$('endTrue'),endCap=$('endCap'),endPhoto=$('endPhoto'),endPhotoImg=$('endPhotoImg'),snd=$('snd'),shardsEl=$('shards');
   var viewBoard=$('viewBoard'),viewVault=$('viewVault'),tabB=$('tabB'),tabV=$('tabV'),dotB=$('dotB'),feed=$('feed'),lb=$('lb'),lbImg=$('lbImg');
+  var mailfx=$('mailfx'),mailCard=$('mailCard'),mailBack=$('mailBack'),mailFront=$('mailFront'),mailHint=$('mailHint'),mailClose=$('mailClose');
 
   /* ---------- ファビコン(画像があれば差し替え) ---------- */
   if(FAVICON_SRC){
@@ -405,6 +789,20 @@ h1{font-size:clamp(1.6rem,8vw,2.1rem);line-height:1.3;font-weight:800;letter-spa
   function buzz(){ensureAudio();tone(110,0,.28,'sawtooth',.09);tone(98,.1,.3,'sawtooth',.07);}
   function fanfare(){ensureAudio();[523.25,659.25,783.99,1046.5].forEach(function(f,i){tone(f,i*.18,1.4,'triangle',.1);});}
   function kirari(){ensureAudio();tone(1318.5,0,.6,'sine',.09);tone(1568,.09,.6,'sine',.08);tone(2093,.18,1.1,'sine',.07);}
+  // 予告状が飛んでくる風切り音(ノイズを、帯域フィルターで下から上へ動かす)
+  function swoosh(){
+    ensureAudio();
+    if(!AC||muted){return;}
+    var len=Math.floor(AC.sampleRate*0.7),buf=AC.createBuffer(1,len,AC.sampleRate),d=buf.getChannelData(0),j;
+    for(j=0;j<len;j++){d[j]=(Math.random()*2-1)*(1-j/len);}
+    var src=AC.createBufferSource();src.buffer=buf;
+    var f=AC.createBiquadFilter();f.type='bandpass';f.Q.value=1.2;
+    var t=AC.currentTime;
+    f.frequency.setValueAtTime(500,t);f.frequency.exponentialRampToValueAtTime(3000,t+0.6);
+    var g=AC.createGain();g.gain.setValueAtTime(0.18,t);g.gain.exponentialRampToValueAtTime(0.001,t+0.7);
+    src.connect(f);f.connect(g);g.connect(AC.destination);src.start(t);
+  }
+  function thud(){ensureAudio();tone(120,0,.18,'sine',.2);tone(80,.02,.25,'sine',.15);}
   snd.addEventListener('click',function(){
     muted=!muted;
     snd.textContent=muted?'音 OFF':'音 ON';
@@ -427,7 +825,10 @@ h1{font-size:clamp(1.6rem,8vw,2.1rem);line-height:1.3;font-weight:800;letter-spa
   }
 
   /* ---------- 進行状況(URLの # に保存) ---------- */
-  // 例: #t=v&k=10000&b=4  (t=表示中のタブ、k=取り戻したカケラ、b=掲示板の進み具合)
+  // 例: #t=v&k=10000&b=4  (t=表示中のタブ、k=取り戻したカケラ、b=掲示板の進み具合、demo=見本を表示)
+  var demoOn=/[#&]demo(&|$)/.test(location.hash||'');
+  var ALL=demoOn?POSTS.concat(DEMO):POSTS;
+  var demoSolved={};
   var N=KAKERA.length,got=[],stage=1,tab='b',i;
   for(i=0;i<N;i++){got.push(false);}
   function bits(){return got.map(function(v){return v?1:0;}).join('');}
@@ -443,7 +844,7 @@ h1{font-size:clamp(1.6rem,8vw,2.1rem);line-height:1.3;font-weight:800;letter-spa
     }catch(e){}
   }
   function saveState(){
-    try{history.replaceState(null,'','#t='+tab+'&k='+bits()+'&b='+stage);}catch(e){}
+    try{history.replaceState(null,'','#t='+tab+'&k='+bits()+'&b='+stage+(demoOn?'&demo':''));}catch(e){}
   }
   function all(){return got.every(function(v){return v;});}
 
@@ -465,29 +866,184 @@ h1{font-size:clamp(1.6rem,8vw,2.1rem);line-height:1.3;font-weight:800;letter-spa
   function openLb(src,alt){lbImg.src=src;lbImg.alt=alt||'';lb.hidden=false;}
   lb.addEventListener('click',function(){lb.hidden=true;});
 
+  /* ---------- 予告状が届く演出 ---------- */
+  // 右上から3回転しながら届き、裏向きで止まる → タップで表にめくる → 「しまう」で閉じる
+  // 見返すとき(instant)は、演出なしで、表向きの予告状がすぐ出る
+  var mailBusy=false,mailLanded=false,mailFlipped=false,mailDone=null,mailCur=null;
+  function fbBack(host){
+    var d=mk('div','fb');
+    d.appendChild(mk('div','seal-s','S'));
+    host.appendChild(d);
+  }
+  function makeFbFront(m){
+    return function(host){
+      var d=mk('div','fb-front'),list=m.text||[];
+      list.forEach(function(t,j){d.appendChild(mk('p',j===list.length-1?'fb-sign':null,t));});
+      host.appendChild(d);
+    };
+  }
+  function setFace(host,src,fb,cb){
+    host.innerHTML='';
+    if(!src){fb(host);cb();return;}
+    var im=new Image();
+    im.onload=function(){host.appendChild(im);cb();};
+    im.onerror=function(){fb(host);cb();};
+    im.alt='';im.src=src;
+  }
+  var mailFly=$('mailFly'),mailSpin=$('mailSpin'),mailGlow=$('mailGlow'),mailShadow=$('mailShadow'),mailFlipping=false,mailInstant=false;
+  function startMail(){
+    mailFly.className='mail-fly';mailFly.style.cssText='';
+    mailSpin.className='mail-spin';mailSpin.style.cssText='';
+    mailCard.className='mail-card';mailCard.style.cssText='';mailFlipping=false;
+    mailGlow.className='mail-glow';mailShadow.className='mail-shadow';
+    mailCard.style.aspectRatio=mailCur.ratio||'91/55';
+    mailHint.hidden=true;mailClose.hidden=true;
+    mailfx.hidden=false;
+    void mailfx.offsetWidth;
+    mailfx.classList.add('on');
+    if(mailInstant){
+      // 見返すとき: 演出は出さずに、表向きの予告状が、ふわっと現れる
+      mailFly.style.opacity='0';mailFly.style.transform='translate(0,0) scale(1)';
+      mailSpin.style.transform='rotate(-1deg)';
+      mailCard.style.transform='rotateY(0deg)';
+      void mailFly.offsetWidth;
+      mailFly.style.transition='opacity .35s ease';
+      mailFly.style.opacity='1';
+      mailLanded=true;mailFlipped=true;
+      mailClose.hidden=false;
+      flipFx(false);
+      return;
+    }
+    swoosh();
+    mailFly.classList.add('fly');       // 右上から飛んでくる
+    mailSpin.classList.add('in');       // 3回転しながら届いて、裏向きで止まる
+  }
+  function playMail(m,done,instant){
+    if(!m||mailBusy){if(done){done();}return;}
+    mailBusy=true;mailLanded=false;mailFlipped=false;mailDone=done||null;mailCur=m;mailInstant=!!instant;
+    var left=2;
+    function ready(){left--;if(left===0){startMail();}}
+    setFace(mailBack,m.back,fbBack,ready);
+    setFace(mailFront,m.front,makeFbFront(m),ready);
+  }
+  mailFly.addEventListener('animationend',function(e){
+    if(e.animationName!=='mailFly'){return;}
+    mailFly.classList.remove('fly');
+    mailFly.style.opacity='1';
+    mailFly.style.transform='translate(0,0) scale(1)';
+    mailLanded=true;
+    thud();
+    mailHint.hidden=false;
+  });
+  // めくる音: 紙がこすれる音。表になるときは、少し遅れて、きらりと鳴る
+  function flipFx(front){
+    ensureAudio();
+    if(AC&&!muted){
+      var len=Math.floor(AC.sampleRate*0.35),buf=AC.createBuffer(1,len,AC.sampleRate),d=buf.getChannelData(0),j;
+      for(j=0;j<len;j++){d[j]=(Math.random()*2-1)*Math.sin(Math.PI*j/len);}
+      var src=AC.createBufferSource();src.buffer=buf;
+      var f=AC.createBiquadFilter();f.type='highpass';f.frequency.value=2500;
+      var g=AC.createGain();g.gain.value=0.12;
+      src.connect(f);f.connect(g);g.connect(AC.destination);src.start();
+    }
+    if(front){setTimeout(kirari,reduce?0:650);}
+  }
+  // 表になった瞬間に、金色の星がカードのまわりにはじける
+  function mailSparkle(){
+    var colors=['#ffffff','#ecd9a0','#c9a24b'];
+    for(var j=0;j<16;j++){
+      var s=document.createElement('i');s.className='twink';
+      var a=(Math.PI*2*j/16)+Math.random()*.3,r=110+Math.random()*90;
+      s.style.setProperty('--dx',Math.round(Math.cos(a)*r)+'px');
+      s.style.setProperty('--dy',Math.round(Math.sin(a)*r*.7)+'px');
+      s.style.background=colors[j%3];
+      s.style.animationDelay=(Math.random()*.2)+'s';
+      mailFly.appendChild(s);
+      (function(n){setTimeout(function(){if(n.parentNode){n.parentNode.removeChild(n);}},1500);})(s);
+    }
+  }
+  mailCard.addEventListener('click',function(){
+    if(!mailLanded||mailFlipping){return;}
+    mailFlipped=!mailFlipped;mailFlipping=true;
+    mailCard.className='mail-card'+(mailFlipped?' flipf':'');
+    mailCard.style.transform=mailFlipped?'rotateY(0deg)':'rotateY(180deg)';
+    flipFx(mailFlipped);
+    mailHint.hidden=true;
+    if(mailFlipped){
+      setTimeout(function(){
+        mailGlow.className='mail-glow';void mailGlow.offsetWidth;mailGlow.className='mail-glow pulse';
+        if(!reduce){mailSparkle();}
+      },reduce?0:650);
+      setTimeout(function(){mailClose.hidden=false;},reduce?0:1500);
+    }
+    setTimeout(function(){mailFlipping=false;},reduce?0:1300);
+  });
+  mailClose.addEventListener('click',function(){
+    mailClose.hidden=true;mailHint.hidden=true;
+    mailfx.classList.remove('on');
+    mailFly.style.transition='transform .7s ease,opacity .7s ease';
+    mailFly.style.opacity='0';
+    mailFly.style.transform='translate(0,30vh) scale(.5)';
+    setTimeout(function(){
+      mailfx.hidden=true;mailBusy=false;
+      var d=mailDone;mailDone=null;
+      if(d){d();}
+    },reduce?0:750);
+  });
+
   /* ---------- 目撃掲示板 ---------- */
   var shown={};
-  function visible(idx){var p=POSTS[idx];return stage>=idx+1&&(!p.requires||got[p.requires.kakera]);}
-  function solvedPost(idx){return stage>=idx+2;}
-
-  function makeFigure(p){
-    var f=mk('figure','shot');
-    var im=new Image();
-    im.alt=p.alt||'';
-    im.onerror=function(){f.className='shot miss';f.textContent='(画像 '+p.img+' が見つかりません)';};
-    im.src=p.img;
-    f.appendChild(im);
-    f.appendChild(mk('span','zoom','タップで拡大'));
-    f.addEventListener('click',function(){if(f.className.indexOf('miss')<0){openLb(p.img,p.alt);}});
-    return f;
+  function visible(idx){
+    var p=ALL[idx];
+    if(p.demo){return true;}
+    if(p.requires){return !!got[p.requires.kakera];}   // カケラを取り戻すと、その投稿が出る
+    return stage>=idx+1;
+  }
+  // 最後の扉は、最後の投稿(DOOR_AFTER)を解いたあとに、金庫に現れる
+  var DOOR_AFTER='p16';
+  var allKakera=all;
+  all=function(){
+    var ok=allKakera();
+    if(ok&&DOOR_AFTER){
+      ok=false;
+      ALL.forEach(function(q,k){if(q.id===DOOR_AFTER){ok=solvedPost(k);}});
+    }
+    return ok;
+  };
+  var renderNew0=renderNew;
+  renderNew=function(scroll){
+    var n=renderNew0(scroll);
+    if(all()&&finalArea.hidden){finalArea.hidden=false;}
+    return n;
+  };
+  function solvedPost(idx){
+    var p=ALL[idx];
+    return p.demo?!!demoSolved[p.id]:stage>=idx+2;
   }
   function advance(idx){
+    var p=ALL[idx];
+    if(p.demo){demoSolved[p.id]=1;return;}
     stage=Math.max(stage,idx+2);
     saveState();
     renderNew(true);
   }
+  function makeFigure(src,alt){
+    var f=mk('figure','shot');
+    var im=new Image();
+    im.alt=alt||'';
+    im.onerror=function(){f.className='shot miss';f.textContent='(画像が見つかりません)';};
+    im.src=src;
+    f.appendChild(im);
+    f.appendChild(mk('span','zoom','タップで拡大'));
+    f.addEventListener('click',function(){if(f.className.indexOf('miss')<0){openLb(src,alt);}});
+    return f;
+  }
   function replyBox(p){
     var r=mk('div','reply');
+    r.style.fontFamily='inherit';r.style.fontSize='.9rem';r.style.background='rgba(255,255,255,.04)';r.style.borderLeftColor='#c9a24b';
+    var who=mk('p',null,'返信 ── '+(p.replyWho||'投稿者'));
+    who.style.cssText='font-size:.72rem;color:#97a3b8;letter-spacing:.1em;margin-bottom:4px';
+    r.appendChild(who);
     r.appendChild(mk('p',null,p.ok));
     if(p.hint){r.appendChild(mk('p','hint2',p.hint));}
     if(p.toVault){
@@ -497,6 +1053,85 @@ h1{font-size:clamp(1.6rem,8vw,2.1rem);line-height:1.3;font-weight:800;letter-spa
     }
     return r;
   }
+  // 答えが合ったとき(どの解き方でも共通)
+  function correct(p,idx,box,keep){
+    chime();
+    if(!keep){box.innerHTML='';}
+    box.appendChild(replyBox(p));
+    advance(idx);
+    if(p.mail){setTimeout(function(){playMail(p.mail);},reduce?0:900);}
+  }
+  function shakeEl(el){el.classList.remove('shake');void el.offsetWidth;el.classList.add('shake');}
+  function vib(){try{if(navigator.vibrate){navigator.vibrate(60);}}catch(err){}}
+
+  /* 添付資料(SNS風 / 防犯カメラ風 / 号外風 / 落とし物の写真) */
+  function makeAttach(p,idx,box){
+    var t=p.attach,w=mk('div','att att-'+t.type);
+    if(t.type==='sns'){
+      var hd=mk('div','sns-h');
+      hd.appendChild(mk('span','sns-av',(t.name||'?').charAt(0)));
+      var nm=mk('span','sns-nm');
+      nm.appendChild(mk('b',null,t.name||''));
+      nm.appendChild(mk('span','sns-hd',t.handle||''));
+      hd.appendChild(nm);
+      hd.appendChild(mk('span','sns-app','ひとことSNS'));
+      w.appendChild(hd);
+      (t.text||[]).forEach(function(x){w.appendChild(mk('p','sns-t',x));});
+      if(t.tags){w.appendChild(mk('p','sns-tags',t.tags.join(' ')));}
+      if(t.img){w.appendChild(makeFigure(t.img,t.alt));}
+      var ft=mk('div','sns-f');
+      ft.appendChild(mk('span',null,'♡ '+(t.likes||0)));
+      ft.appendChild(mk('span',null,'↻ '+(t.rt||0)));
+      w.appendChild(ft);
+    }else if(t.type==='cctv'){
+      var ch=mk('div','cc-h');
+      ch.appendChild(mk('span',null,t.place||'CAM'));
+      ch.appendChild(mk('span','rec','● REC'));
+      w.appendChild(ch);
+      var grid=mk('div','cc-g'),list=t.frames||[],picked=0,total=list.length,isOrder=(p.gate==='order'),done=isOrder&&solvedPost(idx),els=[];
+      function reset(){els.forEach(function(e){e.picked=false;e.classList.remove('picked');e.lastChild.textContent='';});picked=0;}
+      list.forEach(function(fr){
+        var f=mk('div','cc-f');
+        if(fr.src){var im=new Image();im.alt=fr.label||'';im.src=fr.src;f.appendChild(im);}
+        f.appendChild(mk('span','cc-t',fr.time||''));
+        var badge=mk('span','cc-n','');
+        f.appendChild(badge);
+        if(done){f.classList.add('picked');badge.textContent=String(fr.n);}
+        f.addEventListener('click',function(){
+          if(!isOrder){if(fr.src){openLb(fr.src,fr.label);}return;}
+          if(done||f.picked){return;}
+          ensureAudio();
+          if(fr.n===picked+1){
+            picked++;f.picked=true;f.classList.add('picked');badge.textContent=String(picked);soft();
+            if(picked===total){done=true;correct(p,idx,box);}
+          }else{
+            var m=box.querySelector('.msg');
+            if(m){m.textContent='管理人: 順番が違うようです。もう一度。';}
+            shakeEl(grid);buzz();vib();reset();
+          }
+        });
+        els.push(f);grid.appendChild(f);
+      });
+      w.appendChild(grid);
+    }else if(t.type==='news'){
+      w.appendChild(mk('div','nw-top','号外'));
+      w.appendChild(mk('h4','nw-h',t.head||''));
+      if(t.sub){w.appendChild(mk('p','nw-s',t.sub));}
+      (t.body||[]).forEach(function(x){w.appendChild(mk('p','nw-b',x));});
+      if(t.date){w.appendChild(mk('p','nw-d',t.date));}
+    }else if(t.type==='lost'){
+      if(t.img){w.appendChild(makeFigure(t.img,t.alt));}
+      var tg=mk('div','lost-tag');
+      tg.appendChild(mk('b',null,'遺失物'));
+      tg.appendChild(mk('div',null,'品名: '+(t.item||'')));
+      tg.appendChild(mk('div',null,'拾得場所: '+(t.found||'')));
+      tg.appendChild(mk('div',null,'日時: '+(t.date||'')));
+      w.appendChild(tg);
+    }
+    return w;
+  }
+
+  /* 解き方 */
   function makeGate(p,idx){
     var box;
     if(p.gate==='button'){
@@ -511,6 +1146,17 @@ h1{font-size:clamp(1.6rem,8vw,2.1rem);line-height:1.3;font-weight:800;letter-spa
       box.appendChild(bt);
       return box;
     }
+    if(p.gate==='order'){
+      box=mk('div','gate');
+      if(solvedPost(idx)){box.appendChild(replyBox(p));return box;}
+      box.appendChild(mk('p','note',p.note||'写真を、時刻の早い順に、タップしてください。'));
+      box.appendChild(mk('p','msg',''));
+      return box;
+    }
+    if(p.gate==='find'){
+      return makeFind(p,idx);
+    }
+    // 'ask'(言葉を入力する)
     box=mk('div','ask');
     if(solvedPost(idx)){box.appendChild(replyBox(p));return box;}
     var fm=mk('form','form');fm.setAttribute('autocomplete','off');
@@ -522,6 +1168,7 @@ h1{font-size:clamp(1.6rem,8vw,2.1rem);line-height:1.3;font-weight:800;letter-spa
     var go=mk('button','go','投稿する');go.type='submit';
     fm.appendChild(go);
     var ms=mk('p','msg','');
+    var wrong=0;
     fm.appendChild(ms);
     fm.addEventListener('submit',function(e){
       e.preventDefault();
@@ -529,38 +1176,134 @@ h1{font-size:clamp(1.6rem,8vw,2.1rem);line-height:1.3;font-weight:800;letter-spa
       if(!v){return;}
       ensureAudio();
       if(!same(p.answers,v)){
-        ms.textContent=BFAILS[Math.floor(Math.random()*BFAILS.length)];
-        fm.classList.remove('shake');void fm.offsetWidth;fm.classList.add('shake');
-        buzz();
-        try{if(navigator.vibrate){navigator.vibrate(60);}}catch(err){}
+        wrong++;
+        if(p.nudge&&wrong>=2){ms.textContent=p.nudge[Math.min(Math.floor(wrong/2)-1,p.nudge.length-1)];}
+        else{ms.textContent=BFAILS[Math.floor(Math.random()*BFAILS.length)];}
+        shakeEl(fm);buzz();vib();
         return;
       }
-      chime();
-      box.innerHTML='';
-      box.appendChild(replyBox(p));
-      advance(idx);
+      correct(p,idx,box);
     });
     box.appendChild(fm);
     return box;
   }
+
+  // 画像の中を、指でタップして探す
+  function makeFind(p,idx){
+    var box=mk('div','gate'),done=solvedPost(idx),misses=0,hotList=(p.find&&p.find.hot)||[];
+    var f=mk('figure','shot finder');
+    var im=new Image();im.alt=p.alt||'';
+    function ringAt(h,cls){
+      var r=mk('span','ring'+(cls?' '+cls:''));
+      r.style.left=h.x+'%';r.style.top=h.y+'%';r.style.width=(h.r*2)+'%';
+      f.appendChild(r);return r;
+    }
+    im.onload=function(){if(done&&hotList[0]){ringAt(hotList[0]);}};
+    im.onerror=function(){
+      f.className='shot miss';f.textContent='(画像が見つかりません)';
+      var sk=mk('button','btn','スキップする(画像がないとき)');sk.type='button';
+      sk.addEventListener('click',function(){if(!done){done=true;sk.remove();correct(p,idx,box,true);}});
+      box.appendChild(sk);
+    };
+    im.src=p.img;
+    f.appendChild(im);
+    f.addEventListener('click',function(e){
+      if(done||f.className.indexOf('miss')>=0){return;}
+      ensureAudio();
+      var r=im.getBoundingClientRect(),px=e.clientX-r.left,py=e.clientY-r.top,hit=false,j,h,dx,dy;
+      for(j=0;j<hotList.length;j++){
+        h=hotList[j];dx=px-h.x/100*r.width;dy=py-h.y/100*r.height;
+        if(Math.sqrt(dx*dx+dy*dy)<=h.r/100*r.width){hit=true;break;}
+      }
+      var rp=mk('span','ripple'+(hit?' ok':''));rp.style.left=px+'px';rp.style.top=py+'px';f.appendChild(rp);
+      setTimeout(function(){rp.remove();},800);
+      if(hit){
+        done=true;ringAt(h);
+        ms.textContent='';
+        correct(p,idx,box,true);
+      }else{
+        misses++;buzz();
+        ms.textContent=BFIND[Math.floor(Math.random()*BFIND.length)];
+        if(misses>=((p.find&&p.find.hintAfter)||6)&&hotList[0]&&!f.querySelector('.ring.hint')){ringAt(hotList[0],'hint');}
+      }
+    });
+    box.appendChild(f);
+    var tools=mk('div','find-tools');
+    var zb=mk('button','btn','拡大して見る');zb.type='button';
+    zb.addEventListener('click',function(){openLb(p.img,p.alt);});
+    tools.appendChild(zb);
+    var ms=mk('p','msg','');
+    if(!done){
+      box.insertBefore(mk('p','note','画像の中を、指でタップして探してください。'),f);
+      box.appendChild(tools);
+      box.appendChild(ms);
+    }else{
+      box.appendChild(replyBox(p));
+    }
+    return box;
+  }
+
   function makePost(p,idx){
     var a=mk('article','post');
     var h=mk('div','post-h');
     h.appendChild(mk('span','tag',p.tag));
     h.appendChild(mk('span',null,p.who));
-    h.appendChild(mk('span',null,p.when));
+    if(p.when){h.appendChild(mk('span',null,p.when));}
     a.appendChild(h);
-    if(p.img){a.appendChild(makeFigure(p));}
+    var box=p.gate?makeGate(p,idx):null;
+    if(p.attach){a.appendChild(makeAttach(p,idx,box));}
+    if(p.img&&p.gate!=='find'){a.appendChild(makeFigure(p.img,p.alt));}
     var b=mk('div','post-b');
-    p.text.forEach(function(t){b.appendChild(mk('p',null,t));});
+    (p.text||[]).forEach(function(t){b.appendChild(mk('p',null,t));});
     if(p.quotes){p.quotes.forEach(function(q){b.appendChild(mk('p','quote',q));});}
     a.appendChild(b);
-    if(p.gate){a.appendChild(makeGate(p,idx));}
+    if(p.mailBtn){
+      var mb=mk('button','btn',p.mailBtn.label);mb.type='button';mb.style.margin='12px 8px 0 0';
+      mb.addEventListener('click',function(){
+        var mm=null;
+        if(p.mailBtn.postId){ALL.forEach(function(q){if(q.id===p.mailBtn.postId){mm=q.mail;}});}
+        else{mm=KAKERA[p.mailBtn.kakera].mail;}
+        playMail(mm,null,true);
+      });
+      b.appendChild(mb);
+    }
+    if(p.linkBtn){
+      // メールを送るボタン: メールアプリを開く。開かない環境のために、宛先を表示してコピーもできる
+      var lk=mk('button','btn',p.linkBtn.label);lk.type='button';lk.style.margin='12px 8px 0 0';
+      var lp=mk('div',null);lp.hidden=true;
+      lp.style.cssText='margin-top:12px;padding:10px 12px;border:1px dashed #26304a;border-radius:8px;line-height:1.8';
+      var addr=(p.linkBtn.href||'').replace(/^mailto:/,'').split('?')[0];
+      lp.appendChild(mk('p',null,'宛先: '+addr));
+      lp.appendChild(mk('p',null,'(メールアプリが開かないときは、このアドレスに、メールを送ってください)'));
+      var cp=mk('button','btn','アドレスをコピー');cp.type='button';cp.style.marginTop='8px';
+      cp.addEventListener('click',function(){
+        function done(){cp.textContent='コピーしました';}
+        function fb(){
+          var ta=document.createElement('textarea');ta.value=addr;ta.style.cssText='position:fixed;opacity:0';
+          document.body.appendChild(ta);ta.select();
+          try{document.execCommand('copy');}catch(err){}
+          document.body.removeChild(ta);done();
+        }
+        if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(addr).then(done,fb);}else{fb();}
+      });
+      lp.appendChild(cp);
+      lk.addEventListener('click',function(){
+        lp.hidden=false;
+        try{window.location.href=p.linkBtn.href;}catch(err){}
+      });
+      b.appendChild(lk);b.appendChild(lp);
+    }
+    if(p.vaultBtn){
+      var vb=mk('button','btn',p.vaultBtn);vb.type='button';vb.style.margin='12px 8px 0 0';
+      vb.addEventListener('click',function(){setTab('v');});
+      b.appendChild(vb);
+    }
+    if(box){a.appendChild(box);}
     return a;
   }
   function renderNew(scroll){
     var added=0,last=null;
-    POSTS.forEach(function(p,idx){
+    ALL.forEach(function(p,idx){
       if(visible(idx)&&!shown[p.id]){
         shown[p.id]=1;
         last=makePost(p,idx);
@@ -598,8 +1341,10 @@ h1{font-size:clamp(1.6rem,8vw,2.1rem);line-height:1.3;font-weight:800;letter-spa
   }
 
   /* ---------- 怪盗Sのことば ---------- */
+  var curCard=0;
   function showCard(idx,fresh){
     var k=KAKERA[idx],d,j;
+    curCard=idx;
     cardTitle.textContent=k.title;
     cardBody.innerHTML='';
     if(!fresh){
@@ -616,10 +1361,12 @@ h1{font-size:clamp(1.6rem,8vw,2.1rem);line-height:1.3;font-weight:800;letter-spa
       cardHint.style.animationDelay=(reduce?0:(0.45+k.lines.length*0.6))+'s';
     }else{cardHint.hidden=true;}
     cardGo.hidden=!k.board;
+    cardMail.hidden=!k.mail;
     card.hidden=false;
     card.classList.remove('pop');void card.offsetWidth;card.classList.add('pop');
     setTimeout(function(){card.scrollIntoView({behavior:reduce?'auto':'smooth',block:'center'});},150);
   }
+  cardMail.addEventListener('click',function(){playMail(KAKERA[curCard].mail,null,true);});
   function openLock(){
     lock.classList.add('open');
     setTimeout(function(){lock.classList.remove('open');},1800);
@@ -629,9 +1376,8 @@ h1{font-size:clamp(1.6rem,8vw,2.1rem);line-height:1.3;font-weight:800;letter-spa
   var FAILS=['……違う。そのカケラは、まだ眠っている。','合言葉が、違うようだ。','ハガキをもう一度、よく見てみろ。'];
   function fail(){
     msg.textContent=FAILS[Math.floor(Math.random()*FAILS.length)];
-    form.classList.remove('shake');void form.offsetWidth;form.classList.add('shake');
-    buzz();
-    try{if(navigator.vibrate){navigator.vibrate(60);}}catch(e){}
+    shakeEl(form);
+    buzz();vib();
   }
   form.addEventListener('submit',function(e){
     e.preventDefault();
@@ -645,7 +1391,14 @@ h1{font-size:clamp(1.6rem,8vw,2.1rem);line-height:1.3;font-weight:800;letter-spa
     var fresh=!got[hit];
     got[hit]=true;saveState();render();
     msg.textContent='';input.value='';
-    openLock();showCard(hit,fresh);
+    openLock();
+    var km=KAKERA[hit].mail;
+    if(fresh&&km){
+      // 予告状が届く演出 → 閉じたあとに、怪盗Sのことばを出す
+      setTimeout(function(){playMail(km,function(){showCard(hit,fresh);});},reduce?0:900);
+    }else{
+      showCard(hit,fresh);
+    }
     if(fresh){
       chime();
       var added=renderNew(false);   // 掲示板に新しい投稿が増えたら、タブに赤い点を出す
