@@ -187,17 +187,13 @@ body.intro .kaito{animation-play-state:paused}
 .letter-section{border-top:none;padding-top:28px;text-align:center}
 .letter-section .seal-area{margin-top:0}
 
-/* 管理人 奥(予告状を読み終えるころに現れる) */
-.oku-wrap{max-height:0;overflow:hidden;opacity:0;transition:max-height .9s ease,opacity .9s ease}
-.oku-wrap.show{max-height:900px;opacity:1}
-.oku{margin:28px 0 0;padding:16px 16px 18px;text-align:left;background:var(--panel);border:1px solid var(--line);border-radius:12px;box-shadow:0 8px 22px rgba(0,0,0,.35)}
-.oku-h{display:flex;align-items:center;gap:10px;margin-bottom:8px}
-.oku-av{flex:none;width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#3a4668,#1f2740);color:#dfe5f0;display:flex;align-items:center;justify-content:center;font-family:"Shippori Mincho",serif;font-weight:700}
-.oku-nm{display:flex;flex-direction:column;line-height:1.35;font-size:.82rem}
-.oku-nm b{color:#fff}
-.oku-nm i{font-style:normal;color:var(--muted);font-size:.7rem}
-.oku p{font-size:.88rem;line-height:1.95;color:#dfe5f0}
-.oku p+p{margin-top:6px}
+/* ナレーション(天の声): 予告状を読み終えるころに、そっと現れる */
+.nar-wrap{max-height:0;overflow:hidden;opacity:0;transition:max-height .9s ease,opacity 1.2s ease}
+.nar-wrap.show{max-height:600px;opacity:1}
+.nar{margin:34px 8px 0;padding:0 8px;text-align:center;font-family:"Shippori Mincho",serif;color:#c6cfdf;font-size:.92rem;line-height:2.2;letter-spacing:.1em}
+.nar::before{content:"";display:block;width:28px;height:1px;margin:0 auto 18px;background:var(--gold);opacity:.6}
+.nar p+p{margin-top:12px}
+.moon-go{display:inline-block;margin-top:14px;padding:11px 26px;border:1px solid var(--gold);background:rgba(201,162,75,.14);color:var(--gold-l);border-radius:30px;font-size:.88rem;letter-spacing:.2em;text-decoration:none}
 
 /* 怪盗Sの隠しページ(赤い月を3秒押し続けると開く) */
 #moonfx{position:fixed;inset:0;z-index:900;display:flex;align-items:center;justify-content:center;padding:24px;background:rgba(5,8,14,0);transition:background .7s ease}
@@ -206,6 +202,8 @@ body.intro .kaito{animation-play-state:paused}
 .moon-card{width:100%;max-width:380px;padding:28px 22px 22px;text-align:center;background:var(--panel);border:1px solid var(--line);border-radius:14px;box-shadow:0 20px 50px rgba(0,0,0,.6);opacity:0;transform:translateY(14px);transition:opacity .8s ease .2s,transform .8s ease .2s}
 #moonfx.on .moon-card{opacity:1;transform:none}
 .moon-seal{width:52px;height:52px;margin:0 auto 14px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#b13a46,#8e2a35 55%,#6f1f29);display:flex;align-items:center;justify-content:center;font:700 1.4rem/1 "Shippori Mincho",serif;color:rgba(255,255,255,.75);box-shadow:0 4px 14px rgba(0,0,0,.5)}
+.moon-seal.img{width:96px;height:96px;background:none;box-shadow:none;border-radius:0}
+.moon-seal.img img{display:block;width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 0 12px rgba(236,217,160,.6))}
 .moon-l{font-size:1rem;line-height:2;color:#f1e6c8;letter-spacing:.08em}
 .moon-form{margin-top:18px;display:flex;flex-direction:column;gap:10px}
 .moon-form[hidden]{display:none}
@@ -468,17 +466,12 @@ body.intro .hero .kicker,body.intro .hero h1,body.intro .hero .sub,body.intro .h
       </div>
     </div>
 
-    <!-- 管理人 奥: もう1通の予告状(封筒①)へ案内する -->
-    <div class="oku-wrap" id="oku">
-      <div class="oku">
-        <div class="oku-h">
-          <span class="oku-av">奥</span>
-          <span class="oku-nm"><b>管理人 奥</b><i>怪盗S目撃情報掲示板</i></span>
-        </div>
-        <p>はじめまして。怪盗Sの目撃情報を集めている、掲示板の管理人の奥です。</p>
-        <p>実は、あなたのもとに、もう1通、予告状が届いています。こちらでお預かりして、キットに同封しました。</p>
-        <p>お手元の「封筒①」を、開けてみてください。</p>
-        <p>中の予告状の謎を解くと、怪盗Sの隠しページに、たどり着けるはずです。</p>
+    <!-- ナレーション(天の声): もう1通の予告状(封筒①)へ導く -->
+    <div class="nar-wrap" id="nar">
+      <div class="nar">
+        <p>予告状は、もう1通、届いているらしい。</p>
+        <p>お手元の「封筒①」を、開けてみよう。</p>
+        <p>その謎を解いた者だけが、怪盗Sの隠しページへ、たどり着けるという。</p>
       </div>
     </div>
   </section>
@@ -546,9 +539,9 @@ body.intro .hero .kicker,body.intro .hero h1,body.intro .hero .sub,body.intro .h
 <!-- 怪盗Sの隠しページ: 赤い月を3秒押し続けると開く -->
 <div id="moonfx" hidden role="dialog" aria-label="怪盗S">
   <div class="moon-card">
-    <div class="moon-seal">S</div>
+    <div class="moon-seal" id="moonSeal">S</div>
     <p class="moon-l serif">……よくここがわかったな。</p>
-    <p class="moon-l serif">では、最初の行き先を、答えてみせなさい。</p>
+    <p class="moon-l serif">では、最初の行き先を、答えてみよ。</p>
     <form class="moon-form" id="moonForm" autocomplete="off">
       <input id="moonInput" type="text" placeholder="最初の行き先" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" enterkeyhint="go">
       <button type="submit">答える</button>
@@ -707,12 +700,12 @@ body.intro .hero .kicker,body.intro .hero h1,body.intro .hero .sub,body.intro .h
     if(seal.classList.contains('open')&&!reduce) burst();
   });
 
-  // ===== 管理人 奥: 封を切って、予告状を読み終えるころに現れる =====
-  var oku=document.getElementById('oku'),okuShown=false;
+  // ===== ナレーション(天の声): 封を切って、予告状を読み終えるころに、そっと現れる =====
+  var nar=document.getElementById('nar'),narShown=false;
   seal.addEventListener('click',function(){
-    if(!seal.classList.contains('open')||okuShown){return;}
-    okuShown=true;
-    setTimeout(function(){oku.classList.add('show');},reduce?0:(notice.hidden?6000:2500));
+    if(!seal.classList.contains('open')||narShown){return;}
+    narShown=true;
+    setTimeout(function(){nar.classList.add('show');},reduce?0:(notice.hidden?6000:2500));
   });
 
   // ===== 赤い月を、3秒押し続けると、怪盗Sの隠しページが開く =====
@@ -725,6 +718,15 @@ body.intro .hero .kicker,body.intro .hero h1,body.intro .hero .sub,body.intro .h
   var moonHit=document.getElementById('moonHit'),moonRing=document.getElementById('moonRing');
   var moonfx=document.getElementById('moonfx'),moonForm=document.getElementById('moonForm'),moonInput=document.getElementById('moonInput'),moonMsg=document.getElementById('moonMsg'),moonClose=document.getElementById('moonClose');
   var holdTimer=null,holding=false,moonWrong=0;
+
+  // ===== 怪盗Sのカードのアイコン(画像があれば、「S」の丸のかわりに表示) =====
+  var MOON_ICON_SRC='kaitou.png';   // 好きな画像のファイル名に変えられます(背景が透過のPNGがおすすめ)
+  var moonSeal=document.getElementById('moonSeal');
+  if(MOON_ICON_SRC){
+    var mi=new Image();
+    mi.onload=function(){moonSeal.textContent='';mi.alt='';moonSeal.appendChild(mi);moonSeal.classList.add('img');};
+    mi.src=MOON_ICON_SRC;
+  }
   function vib(ms){try{if(navigator.vibrate){navigator.vibrate(ms);}}catch(e){}}
   function moonNorm(s){
     s=(s||'');
@@ -775,9 +777,11 @@ body.intro .hero .kicker,body.intro .hero h1,body.intro .hero .sub,body.intro .h
     }
     moonForm.hidden=true;
     moonMsg.className='moon-msg ok';
-    moonMsg.textContent='……よかろう。ついてきなさい。';
+    moonMsg.textContent='……よかろう。ここまで辿り着いた君には、特別に、私の目撃情報を集めた掲示板を、教えてあげよう。';
     vib(90);
-    setTimeout(function(){location.href=BOARD_URL;},reduce?0:1800);
+    var go=document.createElement('a');
+    go.className='moon-go';go.href=BOARD_URL;go.textContent='掲示板へ進む';
+    moonMsg.parentNode.insertBefore(go,moonClose);
   });
   moonClose.addEventListener('click',function(){
     moonfx.classList.remove('on');
