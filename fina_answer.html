@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="color-scheme" content="dark">
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#080b13">
+<title>怪盗S</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@700;800&display=swap" rel="stylesheet">
+<style>
+:root{--gold:#c9a24b;--gold-l:#ecd9a0;--paper:#f3ead3;--ink:#2b2418}
+*{box-sizing:border-box;margin:0;padding:0}
+html{background:#080b13;color-scheme:dark}
+body{min-height:100vh;min-height:100dvh;display:flex;align-items:center;justify-content:center;padding:max(32px,env(safe-area-inset-top)) 16px max(32px,env(safe-area-inset-bottom));background:radial-gradient(ellipse 70% 45% at 50% 35%,rgba(194,50,50,.2),transparent 70%),#080b13;color:#eef1f6;font-family:"Shippori Mincho","Hiragino Mincho ProN","Yu Mincho",serif;text-align:center;letter-spacing:.08em;-webkit-font-smoothing:antialiased;overflow:hidden}
+.stage{width:100%;max-width:480px;display:flex;flex-direction:column;align-items:center;perspective:1300px}
+
+/* ===== 予告状が届く演出(右上から3回転して届き、裏向きで止まる → タップでめくる) ===== */
+.fly,.spin{transform-style:preserve-3d}
+.fly{position:relative;opacity:0}
+.fly.go{animation:fly 1.7s cubic-bezier(.2,.8,.25,1) both}
+.spin.go{animation:spinIn 1.7s cubic-bezier(.2,.8,.25,1) both}
+@keyframes fly{
+  0%{opacity:0;transform:translate(55vw,-65vh) scale(.3)}
+  12%{opacity:1}
+  100%{opacity:1;transform:translate(0,0) scale(1)}
+}
+@keyframes spinIn{from{transform:rotate(-1080deg)}to{transform:rotate(-4deg)}}
+.flipper{position:relative;width:min(88vw,440px);aspect-ratio:91/55;transform-style:preserve-3d;transform:rotateY(180deg);cursor:pointer;transition:transform .9s cubic-bezier(.3,1.25,.4,1);-webkit-tap-highlight-color:transparent}
+.face{position:absolute;inset:0;border-radius:8px;overflow:hidden;backface-visibility:hidden;-webkit-backface-visibility:hidden;box-shadow:0 22px 44px rgba(0,0,0,.6),0 0 0 1px rgba(255,255,255,.12)}
+.front{transform:rotateY(0deg)}
+.back{transform:rotateY(180deg)}
+.face img{display:block;width:100%;height:100%;object-fit:cover}
+
+/* 表になったときの、光の帯 */
+.front::after{content:"";position:absolute;inset:0;background:linear-gradient(115deg,transparent 34%,rgba(255,255,255,.6) 47%,rgba(236,217,160,.4) 53%,transparent 66%);transform:translateX(-130%);pointer-events:none}
+.flipper.flipped .front::after{animation:shine 1.1s ease-out .75s both}
+@keyframes shine{from{transform:translateX(-130%)}to{transform:translateX(130%)}}
+
+/* 表になった瞬間の、金色の光と星 */
+.glow{position:absolute;left:50%;top:50%;width:150%;aspect-ratio:1;border-radius:50%;transform:translate(-50%,-50%) scale(.4);opacity:0;background:radial-gradient(circle,rgba(236,217,160,.6),rgba(201,162,75,.18) 40%,transparent 68%);pointer-events:none}
+.glow.pulse{animation:glowPulse 1.4s ease-out both}
+@keyframes glowPulse{0%{opacity:0;transform:translate(-50%,-50%) scale(.4)}35%{opacity:1}100%{opacity:0;transform:translate(-50%,-50%) scale(1.15)}}
+.twink{position:absolute;left:50%;top:50%;width:14px;height:14px;margin:-7px 0 0 -7px;clip-path:polygon(50% 0,62% 38%,100% 50%,62% 62%,50% 100%,38% 62%,0 50%,38% 38%);pointer-events:none;animation:twink 1.1s ease-out forwards}
+@keyframes twink{
+  0%{opacity:1;transform:translate(0,0) scale(.4) rotate(0)}
+  30%{opacity:1;transform:translate(calc(var(--dx)*.5),calc(var(--dy)*.5)) scale(1.3) rotate(90deg)}
+  100%{opacity:0;transform:translate(var(--dx),var(--dy)) scale(.3) rotate(180deg)}
+}
+
+/* 画像がないときの、予備の面 */
+.fb-back{display:flex;align-items:center;justify-content:center;width:100%;height:100%;background:radial-gradient(ellipse at 50% 40%,#2c1520,#120b14);box-shadow:inset 0 0 0 6px rgba(201,162,75,.18)}
+.seal-s{width:24%;aspect-ratio:1;border-radius:50%;background:radial-gradient(circle at 35% 30%,#b13a46,#8e2a35 55%,#6f1f29);display:flex;align-items:center;justify-content:center;font:700 clamp(1.2rem,8vw,2.2rem)/1 "Shippori Mincho",serif;color:rgba(255,255,255,.7);box-shadow:0 3px 10px rgba(0,0,0,.5)}
+.fb-front{width:100%;height:100%;padding:6% 8%;display:flex;flex-direction:column;justify-content:center;gap:.5em;background-color:var(--paper);color:var(--ink);font-size:clamp(.9rem,4.4vw,1.2rem);line-height:1.9;box-shadow:inset 0 0 30px rgba(120,90,40,.2)}
+.fb-front .sg{text-align:right;letter-spacing:.2em}
+
+.hint{margin-top:34px;font-size:.8rem;letter-spacing:.3em;color:var(--gold-l);animation:blink 2s ease-in-out infinite}
+.hint[hidden]{display:none}
+@keyframes blink{0%,100%{opacity:.45}50%{opacity:1}}
+
+/* カードの下の、ひとこと(めくったあとに現れる) */
+.note{margin-top:30px;font-size:.95rem;line-height:2;color:var(--gold-l);opacity:0;transition:opacity 1.2s ease}
+.note.in{opacity:1}
+
+@media (prefers-reduced-motion:reduce){
+  .fly.go,.spin.go,.flipper.flipped .front::after,.glow.pulse,.twink,.hint{animation:none}
+  .flipper{transition:none}
+}
+</style>
+</head>
+<body>
+<main class="stage">
+  <div class="fly" id="fly">
+    <span class="glow" id="glow"></span>
+    <div class="spin" id="spin">
+      <div class="flipper" id="flipper" role="button" tabindex="0" aria-label="予告状をめくる">
+        <div class="face front" id="front"></div>
+        <div class="face back" id="back"></div>
+      </div>
+    </div>
+  </div>
+  <p class="hint" id="hint" hidden>タップして、めくる</p>
+  <p class="note" id="note">この画面を閉じて、先ほどの画面にもどり、行き先を告げよ。</p>
+</main>
+
+<script>
+(function(){
+  // ===== 設定 =====
+  var FRONT_SRC='nanba_yokoku.png';   // 行き先を告げる予告状(表)
+  var BACK_SRC='yokoku_ura.png';      // 予告状の裏(共通)
+
+  var $=function(id){return document.getElementById(id);};
+  var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+  var fly=$('fly'),spin=$('spin'),flipper=$('flipper'),front=$('front'),back=$('back'),glow=$('glow'),hint=$('hint'),note=$('note');
+  var landed=false,flipped=false,busy=false;
+
+  /* ---------- 音(Web Audio。ファイル不要) ---------- */
+  var AC=null;
+  function audio(){
+    try{
+      if(!AC){AC=new (window.AudioContext||window.webkitAudioContext)();}
+      if(AC.state==='suspended'){AC.resume();}
+    }catch(e){AC=null;}
+    return AC;
+  }
+  function tone(ac,freq,t0,dur,vol){
+    var o=ac.createOscillator(),g=ac.createGain(),t=ac.currentTime+t0;
+    o.type='sine';o.frequency.value=freq;
+    g.gain.setValueAtTime(0.0001,t);
+    g.gain.exponentialRampToValueAtTime(vol,t+0.02);
+    g.gain.exponentialRampToValueAtTime(0.0001,t+dur);
+    o.connect(g);g.connect(ac.destination);
+    o.start(t);o.stop(t+dur+0.05);
+  }
+  // めくる音: 紙がこすれる音 → 少し遅れて、きらり
+  function flipSound(){
+    var ac=audio();
+    if(!ac){return;}
+    var len=Math.floor(ac.sampleRate*0.35),buf=ac.createBuffer(1,len,ac.sampleRate),d=buf.getChannelData(0),j;
+    for(j=0;j<len;j++){d[j]=(Math.random()*2-1)*Math.sin(Math.PI*j/len);}
+    var src=ac.createBufferSource();src.buffer=buf;
+    var f=ac.createBiquadFilter();f.type='highpass';f.frequency.value=2500;
+    var g=ac.createGain();g.gain.value=0.12;
+    src.connect(f);f.connect(g);g.connect(ac.destination);src.start();
+    setTimeout(function(){
+      var a=audio();
+      if(!a){return;}
+      tone(a,1318.5,0,0.6,0.09);tone(a,1568,0.09,0.6,0.08);tone(a,2093,0.18,1.1,0.07);
+    },reduce?0:650);
+  }
+
+  /* ---------- 面(画像があれば画像、なければ予備) ---------- */
+  function face(host,src,fallback,done){
+    var im=new Image();
+    im.onload=function(){host.appendChild(im);done();};
+    im.onerror=function(){fallback(host);done();};
+    im.alt='';im.src=src;
+  }
+  function fbBack(host){
+    host.innerHTML='<div class="fb-back"><div class="seal-s">S</div></div>';
+  }
+  function fbFront(host){
+    host.innerHTML='<div class="fb-front"><p>よくここに気づいたな。</p><p>次の行き先は、なんば。</p><p class="sg">怪盗S</p></div>';
+  }
+
+  /* ---------- 届く → 裏向きで止まる ---------- */
+  function land(){
+    landed=true;
+    fly.style.opacity='1';
+    hint.hidden=false;
+  }
+  function start(){
+    if(reduce){
+      fly.style.opacity='1';
+      spin.style.transform='rotate(-2deg)';
+      land();
+      return;
+    }
+    fly.classList.add('go');
+    spin.classList.add('go');
+  }
+  fly.addEventListener('animationend',function(e){
+    if(e.animationName!=='fly'){return;}
+    fly.classList.remove('go');
+    fly.style.opacity='1';
+    fly.style.transform='translate(0,0) scale(1)';
+    land();
+  });
+
+  /* ---------- タップでめくる ---------- */
+  function sparkle(){
+    var colors=['#ffffff','#ecd9a0','#c9a24b'];
+    for(var j=0;j<16;j++){
+      var s=document.createElement('i');s.className='twink';
+      var a=(Math.PI*2*j/16)+Math.random()*.3,r=110+Math.random()*90;
+      s.style.setProperty('--dx',Math.round(Math.cos(a)*r)+'px');
+      s.style.setProperty('--dy',Math.round(Math.sin(a)*r*.7)+'px');
+      s.style.background=colors[j%3];
+      s.style.animationDelay=(Math.random()*.2)+'s';
+      fly.appendChild(s);
+      (function(n){setTimeout(function(){if(n.parentNode){n.parentNode.removeChild(n);}},1500);})(s);
+    }
+  }
+  function flip(){
+    if(!landed||flipped||busy){return;}
+    busy=true;flipped=true;
+    flipper.classList.add('flipped');
+    flipper.style.transform='rotateY(0deg)';
+    hint.hidden=true;
+    flipSound();
+    setTimeout(function(){
+      glow.className='glow';void glow.offsetWidth;glow.className='glow pulse';
+      if(!reduce){sparkle();}
+    },reduce?0:650);
+    setTimeout(function(){note.classList.add('in');},reduce?0:1700);
+  }
+  flipper.addEventListener('click',flip);
+  flipper.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();flip();}});
+
+  /* ---------- 起動: 2枚の画像を読み込んでから、届く演出を始める ---------- */
+  var left=2;
+  function ready(){left--;if(left===0){setTimeout(start,reduce?0:500);}}
+  face(back,BACK_SRC,fbBack,ready);
+  face(front,FRONT_SRC,fbFront,ready);
+})();
+</script>
+</body>
+</html>
