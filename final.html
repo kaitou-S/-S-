@@ -100,13 +100,6 @@ body{font-family:"Shippori Mincho","Hiragino Mincho ProN","Yu Mincho",serif;colo
 
   <!-- 扉の奥: 正体と、サプライズ動画 -->
   <div id="reveal">
-    <p class="rl" id="rl1"></p>
-    <div class="rv-stage" id="rvStage" hidden>
-      <img class="rv-char" id="rvChar" alt="" hidden>
-      <img class="rv-true" id="rvTrue" alt="" hidden>
-      <span class="rv-flash"></span>
-    </div>
-    <p class="rl" id="rlSign"></p>
     <p class="rl" id="rlMore"></p>
     <div id="videoBox" hidden>
       <video id="vid" playsinline preload="auto" controls></video>
@@ -144,11 +137,8 @@ body{font-family:"Shippori Mincho","Hiragino Mincho ProN","Yu Mincho",serif;colo
      ===================================================== */
   var INTRO_LINES=['……よくここまで、たどり着けたな。','これが、本当に、最後の謎だ。'];   // 最初に出る、怪盗Sの言葉
   var ANSWERS=['たちまちづき','立待月','0517'];                                    // 暗号の答え(いくつ書いてもOK。いまは、仮の答えです)
-  var REVEAL_LINE='……私の正体は──';                                               // 扉が開いたあとの、一言
-  var SIGN='怪盗S ── 〇〇より';                                                    // 正体のあとに出る署名(〇〇をあなたの名前に)
-  var MORE_LINE='……そして、もうひとつ。';                                         // 動画の前の、一言
-  var CHAR_SRC='kaitou.png';        // 怪盗Sの画像
-  var TRUE_SRC='shunichi.png';      // 正体の画像(怪盗Sが、きらりと光って、これに変わる)
+  var MORE_LINE='……最後に、見せたいものがある。';                                 // 扉が開いたあと、動画の前に出る、一言
+  var CHAR_SRC='kaitou.png';        // 怪盗Sの画像(最初の画面の、赤い封蝋のかわりに出る)
   var VIDEO_SRC='surprise.mp4';     // サプライズ動画のファイル(同じフォルダに置く)
 
   /* ===================================================== */
@@ -156,12 +146,11 @@ body{font-family:"Shippori Mincho","Hiragino Mincho ProN","Yu Mincho",serif;colo
   var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion:reduce)').matches;
   var T=function(ms){return reduce?0:ms;};
   var ui=$('ui'),door=$('door'),light=$('light'),form=$('form'),code=$('code'),msg=$('msg'),lock=$('lock'),seal=$('seal'),introLines=$('introLines');
-  var rl1=$('rl1'),rvStage=$('rvStage'),rvChar=$('rvChar'),rvTrue=$('rvTrue'),rlSign=$('rlSign'),rlMore=$('rlMore'),videoBox=$('videoBox'),vid=$('vid'),playBtn=$('playBtn');
-  var charOK=false,trueOK=false,busy=false,unlocked=false;
+  var rlMore=$('rlMore'),videoBox=$('videoBox'),vid=$('vid'),playBtn=$('playBtn');
+  var busy=false,unlocked=false;
 
-  /* ---------- 画像 ---------- */
-  var ci=new Image();ci.onload=function(){charOK=true;rvChar.src=CHAR_SRC;rvChar.hidden=false;seal.textContent='';var im=new Image();im.src=CHAR_SRC;im.alt='';seal.appendChild(im);seal.classList.add('img');};ci.src=CHAR_SRC;
-  var ti=new Image();ti.onload=function(){trueOK=true;rvTrue.src=TRUE_SRC;rvTrue.hidden=false;};ti.src=TRUE_SRC;
+  /* ---------- 画像(あれば、最初の画面の「S」の丸のかわりに、怪盗Sの画像を出す) ---------- */
+  var ci=new Image();ci.onload=function(){seal.textContent='';var im=new Image();im.src=CHAR_SRC;im.alt='';seal.appendChild(im);seal.classList.add('img');};ci.src=CHAR_SRC;
 
   /* ---------- 音(Web Audio。ファイル不要) ---------- */
   var AC=null;
@@ -247,7 +236,7 @@ body{font-family:"Shippori Mincho","Hiragino Mincho ProN","Yu Mincho",serif;colo
     run();
   });
 
-  /* ---------- 解錠 → 扉が開く → 正体 → サプライズ動画 ---------- */
+  /* ---------- 解錠 → 扉が開く → サプライズ動画 ---------- */
   function run(){
     lock.classList.add('open');
     unlockSound();vib(90);
@@ -257,31 +246,9 @@ body{font-family:"Shippori Mincho","Hiragino Mincho ProN","Yu Mincho",serif;colo
       light.classList.add('on');
       door.classList.add('open');
     },T(1500));
-    // 扉の奥で、一言 → 怪盗S → 正体
-    setTimeout(function(){rl1.textContent=REVEAL_LINE;rl1.classList.add('in');},T(4300));
-    setTimeout(function(){
-      if(charOK||trueOK){rvStage.hidden=false;void rvStage.offsetWidth;rvStage.classList.add('in');}
-      if(trueOK&&!charOK){rvStage.classList.add('swap');}
-    },T(5800));
-    setTimeout(function(){
-      if(charOK&&trueOK){rvStage.classList.add('swap');sparkle();kirari();vib(120);}
-    },T(8200));
-    setTimeout(function(){rlSign.textContent=SIGN;rlSign.classList.add('in');},T(10200));
-    setTimeout(function(){rlMore.textContent=MORE_LINE;rlMore.classList.add('in');},T(12400));
-    setTimeout(showVideo,T(14200));
-  }
-  function sparkle(){
-    var colors=['#ffffff','#ecd9a0','#c9a24b'];
-    for(var j=0;j<18;j++){
-      var s=document.createElement('i');s.className='twink';
-      var a=(Math.PI*2*j/18)+Math.random()*.3,r=70+Math.random()*80;
-      s.style.setProperty('--dx',Math.round(Math.cos(a)*r)+'px');
-      s.style.setProperty('--dy',Math.round(Math.sin(a)*r)+'px');
-      s.style.background=colors[j%3];
-      s.style.animationDelay=(Math.random()*.15)+'s';
-      rvStage.appendChild(s);
-      (function(n){setTimeout(function(){if(n.parentNode){n.parentNode.removeChild(n);}},1400);})(s);
-    }
+    // 扉が開いたあと、一言 → 動画
+    setTimeout(function(){rlMore.textContent=MORE_LINE;rlMore.classList.add('in');},T(4300));
+    setTimeout(showVideo,T(6500));
   }
 
   /* ---------- サプライズ動画 ---------- */

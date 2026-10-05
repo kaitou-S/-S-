@@ -121,6 +121,24 @@ h1{font-size:clamp(1.6rem,8vw,2.1rem);line-height:1.3;font-weight:800;letter-spa
 .ripple.ok{border-color:var(--gold)}
 @keyframes ripple{from{opacity:1;transform:scale(.3)}to{opacity:0;transform:scale(1.6)}}
 .find-tools{display:flex;gap:10px;justify-content:center;margin-top:10px;flex-wrap:wrap}
+/* 解き方: 5秒だけ見える写真 / 嘘つき探し */
+.gl-stage{margin:12px auto 0;width:100%;aspect-ratio:8/5;border-radius:8px;overflow:hidden;background:#0b101c;box-shadow:0 8px 22px rgba(0,0,0,.5),0 0 0 1px rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;color:#4a566e;font-size:1.6rem;letter-spacing:.2em}
+.gl-stage img{display:block;width:100%;height:100%;object-fit:cover}
+.gl-bar{height:5px;margin-top:8px;border-radius:3px;background:rgba(255,255,255,.1);overflow:hidden}
+.gl-bar span{display:block;height:100%;width:100%;background:var(--gold)}
+.gl-bar[hidden]{display:none}
+.gl-qs{margin-top:14px;text-align:left}
+.gl-qs[hidden]{display:none}
+.gl-qs .go{width:100%}
+.gl-q{margin-top:14px}
+.gl-qt{margin:12px 0 8px;font-size:.9rem;color:#fff;text-align:left}
+.gl-opts{display:flex;flex-wrap:wrap;gap:8px}
+.gl-opt{padding:9px 14px;border:1px solid var(--line);background:#0b101c;color:#dfe5f0;border-radius:10px;font:inherit;font-size:.85rem;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.gl-opt.sel{border-color:var(--gold);background:rgba(201,162,75,.2);color:var(--gold-l)}
+.liar-list{display:grid;gap:10px;margin-top:12px;text-align:left}
+.liar-card{background:#0b101c;border:1px solid var(--line);border-radius:10px;padding:10px 14px}
+.liar-card b{color:var(--gold-l);font-size:.82rem;letter-spacing:.1em}
+.liar-card p{margin-top:2px;font-size:.9rem;color:#e6ebf5}
 @keyframes hintBlink{0%,100%{opacity:.45}50%{opacity:1}}
 
 /* 画像の拡大 */
@@ -356,6 +374,7 @@ h1{font-size:clamp(1.6rem,8vw,2.1rem);line-height:1.3;font-weight:800;letter-spa
     <div class="end-lines" id="endLines"></div>
     <figure class="end-photo" id="endPhoto" hidden><img id="endPhotoImg" alt=""></figure>
     <p class="end-sign" id="endSign"></p>
+    <div class="end-lines" id="endAfter" style="margin-top:34px"></div>
     <button type="button" class="end-close" id="endClose">金庫にもどる</button>
   </div>
 </div>
@@ -463,6 +482,87 @@ h1{font-size:clamp(1.6rem,8vw,2.1rem);line-height:1.3;font-weight:800;letter-spa
       hint:'管理人: 難波へ向かう情報が、集まっています。電車で向かってみましょう。'
     },
     {
+      // 移動中(約30分): ホームズの謎①「行列の推理」── 13個の観察から、5人の帽子・持ち物・降りた駅を、すべて決める
+      id:'p4a', tag:'移動中', who:'管理人', when:'昨夜 22:20',
+      text:[
+        '難波まで、電車で約30分。その間に、怪盗Sの次の動きを読むための、過去の事件記録を、お渡しします。被害にあった方々の安全のため、路線や駅の名前は、仮名にしてあります。',
+        '【記録①】青葉線に乗っていた、5人の乗客の観察記録です。5人は、乗る前、ホームの行列に、前から1番目〜5番目まで、1列に並んでいました。降りた駅は、全員、別々です(桜橋、北町、港前、灯台前、終点の5駅)。',
+        '帽子の色は、黒・灰・茶・緑・赤。持ち物は、傘・鞄・本・楽器ケース・新聞。それぞれ、全員、別々でした。'
+      ],
+      quotes:[
+        '1. 本を持った人は、行列のいちばん後ろに並んでいた。',
+        '2. 傘を持った人は、新聞を持った人の、ふたつ後ろに並んでいた。',
+        '3. 黒い帽子の人は、新聞を持った人の、すぐ後ろに並んでいた。',
+        '4. 黒い帽子の人は、終点まで乗っていた。',
+        '5. 桜橋で降りた人は、傘を持っていた。',
+        '6. 本を持った人は、港前で降りた。',
+        '7. 緑の帽子の人は、茶色の帽子の人の、すぐ後ろに並んでいた。',
+        '8. 北町で降りた人は、灯台前で降りた人より、前に並んでいた。',
+        '9. 楽器ケースを持った人は、鞄を持った人の、ふたつ前に並んでいた。',
+        '10. 赤い帽子の人は、行列のいちばん後ろに並んでいた。',
+        '11. 鞄を持った人は、茶色の帽子の人の、すぐ後ろに並んでいた。',
+        '12. 怪盗Sは、傘も、本も、新聞も、持っていなかった。',
+        '13. 怪盗Sは、黒い帽子ではなかった。'
+      ],
+      gate:'ask', label:'怪盗Sが降りた駅', placeholder:'駅名',
+      answers:['とうだいまえ','灯台前'],
+      replyWho:'管理人', ok:'……お見事です。13の観察を、すべて、矛盾なく、つなぎ合わせましたね。怪盗Sが降りたのは、灯台前。',
+      hint:'管理人: この記録から、怪盗Sの癖が読み取れます。怪盗Sは、見晴らしの利く、高い所に近い駅で、降りることを好むようです。難波でも、きっと、高い所へ向かうでしょう。'
+    },
+    {
+      // 移動中: 挑戦状③(実物)の答え「目隠しをしている人」を、大勢の絵の中から探し、胸のゼッケンの番号を読む
+      id:'p4e', tag:'移動中', who:'管理人', when:'昨夜 22:35',
+      img:crowdURI(), alt:'夜の難波に集まった、目撃者たちの影絵。手を挙げて、腕時計を見せている人が、大勢いる',
+      text:[
+        '昨夜の事件の目撃者たちが、夜の難波に、集まっています(影絵の写真です)。',
+        '「怪盗Sを見ましたか?」と聞かれて、手を挙げて、腕時計の時刻を見せながら、答えた人が、大勢います。その中に、【挑戦状③】(封筒③)の答えの人が、紛れています。',
+        'その人の腕時計が示している時刻を、数字だけで、投稿してください。(例: 3時05分 → 305)'
+      ],
+      gate:'ask', label:'時刻(数字だけ)', placeholder:'数字',
+      answers:['146','1時46分','0146'],
+      replyWho:'管理人', ok:'……見つけましたね。「何も見ていない」と言い張る人の腕時計だけが、事件の時刻を、示していました。',
+      hint:'管理人: その時刻が、ポーチの鍵です。難波に着いたら、その鍵で開くポーチが、待っているはずです。'
+    },
+    {
+      // (使わない場合は、disabled:true のまま。外すと、復活します)移動中: ホームズの謎②「演繹」── 前提から、「確実」「ありうる」「ありえない」を、見分ける
+      id:'p4b', disabled:true, tag:'移動中', who:'管理人', when:'昨夜 22:40',
+      text:[
+        '【記録②】同じ事件の、乗客名簿です。次の6つのことが、わかっています。',
+        'ここから導かれる7つの推論を、「確実」「ありうる(確実ではない)」「ありえない」に、仕分けてください。7つすべてが、正しく仕分けられると、先に進みます。',
+        '※「確実」と判定した推論の、番号を、小さい順に並べると、ポーチの鍵の番号(3桁)になります。'
+      ],
+      quotes:[
+        'ア. 怪盗Sは、黒い手袋をはめていた。',
+        'イ. 黒い手袋をはめていた乗客は、全員、傘を持っていなかった。',
+        'ウ. 傘を持っていた乗客は、全員、桜橋か北町で降りた。',
+        'エ. 帽子をかぶっていた乗客は、誰も、桜橋では降りなかった。',
+        'オ. 港前で降りた乗客は、全員、帽子をかぶっていた。',
+        'カ. 怪盗Sは、終点より前の駅で降りた。'
+      ],
+      gate:'sort',
+      sort:{
+        options:['確実','ありうる','ありえない'],
+        items:[
+          {t:'怪盗Sは、傘を持っていなかった。', a:0},
+          {t:'怪盗Sは、終点で降りた。', a:2},
+          {t:'怪盗Sは、帽子をかぶっていた。', a:1},
+          {t:'怪盗Sが桜橋で降りたのなら、怪盗Sは、帽子をかぶっていなかった。', a:0},
+          {t:'怪盗Sは、帽子をかぶって、桜橋で降りた。', a:2},
+          {t:'怪盗Sが港前で降りたのなら、怪盗Sは、帽子をかぶっていた。', a:0},
+          {t:'怪盗Sは、灯台前で降りた。', a:1}
+        ]
+      },
+      replyWho:'管理人', ok:'……不可能を除いていけば、残ったものが、真実。名探偵の流儀ですね。',
+      hint:'管理人: 「確実」と判定した番号を、小さい順に並べた、3桁の数字が、ポーチの鍵です。難波に着いたら、その鍵で開くポーチが、待っているはずです。'
+    },
+    {
+      // 到着: 難波に着いてから、次の投稿を出す
+      id:'p4c', tag:'到着', who:'管理人', when:'昨夜 22:55',
+      text:['難波に着いたら、下のボタンを押してください。'],
+      gate:'button', btn:'難波に着いた',
+      note:'(駅に着くまでは、押さないでください)'
+    },
+    {
       // 難波編: SNS風の添付資料で見せる(枠は他の投稿と同じ)
       id:'p5', tag:'続報', who:'なんばの買い物客', when:'昨夜 22:48',
       attach:{
@@ -510,11 +610,7 @@ h1{font-size:clamp(1.6rem,8vw,2.1rem);line-height:1.3;font-weight:800;letter-spa
       },
       text:['ベンチで、こんなポーチが見つかりました。3桁の鍵がかかっています。','開けられる番号がわかったら、投稿してください。'],
       gate:'ask', label:'3桁の番号', placeholder:'000',
-      nudge:[
-        '管理人: ポーチに付いていた、マッチ棒のカードを見てみてください。',
-        '管理人: マッチ棒を動かすと、3つの数字になります。'
-      ],
-      answers:['440'],
+      answers:['146'],
       replyWho:'園内のスタッフ', ok:'開きました!中に、カードが入っています。'
     },
     {
@@ -755,7 +851,13 @@ h1{font-size:clamp(1.6rem,8vw,2.1rem);line-height:1.3;font-weight:800;letter-spa
       '五つのカケラを集めてくれて、ありがとう。',
       'この記憶は、返すだけじゃ足りない。これからも、二人で増やしていきたい。'
     ],
-    sign:'怪盗S ── 〇〇より'     // 〇〇をあなたの名前に
+    sign:'怪盗S ── 〇〇より',     // 〇〇をあなたの名前に
+    // 署名のあとに出る、最後の誘導(招待状の「S」のNFCタグ → final.html へ)
+    after:[
+      '……そして、もうひとつだけ。',
+      'この場所で、見せたいものがある。',
+      '招待状の「S」に、スマホを、そっとかざしてほしい。'
+    ]
   };
 
   var CHAR_SRC='kaitou.png';    // 怪盗Sのイラスト
@@ -844,7 +946,7 @@ h1{font-size:clamp(1.6rem,8vw,2.1rem);line-height:1.3;font-weight:800;letter-spa
   /* ---------- 進行状況(URLの # に保存) ---------- */
   // 例: #t=v&k=10000&b=4  (t=表示中のタブ、k=取り戻したカケラ、b=掲示板の進み具合、demo=見本を表示)
   var demoOn=/[#&]demo(&|$)/.test(location.hash||'');
-  var ALL=demoOn?POSTS.concat(DEMO):POSTS;
+  var ALL=(demoOn?POSTS.concat(DEMO):POSTS).filter(function(p){return !p.disabled;});
   var demoSolved={};
   var N=KAKERA.length,got=[],stage=1,tab='b',i;
   for(i=0;i<N;i++){got.push(false);}
@@ -1233,6 +1335,9 @@ h1{font-size:clamp(1.6rem,8vw,2.1rem);line-height:1.3;font-weight:800;letter-spa
       box.appendChild(mk('p','msg',''));
       return box;
     }
+    if(p.gate==='sort'){return makeSort(p,idx);}
+    if(p.gate==='glimpse'){return makeGlimpse(p,idx);}
+    if(p.gate==='liar'){return makeLiar(p,idx);}
     if(p.gate==='find'){
       return makeFind(p,idx);
     }
@@ -1321,6 +1426,275 @@ h1{font-size:clamp(1.6rem,8vw,2.1rem);line-height:1.3;font-weight:800;letter-spa
       box.appendChild(replyBox(p));
     }
     return box;
+  }
+
+  // 5秒だけ映る部屋の絵(窓2か所、時計は10時10分、ろうそく3本、手紙)
+  function sceneURI(){
+    var s='<rect width="320" height="200" fill="#232844"/><rect y="168" width="320" height="32" fill="#14172a"/>';
+    [18,240].forEach(function(x){
+      s+='<rect x="'+x+'" y="22" width="62" height="80" fill="#0c1020" stroke="#c9a24b" stroke-width="3"/>';
+    });
+    s+='<circle cx="160" cy="52" r="26" fill="#f3ead3" stroke="#c9a24b" stroke-width="3"/>';
+    s+='<path d="M160 29v5M160 70v5M137 52h5M178 52h5" stroke="#2b2418" stroke-width="2"/>';
+    s+='<path d="M160 52L150.2 45.1" stroke="#2b2418" stroke-width="3.2" stroke-linecap="round"/>';
+    s+='<path d="M160 52L176.5 42.5" stroke="#2b2418" stroke-width="2.2" stroke-linecap="round"/>';
+    s+='<circle cx="160" cy="52" r="2" fill="#c23232"/>';
+    s+='<rect x="50" y="150" width="220" height="12" fill="#5a3a22"/><rect x="62" y="162" width="8" height="30" fill="#5a3a22"/><rect x="250" y="162" width="8" height="30" fill="#5a3a22"/>';
+    [100,160,220].forEach(function(x){
+      s+='<rect x="'+(x-5)+'" y="124" width="10" height="26" fill="#f3ead3"/><ellipse cx="'+x+'" cy="116" rx="4" ry="7" fill="#ffb347"/>';
+    });
+    s+='<rect x="114" y="138" width="32" height="12" fill="#f3ead3"/><circle cx="130" cy="144" r="4" fill="#c23232"/>';
+    return 'data:image/svg+xml,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 200">'+s+'</svg>');
+  }
+
+  // 解き方: 5秒だけ見える写真(ホームズの「観察」)。消えたあとの質問に、すべて正解すると進む
+  function makeGlimpse(p,idx){
+    var g=p.glimpse,secs=g.seconds||5,box=mk('div','gate');
+    if(solvedPost(idx)){box.appendChild(replyBox(p));return box;}
+    var stage=mk('div','gl-stage'),picks=[],timer=null;
+    var img=new Image();img.alt='';img.src=g.img||sceneURI();
+    function setStage(node){stage.innerHTML='';stage.appendChild(node);}
+    setStage(mk('span',null,'?'));
+    var bar=mk('div','gl-bar'),fill=mk('span','');bar.appendChild(fill);bar.hidden=true;
+    var go=mk('button','btn','見る('+secs+'秒)');go.type='button';go.style.marginTop='12px';
+    var qs=mk('div','gl-qs');qs.hidden=true;
+    var ms=mk('p','msg','');
+    g.questions.forEach(function(q,qi){
+      var blk=mk('div','gl-q');
+      blk.appendChild(mk('p','gl-qt','Q'+(qi+1)+'. '+q.q));
+      var row=mk('div','gl-opts');
+      q.opts.forEach(function(o,oi){
+        var b=mk('button','gl-opt',o);b.type='button';
+        b.addEventListener('click',function(){
+          picks[qi]=oi;
+          [].forEach.call(row.children,function(c){c.classList.remove('sel');});
+          b.classList.add('sel');
+        });
+        row.appendChild(b);
+      });
+      blk.appendChild(row);qs.appendChild(blk);
+    });
+    var sub=mk('button','go','答える');sub.type='button';sub.style.marginTop='16px';
+    qs.appendChild(sub);
+    function resetPicks(){picks=[];[].forEach.call(qs.querySelectorAll('.gl-opt'),function(c){c.classList.remove('sel');});}
+    go.addEventListener('click',function(){
+      ensureAudio();
+      go.hidden=true;ms.textContent='';qs.hidden=true;resetPicks();
+      setStage(img);
+      bar.hidden=false;
+      fill.style.transition='none';fill.style.width='100%';void fill.offsetWidth;
+      fill.style.transition='width '+secs+'s linear';fill.style.width='0%';
+      clearTimeout(timer);
+      timer=setTimeout(function(){
+        setStage(mk('span',null,'……消えた'));
+        bar.hidden=true;qs.hidden=false;
+      },secs*1000);
+    });
+    sub.addEventListener('click',function(){
+      var j,okAll=true;
+      for(j=0;j<g.questions.length;j++){if(picks[j]===undefined){ms.textContent='すべての質問に、答えてください。';return;}}
+      for(j=0;j<g.questions.length;j++){if(picks[j]!==g.questions[j].a){okAll=false;}}
+      if(okAll){correct(p,idx,box);return;}
+      ms.textContent='管理人: 見間違いがあるようです。もう一度、見ますか?';
+      shakeEl(qs);buzz();vib();
+      qs.hidden=true;go.hidden=false;go.textContent='もう一度、見る('+secs+'秒)';
+      setStage(mk('span',null,'?'));
+    });
+    box.appendChild(stage);box.appendChild(bar);box.appendChild(go);box.appendChild(qs);box.appendChild(ms);
+    return box;
+  }
+
+  // 解き方: 嘘つき探し(ホームズの「消去法」)。証言の食い違いから、嘘をついている1人を選ぶ
+  function makeLiar(p,idx){
+    var g=p.liar,box=mk('div','gate');
+    if(solvedPost(idx)){box.appendChild(replyBox(p));return box;}
+    var list=mk('div','liar-list');
+    g.people.forEach(function(pp){
+      var c=mk('div','liar-card');
+      c.appendChild(mk('b',null,pp.name));
+      c.appendChild(mk('p',null,'「'+pp.text+'」'));
+      list.appendChild(c);
+    });
+    box.appendChild(list);
+    box.appendChild(mk('p','gl-qt',g.question||'嘘をついているのは、誰でしょう?'));
+    var row=mk('div','gl-opts'),ms=mk('p','msg','');
+    row.style.justifyContent='center';
+    g.people.forEach(function(pp,i){
+      var b=mk('button','gl-opt',pp.name);b.type='button';
+      b.addEventListener('click',function(){
+        ensureAudio();
+        if(i===g.answer){correct(p,idx,box);}
+        else{ms.textContent='管理人: その人では、ないようです。';shakeEl(row);buzz();vib();}
+      });
+      row.appendChild(b);
+    });
+    box.appendChild(row);box.appendChild(ms);
+    return box;
+  }
+
+  // 解き方: 仕分け(前提から、「確実」「ありうる」「ありえない」を見分ける)。全部、正しく仕分けられると進む
+  function makeSort(p,idx){
+    var g=p.sort,box=mk('div','gate'),picks=[];
+    if(solvedPost(idx)){box.appendChild(replyBox(p));return box;}
+    var wrap=mk('div','gl-qs'),ms=mk('p','msg','');
+    g.items.forEach(function(it,ii){
+      var blk=mk('div','gl-q');
+      blk.appendChild(mk('p','gl-qt',(ii+1)+'. '+it.t));
+      var row=mk('div','gl-opts');
+      g.options.forEach(function(o,oi){
+        var b=mk('button','gl-opt',o);b.type='button';
+        b.addEventListener('click',function(){
+          picks[ii]=oi;
+          [].forEach.call(row.children,function(c){c.classList.remove('sel');});
+          b.classList.add('sel');
+        });
+        row.appendChild(b);
+      });
+      blk.appendChild(row);wrap.appendChild(blk);
+    });
+    var sub=mk('button','go','仕分けを確定する');sub.type='button';sub.style.marginTop='16px';
+    sub.addEventListener('click',function(){
+      ensureAudio();
+      var j,okAll=true;
+      for(j=0;j<g.items.length;j++){if(picks[j]===undefined){ms.textContent='すべての推論を、仕分けてください。';return;}}
+      for(j=0;j<g.items.length;j++){if(picks[j]!==g.items[j].a){okAll=false;}}
+      if(okAll){correct(p,idx,box);return;}
+      ms.textContent='管理人: 見落としがあるようです。';
+      shakeEl(wrap);buzz();vib();
+    });
+    wrap.appendChild(sub);
+    box.appendChild(wrap);box.appendChild(ms);
+    return box;
+  }
+
+  // 大勢の人の絵(仮): 全員、胸にゼッケン。「目隠しをしている人」は1人だけ(番号146)。まぎらわしい人(サングラス、眼帯など)も混ぜてある
+  function crowdURI_old(){
+    var skins=['#f2c9a0','#e0ac84','#c68b62','#f6d5b5'],hairs=['#2b2418','#5a3a22','#1a1a1a','#8a5a2b','#444444'],shirts=['#4a6fa5','#c0504d','#6a994e','#e0a030','#7b5ea7','#3d8d8d','#d17a9b'];
+    var s='<rect width="360" height="240" fill="#e8e2d0"/>',k;
+    var BLIND=10,SUNG=3,PATCH=6,SLEEP=17,MASK=21,HAT=24;
+    for(k=0;k<28;k++){
+      var col=k%7,row=Math.floor(k/7),x=28+col*50+(row%2?12:0),y=36+row*54;
+      var skin=skins[k%4],hair=hairs[(k*3)%5],shirt=shirts[(k*2)%7];
+      var num=100+(k*37)%899;if(num===146){num=147;}
+      if(k===BLIND){num=146;}
+      s+='<rect x="'+(x-12)+'" y="'+(y+10)+'" width="24" height="28" rx="6" fill="'+shirt+'"/>';
+      s+='<circle cx="'+x+'" cy="'+y+'" r="9" fill="'+skin+'"/>';
+      s+='<path d="M'+(x-9)+' '+(y-1)+'A9 9 0 0 1 '+(x+9)+' '+(y-1)+'Z" fill="'+hair+'"/>';
+      if(k===BLIND){
+        s+='<rect x="'+(x-10)+'" y="'+(y-3)+'" width="20" height="6" fill="#111"/><path d="M'+(x+10)+' '+y+'l7 -3l1 3l-7 4z" fill="#111"/>';
+      }else if(k===SUNG){
+        s+='<circle cx="'+(x-4)+'" cy="'+(y+1)+'" r="3.2" fill="#111"/><circle cx="'+(x+4)+'" cy="'+(y+1)+'" r="3.2" fill="#111"/><path d="M'+(x-1)+' '+(y+1)+'h2" stroke="#111" stroke-width="1"/>';
+      }else if(k===PATCH){
+        s+='<circle cx="'+(x-3.5)+'" cy="'+(y+1)+'" r="1.1" fill="#222"/><circle cx="'+(x+3.5)+'" cy="'+(y+1)+'" r="3.2" fill="#111"/><path d="M'+(x-9)+' '+(y-3)+'L'+(x+3.5)+' '+(y+1)+'" stroke="#111" stroke-width=".8"/>';
+      }else if(k===SLEEP){
+        s+='<rect x="'+(x-9)+'" y="'+(y-7)+'" width="18" height="5" fill="#555"/><circle cx="'+(x-3.5)+'" cy="'+(y+1)+'" r="1.1" fill="#222"/><circle cx="'+(x+3.5)+'" cy="'+(y+1)+'" r="1.1" fill="#222"/>';
+      }else if(k===MASK){
+        s+='<circle cx="'+(x-3.5)+'" cy="'+(y+1)+'" r="1.1" fill="#222"/><circle cx="'+(x+3.5)+'" cy="'+(y+1)+'" r="1.1" fill="#222"/><rect x="'+(x-6)+'" y="'+(y+3)+'" width="12" height="6" rx="2" fill="#fff"/>';
+      }else if(k===HAT){
+        s+='<rect x="'+(x-13)+'" y="'+(y-6)+'" width="26" height="4" fill="#333"/><circle cx="'+(x-3.5)+'" cy="'+(y+1)+'" r="1.1" fill="#222"/><circle cx="'+(x+3.5)+'" cy="'+(y+1)+'" r="1.1" fill="#222"/>';
+      }else{
+        s+='<circle cx="'+(x-3.5)+'" cy="'+(y+1)+'" r="1.1" fill="#222"/><circle cx="'+(x+3.5)+'" cy="'+(y+1)+'" r="1.1" fill="#222"/>';
+      }
+      s+='<rect x="'+(x-8)+'" y="'+(y+14)+'" width="16" height="12" rx="1" fill="#fff"/><text x="'+x+'" y="'+(y+23)+'" font-size="7" text-anchor="middle" fill="#111" font-family="sans-serif" font-weight="700">'+num+'</text>';
+    }
+    return 'data:image/svg+xml,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 240">'+s+'</svg>');
+  }
+
+  // 大勢の人の絵(仮・第2版): 両手を挙げる人、片手だけ挙げる人、アフロ、パーマ、リーゼントなど。
+  // 答えの人(ゼッケン146)は、両手で、目を隠している。ほかにも、片目を隠す人、口を隠す人、サングラス、眼帯などが、まぎれている
+  function crowdURI_v2(){
+    var skins=['#f2c9a0','#e0ac84','#c68b62','#f6d5b5'],hairs=['#2b2418','#5a3a22','#1a1a1a','#8a5a2b','#444444'],shirts=['#4a6fa5','#c0504d','#6a994e','#e0a030','#7b5ea7','#3d8d8d','#d17a9b'];
+    // 髪型: afro=アフロ perm=パーマ pomp=リーゼント(指定のない人は、ふつうの短い髪)
+    var HAIR={1:'afro',13:'afro',4:'perm',16:'perm',25:'perm',7:'pomp',20:'pomp'};
+    // ポーズ: both=両手を挙げる one=片手だけ挙げる target=両手で目を隠す(答え) eye1=片手で片目を隠す mouth=手で口を隠す
+    var POSE={2:'both',8:'both',15:'both',22:'both',5:'one',12:'one',19:'one',26:'one',10:'target',9:'eye1',18:'mouth'};
+    // 小物: sung=サングラス patch=眼帯 sleep=アイマスクを額に上げる mask=マスク hat=深くかぶった帽子
+    var ACC={3:'sung',6:'patch',17:'sleep',21:'mask',24:'hat'};
+    var s='<rect width="360" height="240" fill="#e8e2d0"/>',k;
+    function arm(sk,x1,y1,x2,y2,r){
+      s+='<path d="M'+x1+' '+y1+'L'+x2+' '+y2+'" stroke="'+sk+'" stroke-width="4.4" stroke-linecap="round" fill="none"/><circle cx="'+x2+'" cy="'+y2+'" r="'+r+'" fill="'+sk+'"/>';
+    }
+    for(k=0;k<28;k++){
+      var col=k%7,row=Math.floor(k/7),x=28+col*50+(row%2?12:0),y=36+row*54;
+      var skin=skins[k%4],hair=hairs[(k*3)%5],shirt=shirts[(k*2)%7],hs=HAIR[k]||'n',ps=POSE[k]||'down',ac=ACC[k]||'';
+      var num=100+(k*37)%899;if(num===146){num=147;}
+      if(ps==='target'){num=146;}
+      var eL='<circle cx="'+(x-3.5)+'" cy="'+(y+1)+'" r="1.1" fill="#222"/>',eR='<circle cx="'+(x+3.5)+'" cy="'+(y+1)+'" r="1.1" fill="#222"/>';
+      if(hs==='afro'){hair='#1a1a1a';s+='<circle cx="'+x+'" cy="'+(y-3)+'" r="14" fill="'+hair+'"/>';}
+      s+='<rect x="'+(x-12)+'" y="'+(y+10)+'" width="24" height="28" rx="6" fill="'+shirt+'"/>';
+      s+='<rect x="'+(x-8)+'" y="'+(y+14)+'" width="16" height="12" rx="1" fill="#fff"/><text x="'+x+'" y="'+(y+23)+'" font-size="7" text-anchor="middle" fill="#111" font-family="sans-serif" font-weight="700">'+num+'</text>';
+      s+='<circle cx="'+x+'" cy="'+y+'" r="9" fill="'+skin+'"/>';
+      s+='<path d="M'+(x-9)+' '+(y-1)+'A9 9 0 0 1 '+(x+9)+' '+(y-1)+'Z" fill="'+hair+'"/>';
+      if(hs==='perm'){[-8,-3,3,8].forEach(function(dx){s+='<circle cx="'+(x+dx)+'" cy="'+(y-7)+'" r="3.6" fill="'+hair+'"/>';});}
+      if(hs==='pomp'){s+='<ellipse cx="'+(x+4)+'" cy="'+(y-10)+'" rx="10" ry="6" fill="'+hair+'"/><path d="M'+(x-1)+' '+(y-12)+'q5 -3 10 0" stroke="#999" stroke-width=".8" fill="none"/>';}
+      // 顔
+      if(ps==='target'){
+        // 目は、手で隠れている
+      }else if(ps==='eye1'){s+=eR;}
+      else if(ac==='sung'){s+='<circle cx="'+(x-4)+'" cy="'+(y+1)+'" r="3.2" fill="#111"/><circle cx="'+(x+4)+'" cy="'+(y+1)+'" r="3.2" fill="#111"/><path d="M'+(x-1)+' '+(y+1)+'h2" stroke="#111" stroke-width="1"/>';}
+      else if(ac==='patch'){s+=eL+'<circle cx="'+(x+3.5)+'" cy="'+(y+1)+'" r="3.2" fill="#111"/><path d="M'+(x-9)+' '+(y-3)+'L'+(x+3.5)+' '+(y+1)+'" stroke="#111" stroke-width=".8"/>';}
+      else if(ac==='sleep'){s+=eL+eR+'<rect x="'+(x-9)+'" y="'+(y-7)+'" width="18" height="5" fill="#555"/>';}
+      else if(ac==='mask'){s+=eL+eR+'<rect x="'+(x-6)+'" y="'+(y+3)+'" width="12" height="6" rx="2" fill="#fff"/>';}
+      else if(ac==='hat'){s+=eL+eR+'<rect x="'+(x-13)+'" y="'+(y-6)+'" width="26" height="4" fill="#333"/>';}
+      else{s+=eL+eR;}
+      // 腕と手
+      if(ps==='both'){arm(skin,x-11,y+14,x-17,y-9,3.4);arm(skin,x+11,y+14,x+17,y-9,3.4);}
+      else if(ps==='one'){arm(skin,x-11,y+14,x-14,y+31,3.2);arm(skin,x+11,y+14,x+17,y-9,3.4);}
+      else if(ps==='target'){arm(skin,x-11,y+14,x-4,y+2,4.3);arm(skin,x+11,y+14,x+4,y+2,4.3);}
+      else if(ps==='eye1'){arm(skin,x-11,y+14,x-4,y+2,4.3);arm(skin,x+11,y+14,x+14,y+31,3.2);}
+      else if(ps==='mouth'){arm(skin,x-11,y+14,x-14,y+31,3.2);arm(skin,x+11,y+14,x+2,y+6,3.6);}
+      else{arm(skin,x-11,y+14,x-14,y+31,3.2);arm(skin,x+11,y+14,x+14,y+31,3.2);}
+    }
+    return 'data:image/svg+xml,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 240">'+s+'</svg>');
+  }
+
+  // 夜の難波に集まった、目撃者たちの影絵(仮・第3版)。怪盗Sと同じ、黒い影に、金色のふちどり。
+  // 手を挙げて、腕時計の時刻を見せている人が、大勢いる。答えの人は、両手で目を隠していて、その腕時計が「1:46」を示している
+  function crowdURI(){
+    var B='#05070c';
+    var s='<defs><filter id="rim" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="0" stdDeviation="1.1" flood-color="#ecd9a0" flood-opacity=".65"/></filter><linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1b2340"/><stop offset="1" stop-color="#0b0f1c"/></linearGradient><radialGradient id="mn"><stop offset="0" stop-color="#c23232" stop-opacity=".9"/><stop offset="1" stop-color="#c23232" stop-opacity="0"/></radialGradient></defs>';
+    s+='<rect width="360" height="240" fill="url(#bg)"/><circle cx="300" cy="46" r="46" fill="url(#mn)"/><circle cx="300" cy="46" r="20" fill="#c23232" opacity=".85"/>';
+    [[30,22],[80,14],[130,30],[190,16],[240,28],[340,20],[20,60],[350,90]].forEach(function(d){s+='<circle cx="'+d[0]+'" cy="'+d[1]+'" r="1.1" fill="#ecd9a0" opacity=".7"/>';});
+    function line(x1,y1,x2,y2,w){return '<path d="M'+x1+' '+y1+'L'+x2+' '+y2+'" stroke="'+B+'" stroke-width="'+w+'" stroke-linecap="round" fill="none"/>';}
+    function dot(x,y,r){return '<circle cx="'+x+'" cy="'+y+'" r="'+r+'" fill="'+B+'"/>';}
+    function watch(cx,cy,sc,t){
+      var w=24*sc,h=14*sc;
+      return '<rect x="'+(cx-w/2)+'" y="'+(cy-h/2)+'" width="'+w+'" height="'+h+'" rx="'+(2*sc)+'" fill="#c9a24b"/><rect x="'+(cx-w/2+1.6*sc)+'" y="'+(cy-h/2+1.6*sc)+'" width="'+(w-3.2*sc)+'" height="'+(h-3.2*sc)+'" rx="'+sc+'" fill="#0b101c"/><text x="'+cx+'" y="'+(cy+3.4*sc)+'" font-size="'+(9.5*sc)+'" text-anchor="middle" fill="#ecd9a0" font-family="monospace" font-weight="700">'+t+'</text>';
+    }
+    // 人物: x,y=頭の中心、sc=大きさ。o={arms,hair,t}  arms: down|both|one|target|eye1|mouth
+    function person(x,y,sc,o){
+      var a=o.arms||'down',h=o.hair||'n',o2='';
+      if(h==='afro'){o2+=dot(x,y-4*sc,17*sc);}
+      o2+='<rect x="'+(x-17*sc)+'" y="'+(y+12*sc)+'" width="'+(34*sc)+'" height="'+(140*sc)+'" rx="'+(10*sc)+'" fill="'+B+'"/>';
+      o2+=dot(x,y,12*sc);
+      if(h==='perm'){[[-10,-8],[-4,-13],[4,-13],[10,-8]].forEach(function(d){o2+=dot(x+d[0]*sc,y+d[1]*sc,5*sc);});}
+      if(h==='pomp'){o2+='<ellipse cx="'+(x+6*sc)+'" cy="'+(y-13*sc)+'" rx="'+(13*sc)+'" ry="'+(7*sc)+'" fill="'+B+'"/>';}
+      var sw=9*sc,wp=null;
+      if(a==='both'){o2+=line(x-15*sc,y+22*sc,x-26*sc,y-20*sc,sw)+line(x+15*sc,y+22*sc,x+26*sc,y-20*sc,sw)+dot(x-26*sc,y-21*sc,5.4*sc)+dot(x+26*sc,y-21*sc,5.4*sc);wp=[x+26*sc,y-11*sc];}
+      else if(a==='one'){o2+=line(x-15*sc,y+22*sc,x-20*sc,y+62*sc,sw)+line(x+15*sc,y+22*sc,x+26*sc,y-20*sc,sw)+dot(x+26*sc,y-21*sc,5.4*sc);wp=[x+26*sc,y-11*sc];}
+      else if(a==='target'){o2+=line(x-15*sc,y+22*sc,x-5*sc,y+2*sc,sw)+line(x+15*sc,y+22*sc,x+5*sc,y+2*sc,sw)+dot(x-5*sc,y+1*sc,6.4*sc)+dot(x+5*sc,y+1*sc,6.4*sc);wp=[x-10*sc,y+14*sc];}
+      else if(a==='eye1'){o2+=line(x-15*sc,y+22*sc,x-5*sc,y+2*sc,sw)+line(x+15*sc,y+22*sc,x+20*sc,y+62*sc,sw)+dot(x-5*sc,y+1*sc,6.4*sc);wp=[x-10*sc,y+14*sc];}
+      else if(a==='mouth'){o2+=line(x-15*sc,y+22*sc,x-20*sc,y+62*sc,sw)+line(x+15*sc,y+22*sc,x+5*sc,y+9*sc,sw)+dot(x+4*sc,y+8*sc,6.4*sc);wp=[x+11*sc,y+18*sc];}
+      else{o2+=line(x-15*sc,y+22*sc,x-20*sc,y+62*sc,sw)+line(x+15*sc,y+22*sc,x+20*sc,y+62*sc,sw);wp=[x-20*sc,y+54*sc];}
+      if(o.t&&wp){o2+=watch(wp[0],wp[1],sc,o.t);}
+      return o2;
+    }
+    var g='',i;
+    // 奥の人影(小さく、飾りだけ)
+    for(i=0;i<14;i++){g+=person(14+i*26,78,.55,{arms:(i%4===0?'both':(i%5===2?'one':'down')),hair:(i%6===3?'afro':(i%7===5?'perm':'n'))});}
+    // 中段(腕時計つき)
+    g+=person(72,112,.85,{arms:'mouth',t:'7:30'});
+    g+=person(144,112,.85,{arms:'both',t:'2:10'});
+    g+=person(216,112,.85,{arms:'eye1',t:'6:55'});
+    g+=person(288,112,.85,{arms:'down',hair:'pomp',t:'4:25'});
+    // 手前(腕時計つき)。答えの人は、中央で、両手で目を隠している
+    g+=person(36,150,1,{arms:'both',hair:'afro',t:'3:15'});
+    g+=person(108,150,1,{arms:'one',hair:'pomp',t:'9:40'});
+    g+=person(180,150,1,{arms:'target',t:'1:46'});
+    g+=person(252,150,1,{arms:'both',hair:'perm',t:'5:20'});
+    g+=person(324,150,1,{arms:'one',t:'11:05'});
+    s+='<g filter="url(#rim)">'+g+'</g>';
+    return 'data:image/svg+xml,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 240">'+s+'</svg>');
   }
 
   function makePost(p,idx){
@@ -1526,7 +1900,7 @@ h1{font-size:clamp(1.6rem,8vw,2.1rem);line-height:1.3;font-weight:800;letter-spa
     ending.hidden=false;
     document.body.style.overflow='hidden';
     ending.scrollTop=0;
-    endLines.innerHTML='';
+    endLines.innerHTML='';var afx=document.getElementById('endAfter');if(afx){afx.innerHTML='';}
     endSign.className='end-sign';endClose.className='end-close';endPhoto.className='end-photo';
     endSign.textContent=ENDING.sign;
     endCap.textContent='時間が、いま、追いつく。';
@@ -1568,6 +1942,13 @@ h1{font-size:clamp(1.6rem,8vw,2.1rem);line-height:1.3;font-weight:800;letter-spa
       }
       later(function(){endSign.classList.add('in');endSign.scrollIntoView({behavior:reduce?'auto':'smooth',block:'nearest'});},t);
       t+=reduce?0:1300;
+      // 最後の誘導(招待状の「S」にスマホをかざす)を、1行ずつ出す
+      var af=document.getElementById('endAfter');
+      (ENDING.after||[]).forEach(function(txt){
+        var p=document.createElement('p');p.textContent=txt;af.appendChild(p);
+        later(function(){p.classList.add('in');p.scrollIntoView({behavior:reduce?'auto':'smooth',block:'nearest'});},t);
+        t+=reduce?0:1700;
+      });
       later(function(){endClose.classList.add('in');},t);
     }
     requestAnimationFrame(step);
