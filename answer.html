@@ -466,15 +466,15 @@ h1{font-size:clamp(1.6rem,8vw,2.1rem);line-height:1.3;font-weight:800;letter-spa
       requires:{kakera:0},
       text:[
         '怪盗Sから、新しい予告状が届いたようです。',
-        '予告状を読み解いて、黒い影の次の行き先を、投稿してください。(予告は封筒➁にあります)'
+        '予告状の隅に、とても小さな四角い模様(QRコード)が、印刷されているそうです。',
+        'スマートフォンのカメラで読み取って、黒い影の次の行き先を、投稿してください。'
       ],
       mailBtn:{kakera:0,label:'予告状を見る'},
       gate:'ask', label:'黒い影の行き先', placeholder:'行き先',
       nudge:[
-        '管理人: 予告状の言葉を、もう一度、よく読んでみてください。',
-        '管理人: 怪盗Sは、同じ歩幅で、言葉を選んでいるようです。',
-        '管理人: 三つおきに、言葉を拾ってみてください。',
-        '管理人: 答えは、あなたのスマートフォンの裏にあるようです。'
+        '管理人: 予告状を、もう一度、よく見てください。小さな四角が、どこかにあるはずです。',
+        '管理人: スマートフォンのカメラを、その四角に向けてみてください。',
+        '管理人: 文章の中の、南にある、大きな街の名前を、答えてください。'
       ],
       answers:['なんば','おおさかなんば','難波','大阪難波','なんばえき','namba'],
       replyWho:'電車の乗客',
@@ -483,7 +483,7 @@ h1{font-size:clamp(1.6rem,8vw,2.1rem);line-height:1.3;font-weight:800;letter-spa
     },
     {
       // 移動中(約30分): ホームズの謎①「行列の推理」── 13個の観察から、5人の帽子・持ち物・降りた駅を、すべて決める
-      id:'p4a', tag:'移動中', who:'管理人', when:'昨夜 22:20',
+      id:'p4a', disabled:true, tag:'移動中', who:'管理人', when:'昨夜 22:20',
       text:[
         '難波まで、電車で約30分。その間に、怪盗Sの次の動きを読むための、過去の事件記録を、お渡しします。被害にあった方々の安全のため、路線や駅の名前は、仮名にしてあります。',
         '【記録①】青葉線に乗っていた、5人の乗客の観察記録です。5人は、乗る前、ホームの行列に、前から1番目〜5番目まで、1列に並んでいました。降りた駅は、全員、別々です(桜橋、北町、港前、灯台前、終点の5駅)。',
@@ -511,7 +511,7 @@ h1{font-size:clamp(1.6rem,8vw,2.1rem);line-height:1.3;font-weight:800;letter-spa
     },
     {
       // 移動中: 挑戦状③(実物)の答え「目隠しをしている人」を、大勢の絵の中から探し、胸のゼッケンの番号を読む
-      id:'p4e', tag:'移動中', who:'管理人', when:'昨夜 22:35',
+      id:'p4e', disabled:true, tag:'移動中', who:'管理人', when:'昨夜 22:35',
       img:crowdURI(), alt:'夜の難波に集まった、目撃者たちの影絵。手を挙げて、腕時計を見せている人が、大勢いる',
       text:[
         '昨夜の事件の目撃者たちが、夜の難波に、集まっています(影絵の写真です)。',
@@ -600,7 +600,41 @@ h1{font-size:clamp(1.6rem,8vw,2.1rem);line-height:1.3;font-weight:800;letter-spa
       gate:'button', btn:'ガーデンに着いた。続報を見る'
     },
     {
-      // 落とし物の写真 + 3桁の番号(ポーチの南京錠の答え)
+      // ===== 難波 ②-2: イラスト変換(絵を言葉にして、頭文字を並べる)=====
+      // 謎は「予告状(card)」に書く。画像 yokoku_omote_04.png ができるまでは、card.text の文章版が出ます。
+      // card は、この投稿が新しく出たときに、右上から回って届く演出で出ます(あとから「予告状を見る」で見返せます)
+      id:'p6c', tag:'新着', who:'管理人', when:'昨夜 23:10',
+      card:{
+        back:'yokoku_ura.png', front:'yokoku_omote_04.png',
+        text:['三つの絵を、言葉にして、','頭文字を、順に並べよ。','(絵: 梨 / 傘 / 枕)','怪盗S']
+      },
+      text:['新しい予告状が、届きました。','予告状の謎を解いて、答えを投稿してください。'],
+      gate:'ask', label:'答え', placeholder:'ひらがなで',
+      nudge:[
+        '管理人: 予告状の絵を、一つずつ、言葉にしてみてください。',
+        '管理人: それぞれの言葉の、最初の一文字を、順に並べます。'
+      ],
+      answers:['なかま','仲間'],
+      replyWho:'管理人', ok:'……仲間。怪盗Sにも、そう呼ぶ相手がいるのかもしれません。'
+    },
+    {
+      // ===== 難波 ②-3: 五十音表で、数字に変える。答えは3桁 = ポーチの南京錠 =====
+      id:'p6d', tag:'新着', who:'管理人', when:'昨夜 23:15',
+      card:{
+        back:'yokoku_ura.png', front:'yokoku_omote_05.png',
+        text:['前の答えを、一文字ずつ、','五十音の表で、何行目か数えよ。','(あ行=1、か行=2、さ行=3 …… わ行=10)','怪盗S']
+      },
+      text:['もう一通、予告状が届きました。','答えの3桁の数字を、投稿してください。'],
+      gate:'ask', label:'3桁の数字', placeholder:'000',
+      nudge:[
+        '管理人: 「なかま」を、一文字ずつ、分けてみてください。',
+        '管理人: 「な」は、な行。何行目でしょう。'
+      ],
+      answers:['527'],
+      replyWho:'管理人', ok:'……その数字、どこかの鍵の番号かもしれません。'
+    },
+    {
+      // 落とし物の写真 + ポーチ(南京錠は、さっきの番号 527)
       id:'p7', tag:'続報', who:'園内のスタッフ', when:'昨夜 23:20',
       attach:{
         type:'lost',
@@ -608,21 +642,86 @@ h1{font-size:clamp(1.6rem,8vw,2.1rem);line-height:1.3;font-weight:800;letter-spa
         alt:'黒いポーチ。3桁の南京錠がかかっている',
         item:'黒いポーチ(3桁の南京錠つき)', found:'庭園のベンチ', date:'昨夜 23:15'
       },
-      text:['ベンチで、こんなポーチが見つかりました。3桁の鍵がかかっています。','開けられる番号がわかったら、投稿してください。'],
-      gate:'ask', label:'3桁の番号', placeholder:'000',
-      answers:['146'],
-      replyWho:'園内のスタッフ', ok:'開きました!中に、カードが入っています。'
+      text:['ベンチで、こんなポーチが見つかりました。3桁の鍵がかかっています。','ここまでの謎の答えで、鍵を開けてみてください。'],
+      gate:'button', btn:'開いた。中身を見る',
+      note:'(ポーチの鍵が開いたら、押してください)'
     },
     {
-      // この投稿のあと、物(ポケカ)の謎を解いて、答えを金庫へ入れる
+      // この投稿のあと、物(ポケカ)の謎を解いて、答えを金庫へ入れる(カケラ②)
       id:'p8', tag:'新着', who:'管理人', when:'昨夜 23:30',
       text:['ポーチの中のカードを、調べてみてください。','答えがわかったら、記憶の金庫へ。'],
       vaultBtn:'記憶の金庫を開く'
     },
     {
-      // 梅田(③): 防犯カメラ風 + 時刻順に並べる(カケラ②を取り戻すと出る)
-      id:'p9', tag:'新着', who:'梅田の警備員', when:'昨夜 23:55',
+      // ===== 心斎橋 ③-1: 写真から、場所の名前を答える(カケラ②を取り戻すと出る)=====
+      // 画像: shinsaibashi_01.jpg(大丸心斎橋 9階のポケモンセンターの前。左から、フリーザー144・サンダー145・ファイヤー146)
+      id:'p8b', tag:'新着', who:'心斎橋の買い物客', when:'昨夜 23:40',
       requires:{kakera:1},
+      img:'shinsaibashi_01.jpg', alt:'お店の前に並ぶ、3羽の鳥の像。左から、氷の鳥、電気の鳥、炎の鳥',
+      text:[
+        '黒い影が、この3羽の前で、立ち止まっていました。',
+        'お店の名前を、投稿してください。'
+      ],
+      gate:'ask', label:'お店の名前', placeholder:'お店の名前',
+      nudge:[
+        '管理人: 3羽は、ある有名なゲームの、伝説の鳥です。',
+        '管理人: そのゲームの、公式のお店です。'
+      ],
+      answers:['ぽけもんせんたー','ポケモンセンター','ぽけせん','ぽけもんせんたーおーさか','ぽけもんせんたーおおさか'],
+      replyWho:'心斎橋の買い物客', ok:'そうそう、ポケモンセンター!心斎橋の大丸の、9階よ。'
+    },
+    {
+      // ===== 心斎橋 ③-2: 予告状の謎(図鑑の番号)。答えは、金庫(カケラ③)へ =====
+      id:'p8c', tag:'新着', who:'管理人', when:'昨夜 23:45',
+      requires:{kakera:1}, afterPost:'p8b',
+      card:{
+        back:'yokoku_ura.png', front:'yokoku_omote_06.png',
+        text:['三羽の鳥のうち、','図鑑の番号が、いちばん大きい鳥の名を、','記憶の金庫へ。','怪盗S']
+      },
+      text:['新しい予告状が、届きました。','答えがわかったら、記憶の金庫へ。'],
+      vaultBtn:'記憶の金庫を開く'
+    },
+    {
+      // ===== 心斎橋 ③-3: ブラックライト(物)。カードは、ポーチの中の白紙のカード =====
+      id:'p8d', tag:'新着', who:'管理人', when:'昨夜 23:50',
+      requires:{kakera:2},
+      text:['ポーチの中の、白紙のカードに、ライトを当ててみてください。','浮かび上がったものを、投稿してください。'],
+      gate:'ask', label:'浮かんだもの', placeholder:'浮かんだもの',
+      nudge:[
+        '管理人: 暗めの場所で、カードに、近づけて当ててみてください。',
+        '管理人: 赤くて、大きくて、回るものです。'
+      ],
+      answers:['かんらんしゃ','観覧車','へっぷ','へっぷふぁいぶ','HEP','HEPFIVE','赤い観覧車','あかいかんらんしゃ'],
+      replyWho:'管理人', ok:'……赤い観覧車。梅田の、あの建物ですね。'
+    },
+    {
+      // ===== 心斎橋→梅田 ③-4: 移動中(御堂筋線)。路線図の番号 =====
+      id:'p8e', tag:'移動中', who:'管理人', when:'昨夜 23:52',
+      requires:{kakera:2}, afterPost:'p8d',
+      card:{
+        back:'yokoku_ura.png', front:'yokoku_omote_07.png',
+        text:['心斎橋(M19)から、北へ、三つ進め。','降りる駅の、番号を答えよ。','怪盗S']
+      },
+      text:['御堂筋線で、北へ向かいます。','移動中に、予告状の謎を解いてみてください。'],
+      gate:'ask', label:'駅の番号', placeholder:'M00',
+      nudge:[
+        '管理人: 駅の番号は、数字が、一つずつ、変わっていきます。',
+        '管理人: 北へ進むと、番号は、小さくなります。'
+      ],
+      answers:['m16','M16','えむじゅうろく','16'],
+      replyWho:'管理人', ok:'……梅田。怪盗Sも、同じ電車に、乗っていたのかもしれません。'
+    },
+    {
+      id:'p8f', tag:'到着', who:'管理人', when:'昨夜 23:58',
+      requires:{kakera:2}, afterPost:'p8e',
+      text:['梅田に着いたら、下のボタンを押してください。'],
+      gate:'button', btn:'梅田に着いた',
+      note:'(駅に着くまでは、押さないでください)'
+    },
+    {
+      // 梅田(③): 防犯カメラ風 + 時刻順に並べる(心斎橋の投稿を解いたあとに出る)
+      id:'p9', tag:'新着', who:'梅田の警備員', when:'昨夜 23:55',
+      requires:{kakera:2}, afterPost:'p8f',
       attach:{
         type:'cctv', place:'CAM 07 / 梅田の商業施設',
         frames:[
@@ -649,7 +748,7 @@ h1{font-size:clamp(1.6rem,8vw,2.1rem);line-height:1.3;font-weight:800;letter-spa
     },
     {
       // 梅田(④): 号外風 + 町の名前を答える(カケラ③を取り戻すと出る)
-      id:'p11', tag:'新着', who:'管理人', when:'今朝',
+      id:'p11', disabled:true, tag:'新着', who:'管理人', when:'今朝',
       requires:{kakera:2},
       attach:{
         type:'news', head:'怪盗S、次は静かな路地へ?', sub:'古い町並みのカフェ街で、目撃情報',
@@ -667,14 +766,14 @@ h1{font-size:clamp(1.6rem,8vw,2.1rem);line-height:1.3;font-weight:800;letter-spa
     },
     {
       // 怪盗Sにメールを送る(自動返信に、次の謎を入れる)
-      id:'p12', tag:'新着', who:'管理人', when:'今朝',
+      id:'p12', disabled:true, tag:'新着', who:'管理人', when:'今朝',
       text:['怪盗Sの連絡先が、公開されました。','何か送ってみると、返事が来るかもしれません。','返事の謎を解いて、答えを金庫へ。'],
       linkBtn:{label:'怪盗Sにメールを送る', href:'mailto:kaito.s.example@example.com?subject=%E6%80%AA%E7%9B%97S'},
       vaultBtn:'記憶の金庫を開く'
     },
     {
       // 梅田(⑤): 落とし物の写真 + 持ち主の名前(カケラ④を取り戻すと出る)
-      id:'p13', tag:'新着', who:'カフェの店員', when:'今朝',
+      id:'p13', disabled:true, tag:'新着', who:'カフェの店員', when:'今朝',
       requires:{kakera:3},
       attach:{
         type:'lost',
@@ -688,29 +787,35 @@ h1{font-size:clamp(1.6rem,8vw,2.1rem);line-height:1.3;font-weight:800;letter-spa
     },
     {
       // 画像の中をタップして探す + ブラックライト(透明ペン)の謎へ
-      id:'p14', tag:'続報', who:'北館の利用客', when:'今朝',
+      id:'p14', requires:{kakera:3}, tag:'続報', who:'北館の利用客', when:'今朝',
       text:['大きな建物の前の人混みに、黒い影が紛れていました。','指でタップして、探してください。'],
       gate:'find', img:demoCrowd(), alt:'人混みの写真。どこかに、黒い影',
       find:{hot:[{x:62,y:46,r:6}], hintAfter:5},
       replyWho:'北館の利用客', ok:'そこそこ!建物の上のほうへ向かっていったわ。',
-      hint:'管理人: 予告状に、ライトを当ててみてください。答えがわかったら、金庫へ。',
+      hint:'管理人: 最後のカケラは、すべての はじまり にあります。答えがわかったら、金庫へ。',
       toVault:'記憶の金庫を開く'
     },
     {
-      // 最終謎: カケラの答えの「隠れた意味」から、ロッカーの番号を出す(カケラ⑤を取り戻すと出る)
+      // ===== 最後の謎(大謎): 五つのカケラの答えを、つなげる(カケラ⑤を取り戻すと出る)=====
+      // 答え 0517 = 710 をばらして並べ替え + 5(出会って5年)→ 月と日。作れる月日は 05/17 と 07/15 だけ
       id:'p15', tag:'新着', who:'管理人', when:'今朝',
       requires:{kakera:4},
-      text:['五つのカケラが、揃いました。','カケラの答えの、隠れた意味を並べると、ロッカーの4桁の番号になるようです。','番号を、投稿してください。'],
-      gate:'ask', label:'ロッカーの番号', placeholder:'0000',
+      card:{
+        back:'yokoku_ura.png', front:'yokoku_omote_09.png',
+        text:['710 を、ばらして、並べ替えよ。','そこへ、二人が過ごした年数を加えよ。','月と日に、並べ直せ。','怪盗S']
+      },
+      text:['五つのカケラが、揃いました。','最後の謎の、予告状が届いています。','答えの4桁を、投稿してください。'],
+      gate:'ask', label:'4桁の数字', placeholder:'0000',
       nudge:[
-        '管理人: 五つの答えを、もう一度、見直してみてください。',
-        '管理人: 月と日の、4桁の数字です。'
+        '管理人: 最初の答えを、一文字ずつ、ばらしてみてください。',
+        '管理人: 「遷都」とは、場所を、移すこと。並べ替えること。',
+        '管理人: 年数は、最後のカケラの答えから、数えられます。'
       ],
       answers:['0517','517'],
-      replyWho:'管理人', ok:'ロッカーが開きました!中に、最後の予告状が入っています。',
+      replyWho:'管理人', ok:'……あなたたちの、大切な日。最後の予告状が、届きます。',
       mail:{
         back:'yokoku_ura.png',
-        front:'yokoku_omote_03.png',
+        front:'yokoku_omote_10.png',
         text:['よくここまで辿り着いたな。','最後に、私の正体を、見つけてみせよ。','怪盗S']
       }
     },
@@ -795,47 +900,58 @@ h1{font-size:clamp(1.6rem,8vw,2.1rem);line-height:1.3;font-weight:800;letter-spa
   //   届いたカードは、裏向きで止まります。タップすると、表を向いて読めます。
   var KAKERA=[
     {
+      // カケラ①(奈良): 710。取り戻すと、次の予告状(なんばへ)が届く
+      // 記憶の中身(photo / lines)は「仮」です。写真は kioku_01.jpg の名前で、同じフォルダに置くと出ます
       answers:['710','せんと','遷都'],
       title:'カケラ① ── はじまりの都',
-      lines:['……710年。都が遷された、はじまりの年。','最初のカケラは、返してやろう。'],
+      lines:['……710年。都が遷された、はじまりの年。','最初のカケラは、返してやろう。','(ここに、この場所の記憶の一言)'],
+      photo:'kioku_01.jpg',
       hint:'次の目撃情報が、掲示板に届いた。',
       board:true,
       mail:{
         back:'yokoku_ura.png',
         front:'yokoku_omote_01.png',
-        text:['最初のカケラは、返してやろう。','だが、記憶の続きは、人の波の向こうにある。','怪盗S']
+        text:['最初のカケラは、返してやろう。','だが、記憶の続きは、人の波の向こうにある。','(南の街へ)','怪盗S']
       }
     },
     {
-      answers:['かびごん'],
+      // カケラ②(難波): かびごん。取り戻すと、次の予告状(心斎橋へ)が届く
+      answers:['かびごん','カビゴン','143'],
       title:'カケラ② ── いちばん重い子',
-      lines:['……カビゴン。眠ってばかりの、いちばん重い子。','二つ目のカケラも、返してやろう。'],
+      lines:['……カビゴン。眠ってばかりの、いちばん重い子。','二つ目のカケラも、返してやろう。','(ここに、この場所の記憶の一言)'],
+      photo:'kioku_02.jpg',
       hint:'次の目撃情報が、掲示板に届いた。',
       board:true,
       mail:{
         back:'yokoku_ura.png',
         front:'yokoku_omote_02.png',
-        text:['二つ目も、取り戻したか。','次の舞台は、梅田だ。','怪盗S']
+        text:['二つ目も、取り戻したか。','次の足跡は、橋のたもとに残した。','怪盗S']
       }
     },
     {
-      answers:['ゆき','雪'],
-      title:'カケラ③ ── 白い景色',
-      lines:['……雪。白く、静かな景色。','三つ目のカケラだ。'],
+      // カケラ③(心斎橋): ふぁいやー(いちばん図鑑番号が大きい鳥)
+      answers:['ふぁいやー','ファイヤー','fire','moltres','146'],
+      title:'カケラ③ ── 炎の鳥',
+      lines:['……炎の鳥。私の足跡は、光の下でだけ、見える。','三つ目のカケラだ。','(ここに、この場所の記憶の一言)'],
+      photo:'kioku_03.jpg',
+      hint:'ポーチの白紙のカードを、掲示板で、確かめてみてほしい。',
+      board:true
+    },
+    {
+      // カケラ④(梅田): 「仮」。梅田の謎が決まったら、答えと文面を書き換える
+      answers:['かりのこたえよん'],
+      title:'カケラ④ ── (仮)',
+      lines:['……(仮)。四つ目のカケラだ。','(ここに、この場所の記憶の一言)'],
+      photo:'kioku_04.jpg',
       hint:'次の目撃情報が、掲示板に届いた。',
       board:true
     },
     {
-      answers:['しる','知る'],
-      title:'カケラ④ ── 知らなかった頃',
-      lines:['……知る。まだ何も知らなかった頃の、記憶。','四つ目のカケラだ。'],
-      hint:'次の目撃情報が、掲示板に届いた。',
-      board:true
-    },
-    {
-      answers:['たちまちづき','立待月','立待ち月'],
-      title:'カケラ⑤ ── 満ちゆく月',
-      lines:['……立待月。月は、満ちてから、また満ちる。','最後のカケラだ。'],
+      // カケラ⑤(最後): はじまりの日。年数の「5」は、ここから数える
+      answers:['20210401','2021.4.1','2021/4/1'],
+      title:'カケラ⑤ ── はじまりの日',
+      lines:['……2021年4月1日。すべての、はじまりの日。','最後のカケラだ。','(ここに、記憶の一言)'],
+      photo:'kioku_05.jpg',
       hint:'最後の問題が、掲示板に届いた。',
       board:true
     }
@@ -1115,7 +1231,13 @@ h1{font-size:clamp(1.6rem,8vw,2.1rem);line-height:1.3;font-weight:800;letter-spa
   function visible(idx){
     var p=ALL[idx];
     if(p.demo){return true;}
-    if(p.requires){return !!got[p.requires.kakera];}   // カケラを取り戻すと、その投稿が出る
+    if(p.requires){
+      if(!got[p.requires.kakera]){return false;}   // カケラを取り戻すと、その投稿が出る
+      if(p.afterPost){   // afterPost に書いた投稿を解いてから出す
+        var j;for(j=0;j<ALL.length;j++){if(ALL[j].id===p.afterPost){return solvedPost(j);}}
+      }
+      return true;
+    }
     return stage>=idx+1;
   }
   // 最後の扉は、最後の投稿(DOOR_AFTER)を解いたあとに、金庫に現れる
@@ -1138,7 +1260,7 @@ h1{font-size:clamp(1.6rem,8vw,2.1rem);line-height:1.3;font-weight:800;letter-spa
 
   // ===== 掲示板を、章ごとに分けて表示する =====
   // 各章の最初の投稿の id を、順番に並べます(下の例: 第一章は p1 から、第二章は p4 から …)。
-  var CHAPTER_STARTS=['p0','p4','p9','p11','p13','p15'];
+  var CHAPTER_STARTS=['p0','p4','p8b','p9','p15'];
   var KANJI=['','一','二','三','四','五','六','七','八','九'];
   var chs=$('chs'),curCh=0,pendingCh=0;
   function chapterOf(idx){
@@ -1213,7 +1335,7 @@ h1{font-size:clamp(1.6rem,8vw,2.1rem);line-height:1.3;font-weight:800;letter-spa
     var f=mk('figure','shot');
     var im=new Image();
     im.alt=alt||'';
-    im.onerror=function(){f.className='shot miss';f.textContent='(画像が見つかりません)';};
+    im.onerror=function(){f.className='shot miss';f.textContent='(画像待ち: '+src+')';};
     im.src=src;
     f.appendChild(im);
     f.appendChild(mk('span','zoom','タップで拡大'));
@@ -1721,6 +1843,11 @@ h1{font-size:clamp(1.6rem,8vw,2.1rem);line-height:1.3;font-weight:800;letter-spa
       });
       b.appendChild(mb);
     }
+    if(p.card){
+      var cb=mk('button','btn','予告状を見る');cb.type='button';cb.style.margin='12px 8px 0 0';
+      cb.addEventListener('click',function(){playMail(p.card,null,true);});
+      b.appendChild(cb);
+    }
     if(p.linkBtn){
       // メールを送るボタン: メールアプリを開く。開かない環境のために、宛先を表示してコピーもできる
       var lk=mk('button','btn',p.linkBtn.label);lk.type='button';lk.style.margin='12px 8px 0 0';
@@ -1755,6 +1882,14 @@ h1{font-size:clamp(1.6rem,8vw,2.1rem);line-height:1.3;font-weight:800;letter-spa
     if(box){a.appendChild(box);}
     return a;
   }
+  // 投稿についている予告状(p.card)を、届く演出で出す。ほかの予告状が出ている間は、少し待つ
+  var booted=false;
+  function autoCard(c,n){
+    setTimeout(function(){
+      if(mailBusy&&n<40){autoCard(c,n+1);return;}
+      playMail(c);
+    },n===0?(reduce?0:1100):1500);
+  }
   function renderNew(scroll){
     var added=0,last=null;
     ALL.forEach(function(p,idx){
@@ -1763,6 +1898,7 @@ h1{font-size:clamp(1.6rem,8vw,2.1rem);line-height:1.3;font-weight:800;letter-spa
         last=makePost(p,idx);
         feed.appendChild(last);
         added++;
+        if(p.card&&booted){autoCard(p.card,0);}   // 謎が書かれた予告状を、右上から届く演出で出す(読み込み直しのときは出さない)
       }
     });
     if(added&&scroll&&tab==='b'&&last){
@@ -1809,6 +1945,14 @@ h1{font-size:clamp(1.6rem,8vw,2.1rem);line-height:1.3;font-weight:800;letter-spa
       d=reduce?0:(0.45+j*0.6);
       s.style.animationDelay=d+'s';
       cardBody.appendChild(s);
+    }
+    if(k.photo){
+      var ph=mk('figure','shot');ph.style.animationDelay=(reduce?0:(0.45+k.lines.length*0.6))+'s';
+      var pim=new Image();pim.alt=k.photoAlt||'';
+      pim.onload=function(){ph.appendChild(pim);};
+      pim.onerror=function(){ph.className='shot miss';ph.textContent='(写真待ち: '+k.photo+')';};
+      pim.src=k.photo;
+      cardBody.appendChild(ph);
     }
     if(k.hint){
       cardHint.textContent=k.hint;cardHint.hidden=false;
@@ -1964,6 +2108,7 @@ h1{font-size:clamp(1.6rem,8vw,2.1rem);line-height:1.3;font-weight:800;letter-spa
   loadState();
   render();
   renderNew(false);
+  booted=true;
   setTab(tab,true);
   if(all()){finalArea.hidden=false;}
 })();

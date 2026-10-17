@@ -47,6 +47,7 @@ body{font-family:"Shippori Mincho","Hiragino Mincho ProN","Yu Mincho",serif;colo
 #videoBox.in{opacity:1}
 #videoBox[hidden]{display:none}
 #vid{display:block;width:min(92vw,520px);max-height:68vh;border-radius:8px;background:#000;box-shadow:0 12px 40px rgba(0,0,0,.6)}
+#ytf{display:block;width:min(92vw,520px);aspect-ratio:16/9;border:0;border-radius:8px;background:#000;box-shadow:0 12px 40px rgba(0,0,0,.6)}
 #playBtn{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);padding:14px 30px;border:1px solid var(--gold);background:rgba(5,7,12,.8);color:var(--gold-l);border-radius:40px;font:inherit;font-size:1rem;letter-spacing:.3em;cursor:pointer}
 #playBtn[hidden]{display:none}
 .novid{font-size:.8rem;color:#97a3b8}
@@ -139,7 +140,8 @@ body{font-family:"Shippori Mincho","Hiragino Mincho ProN","Yu Mincho",serif;colo
   var ANSWERS=['たちまちづき','立待月','0517'];                                    // 暗号の答え(いくつ書いてもOK。いまは、仮の答えです)
   var MORE_LINE='……最後に、見せたいものがある。';                                 // 扉が開いたあと、動画の前に出る、一言
   var CHAR_SRC='kaitou.png';        // 怪盗Sの画像(最初の画面の、赤い封蝋のかわりに出る)
-  var VIDEO_SRC='surprise.mp4';     // サプライズ動画のファイル(同じフォルダに置く)
+  var YOUTUBE_ID='';                // YouTube(限定公開)の動画ID。youtu.be/ のあとの文字列。入れると、こちらを使う
+  var VIDEO_SRC='surprise.mp4';     // YOUTUBE_ID が空のとき使う、動画ファイル(同じフォルダに置く)
 
   /* ===================================================== */
   var $=function(id){return document.getElementById(id);};
@@ -256,8 +258,7 @@ body{font-family:"Shippori Mincho","Hiragino Mincho ProN","Yu Mincho",serif;colo
   var vidErr=false,vload=$('vload');
   vid.preload='auto';
   vid.addEventListener('error',function(){vidErr=true;});
-  vid.src=VIDEO_SRC;
-  try{vid.load();}catch(e){}
+  if(!YOUTUBE_ID){vid.src=VIDEO_SRC;try{vid.load();}catch(e){}}
   vid.addEventListener('waiting',function(){vload.hidden=false;});          // 途中で、読み込みが追いつかないとき
   vid.addEventListener('playing',function(){vload.hidden=true;playBtn.hidden=true;});
   function startPlay(){
@@ -267,6 +268,10 @@ body{font-family:"Shippori Mincho","Hiragino Mincho ProN","Yu Mincho",serif;colo
   }
   function showVideo(){
     videoBox.hidden=false;void videoBox.offsetWidth;videoBox.classList.add('in');
+    if(YOUTUBE_ID){
+      videoBox.innerHTML='<iframe id="ytf" src="https://www.youtube-nocookie.com/embed/'+encodeURIComponent(YOUTUBE_ID)+'?autoplay=1&playsinline=1&rel=0&modestbranding=1" title="" allow="autoplay; encrypted-media; fullscreen" allowfullscreen></iframe>';
+      return;
+    }
     if(vidErr){videoBox.innerHTML='<p class="novid">(動画ファイル '+VIDEO_SRC+' が見つかりません)</p>';return;}
     if(vid.readyState>=3){startPlay();return;}   // もう、再生できるだけ読み込めていれば、すぐ始める
     vload.hidden=false;
