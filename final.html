@@ -131,6 +131,7 @@ body{font-family:"Shippori Mincho","Hiragino Mincho ProN","Yu Mincho",serif;colo
   </div>
 </div>
 
+<script src="video-config.js"></script>
 <script>
 (function(){
   /* =====================================================
@@ -140,7 +141,7 @@ body{font-family:"Shippori Mincho","Hiragino Mincho ProN","Yu Mincho",serif;colo
   var ANSWERS=['たちまちづき','立待月','0517'];                                    // 暗号の答え(いくつ書いてもOK。いまは、仮の答えです)
   var MORE_LINE='……最後に、見せたいものがある。';                                 // 扉が開いたあと、動画の前に出る、一言
   var CHAR_SRC='kaitou.png';        // 怪盗Sの画像(最初の画面の、赤い封蝋のかわりに出る)
-  var YOUTUBE_ID='';                // YouTube(限定公開)の動画ID。youtu.be/ のあとの文字列。入れると、こちらを使う
+  var YOUTUBE_ID=window.YOUTUBE_ID||'';   // YouTube(限定公開)の動画ID。video-config.js(gitに上げないファイル)から読む。空なら、下の VIDEO_SRC を使う
   var VIDEO_SRC='surprise.mp4';     // YOUTUBE_ID が空のとき使う、動画ファイル(同じフォルダに置く)
 
   /* ===================================================== */

@@ -3,3 +3,9 @@
 *.mov
 *.MP4
 *.MOV
+
+# 動画のリンク(内密)
+video-config.js
+
+# 答え・仕様書(内密)
+private/
