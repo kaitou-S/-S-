@@ -101,12 +101,23 @@ h1{font-size:clamp(1.6rem,8vw,2.1rem);line-height:1.3;font-weight:800;letter-spa
 .cc-f.picked{outline:2px solid var(--gold)}
 .cc-f.picked .cc-n{display:flex}
 /* 添付: 号外風 */
-.att-news{background:#efe6cf;color:#2b2418;border:1px solid #b9a577;padding:12px 14px;font-family:"Shippori Mincho",serif}
-.nw-top{display:inline-block;background:var(--red);color:#fff;padding:0 12px;font-size:.78rem;letter-spacing:.3em}
-.nw-h{margin-top:8px;font-size:1.35rem;line-height:1.35;border-bottom:2px solid #2b2418;padding-bottom:6px;font-weight:800}
-.nw-s{margin-top:6px;font-size:.9rem;font-weight:700}
-.nw-b{margin-top:8px;font-size:.84rem;line-height:1.85;color:#3a3220}
-.nw-d{margin-top:8px;font-size:.7rem;color:#7a6a48;text-align:right}
+.att-news{background:#e9e6de;color:#161616;border:1px solid #7f7c73;padding:8px 14px 12px;font-family:"Shippori Mincho",serif;box-shadow:inset 0 0 28px rgba(60,55,45,.18)}
+.nw-mast{display:flex;align-items:flex-end;justify-content:space-between;border-top:3px double #161616;border-bottom:1px solid #161616;padding:5px 0 4px}
+.nw-top{font-size:1.9rem;font-weight:800;letter-spacing:.3em;line-height:1}
+.nw-nm{font-size:.7rem;letter-spacing:.2em;text-align:right;line-height:1.5}
+.nw-h{margin-top:10px;font-size:1.45rem;line-height:1.35;border-bottom:1px solid #161616;padding-bottom:7px;font-weight:800}
+.nw-s{margin-top:7px;font-size:.9rem;font-weight:700;letter-spacing:.03em}
+.nw-row{display:flex;gap:12px;margin-top:10px;align-items:flex-start}
+.nw-ph{flex:0 0 36%;max-width:130px;margin:0}
+.nw-ph .nw-img{position:relative;border:1px solid #161616;background:#cfccc4;line-height:0}
+.nw-ph img{display:block;width:100%;height:auto;filter:grayscale(1) contrast(1.25)}
+.nw-ph .nw-img::after{content:"";position:absolute;inset:0;background:radial-gradient(rgba(0,0,0,.28) 1px,transparent 1.4px) 0 0/3px 3px;mix-blend-mode:multiply;pointer-events:none}
+.nw-ph figcaption{margin-top:3px;font-size:.62rem;line-height:1.5}
+.nw-b{margin:0 0 6px;font-size:.84rem;line-height:1.9;text-align:justify}
+.nw-b:first-child{margin-top:0}
+.nw-row>div .nw-b:last-child{margin-bottom:0}
+.att-news>.nw-b{margin-top:8px}
+.nw-d{margin-top:8px;font-size:.68rem;text-align:right;border-top:1px solid #161616;padding-top:4px;letter-spacing:.1em}
 /* 添付: 落とし物の写真 */
 .att-lost{background:#f4f1ea;color:#2b2418;border:1px dashed #9a8f78;padding:10px}
 .att-lost .shot{margin:0 0 8px}
@@ -458,7 +469,31 @@ h1{font-size:clamp(1.6rem,8vw,2.1rem);line-height:1.3;font-weight:800;letter-spa
       answers:['せんとくん','せんと','sentokun'],
       replyWho:'屋上にいた人',
       ok:'せんとくん!そうそう、確かその子の足元に、何かを置いてたような気がします。',
-      hint:'管理人: 足元に何かあるようです。見つけたら、記憶の金庫で確認してみてください。',
+      hint:'管理人: 足元に何かあるようです。続報が入りました。'
+    },
+    {
+      // せんとくん → 710 の経緯: 足元のメモ(画像は sentokun_memo.png: iPhoneのフリックの指示 「な」「わ↑」「た↓」)
+      // フリックで拾うと「なんと」 → 語呂「なんと立派な平城京」 → 平城京への遷都の年 710 → 金庫①
+      id:'p3b', tag:'新着', who:'管理人', when:'昨夜 22:15',
+      img:'sentokun_memo.png', alt:'せんとくんの足元にあった、折りたたまれた紙。キーの名前と、指の向きを示す矢印が書かれている',
+      text:[
+        'せんとくんの足元に、折りたたんだ紙が落ちていたそうです。',
+        '怪盗Sの字で、こう書いてあります。'
+      ],
+      quotes:[
+        'この子の名は、遠い昔の、ある出来事から生まれた。',
+        '携帯のキーボードを開き、指の向きのとおりに、文字を拾え。',
+        'その先に、この子が見ていた年がある。'
+      ],
+      gate:'ask', label:'拾った文字', placeholder:'拾った文字',
+      nudge:[
+        '管理人: iPhoneのキーボードで、キーを指でゆっくり、はじいてみてください。はじく向きで、出る文字が変わります。',
+        '管理人: 「な」はそのままタップ。「わ」は上へ。「た」は下へ、はじきます。'
+      ],
+      answers:['なんと'],
+      replyWho:'管理人',
+      ok:'……「なんと」。まだ、続きがありそうです。',
+      hint:'管理人: 「なんと」で始まる、有名な語呂合わせがあるはずです。奈良の都が、ここへ遷された年を表しています。その年を、記憶の金庫へ。',
       toVault:'記憶の金庫を開く'
     },
     {
@@ -466,15 +501,16 @@ h1{font-size:clamp(1.6rem,8vw,2.1rem);line-height:1.3;font-weight:800;letter-spa
       requires:{kakera:0},
       text:[
         '怪盗Sから、新しい予告状が届いたようです。',
-        '予告状の隅に、とても小さな四角い模様(QRコード)が、印刷されているそうです。',
-        'スマートフォンのカメラで読み取って、黒い影の次の行き先を、投稿してください。'
+        '予告状をよく読んで、黒い影を探してください。',
+        '見つけたものを手がかりに、黒い影の次の行き先を、投稿してください。'
       ],
       mailBtn:{kakera:0,label:'予告状を見る'},
       gate:'ask', label:'黒い影の行き先', placeholder:'行き先',
       nudge:[
-        '管理人: 予告状を、もう一度、よく見てください。小さな四角が、どこかにあるはずです。',
-        '管理人: スマートフォンのカメラを、その四角に向けてみてください。',
-        '管理人: 文章の中の、南にある、大きな街の名前を、答えてください。'
+        '管理人: 予告状を、もう一度、よく読んでください。黒い影は、どこにひそんでいますか。',
+        '管理人: 影は、あなたの持ち物の中にいます。裏側も、よく見てください。',
+        '管理人: 小さな四角い模様(QRコード)を、スマートフォンのカメラで読み取ってみてください。',
+        '管理人: 読み取った画面の予告状に、行き先が書いてあります。'
       ],
       answers:['なんば','おおさかなんば','難波','大阪難波','なんばえき','namba'],
       replyWho:'電車の乗客',
@@ -594,7 +630,8 @@ h1{font-size:clamp(1.6rem,8vw,2.1rem);line-height:1.3;font-weight:800;letter-spa
       attach:{
         type:'news', head:'怪盗S、パークスガーデンに出没!', sub:'屋上の緑の中で、黒い影が目撃される',
         body:['昨夜遅く、難波の大きな商業施設の屋上庭園で、黒い影が目撃された。','影は、ベンチの近くに、何かを置いていったという。'],
-        date:'号外'
+        photo:'kaitou.png', cap:'目撃者の証言をもとに描かれた、黒い影',
+        date:'昨夜 23:05'
       },
       text:['屋上庭園(パークスガーデン)に着いたら、ボタンを押してください。'],
       gate:'button', btn:'ガーデンに着いた。続報を見る'
@@ -676,9 +713,16 @@ h1{font-size:clamp(1.6rem,8vw,2.1rem);line-height:1.3;font-weight:800;letter-spa
       requires:{kakera:1}, afterPost:'p8b',
       card:{
         back:'yokoku_ura.png', front:'yokoku_omote_03.png',
-        text:['凍る足跡は、朝には、溶けて消える。','走る足跡は、光とともに、消える。','燃える足跡だけが、灰になって、残る。','残った鳥の名を、記憶の金庫へ。','(図鑑の番号は、三羽の中で、いちばん最後)','怪盗S']
+        // 画像 yokoku_omote_03.png: 足跡の筋が4本(番号つき)。離れて見ると、漢字「火」になる(本人が描く。仕様は private/cards.html)
+        text:['黒い影は、三羽の前で、足跡を残した。','足跡は、四度、道を変えた。番号の順に、たどれ。','そこに現れた字を名にもつ鳥を、記憶の金庫へ。','怪盗S']
       },
-      text:['新しい予告状が、届きました。','答えがわかったら、記憶の金庫へ。','(ヒント: 三羽は、氷・電気・炎の鳥です。)'],
+      text:[
+        '新しい予告状が、届きました。',
+        'この建物には、伝説の鳥が棲んでいる、という噂があります。三羽いるそうです。',
+        '黒い影は、そのうちの一羽の足跡を、追っているのでしょうか。',
+        '答えがわかったら、記憶の金庫へ。',
+        '(ヒント: 足跡の筋は、番号の順に。少し離れて、全体を見てください。)'
+      ],
       vaultBtn:'記憶の金庫を開く'
     },
     {
@@ -1000,7 +1044,7 @@ h1{font-size:clamp(1.6rem,8vw,2.1rem);line-height:1.3;font-weight:800;letter-spa
     {
       id:'d3', demo:true, tag:'見本', who:'号外風', when:'',
       attach:{type:'news', head:'怪盗S、難波に出没!', sub:'屋上庭園で目撃相次ぐ',
-        body:['昨夜遅く、難波の駅前で、黒い影を見たという情報が相次いだ。','影は、緑の多い大きな建物の屋上へ向かったという。'], date:'号外'},
+        body:['昨夜遅く、難波の駅前で、黒い影を見たという情報が相次いだ。','影は、緑の多い大きな建物の屋上へ向かったという。'], photo:'kaitou.png', cap:'目撃者の証言をもとに描かれた、黒い影', date:'昨夜 23:05'},
       text:['号外が、掲示板に貼られました。見出しや本文から、場所を読み取る形にもできます。']
     },
     {
@@ -1027,7 +1071,7 @@ h1{font-size:clamp(1.6rem,8vw,2.1rem);line-height:1.3;font-weight:800;letter-spa
     {
       // カケラ①(奈良): 710。取り戻すと、次の予告状(なんばへ)が届く
       // 記憶の写真は使いません(最後のフォトムービーで見せるため)。怪盗Sのことば(lines)だけを出します
-      answers:['710','せんと','遷都'],
+      answers:['710'],
       title:'カケラ① ── はじまりの都',
       lines:['……710年。都が遷された、はじまりの年。','最初のカケラは、返してやろう。'],
       hint:'次の目撃情報が、掲示板に届いた。',
@@ -1047,8 +1091,8 @@ h1{font-size:clamp(1.6rem,8vw,2.1rem);line-height:1.3;font-weight:800;letter-spa
       board:true
     },
     {
-      // カケラ③(心斎橋): ふぁいやー(いちばん図鑑番号が大きい鳥)
-      answers:['ふぁいやー','ファイヤー','fire','moltres','146'],
+      // カケラ③(心斎橋): ふぁいやー(足跡をたどって「火」→ 火を名にもつ鳥)
+      answers:['ふぁいやー','ファイヤー','ふぁいあー','ファイアー','ふぁいや','fire','moltres','146'],
       title:'カケラ③ ── 炎の鳥',
       lines:['……炎の鳥。私の足跡は、光の下でだけ、見える。','三つ目のカケラだ。'],
       hint:'ポーチの白紙のカードを、掲示板で、確かめてみてほしい。',
@@ -1533,10 +1577,25 @@ h1{font-size:clamp(1.6rem,8vw,2.1rem);line-height:1.3;font-weight:800;letter-spa
       });
       w.appendChild(grid);
     }else if(t.type==='news'){
-      w.appendChild(mk('div','nw-top','号外'));
+      var mast=mk('div','nw-mast');
+      mast.appendChild(mk('div','nw-top','号外'));
+      mast.appendChild(mk('div','nw-nm','目撃新報'));
+      w.appendChild(mast);
       w.appendChild(mk('h4','nw-h',t.head||''));
       if(t.sub){w.appendChild(mk('p','nw-s',t.sub));}
-      (t.body||[]).forEach(function(x){w.appendChild(mk('p','nw-b',x));});
+      var nbody=mk('div');
+      (t.body||[]).forEach(function(x){nbody.appendChild(mk('p','nw-b',x));});
+      if(t.photo){
+        var nrow=mk('div','nw-row');
+        var nfig=mk('figure','nw-ph');
+        var nbox=mk('div','nw-img');
+        var nim=new Image();nim.alt=t.cap||'';nim.onerror=function(){nfig.style.display='none';};nim.src=t.photo;
+        nbox.appendChild(nim);nfig.appendChild(nbox);
+        if(t.cap){nfig.appendChild(mk('figcaption',null,t.cap));}
+        nrow.appendChild(nfig);nrow.appendChild(nbody);w.appendChild(nrow);
+      }else{
+        while(nbody.firstChild){w.appendChild(nbody.firstChild);}
+      }
       if(t.date){w.appendChild(mk('p','nw-d',t.date));}
     }else if(t.type==='lost'){
       if(t.img){w.appendChild(makeFigure(t.img,t.alt));}
