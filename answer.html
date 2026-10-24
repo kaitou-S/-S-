@@ -12,7 +12,7 @@
 <meta name="apple-mobile-web-app-title" content="怪盗S">
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
 <link id="favicon" rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%23c23232'/%3E%3Ctext x='32' y='45' font-size='38' font-family='serif' font-weight='700' text-anchor='middle' fill='white'%3ES%3C/text%3E%3C/svg%3E">
-<link rel="apple-touch-icon" href="favicon.png">
+<link rel="apple-touch-icon" href="img/site/favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@700;800&display=swap" rel="stylesheet">
@@ -246,10 +246,10 @@ h1{font-size:clamp(1.6rem,8vw,2.1rem);line-height:1.3;font-weight:800;letter-spa
 #ending.show{opacity:1}
 #ending[hidden]{display:none}
 .end-in{position:relative;max-width:520px;margin:0 auto;padding:56px 28px 70px;text-align:center}
-.end-in::before{content:"";position:absolute;left:50%;top:36%;width:150%;aspect-ratio:1075/650;background:url(card.png) center/cover no-repeat;opacity:.3;transform:translate(-50%,-50%) rotate(-12deg);-webkit-mask-image:radial-gradient(ellipse 58% 58% at 50% 50%,#000 30%,transparent 100%);mask-image:radial-gradient(ellipse 58% 58% at 50% 50%,#000 30%,transparent 100%);pointer-events:none}
+.end-in::before{content:"";position:absolute;left:50%;top:36%;width:150%;aspect-ratio:1075/650;background:url(img/cards/card.png) center/cover no-repeat;opacity:.3;transform:translate(-50%,-50%) rotate(-12deg);-webkit-mask-image:radial-gradient(ellipse 58% 58% at 50% 50%,#000 30%,transparent 100%);mask-image:radial-gradient(ellipse 58% 58% at 50% 50%,#000 30%,transparent 100%);pointer-events:none}
 .end-in>*{position:relative}
 
-/* 怪盗Sの正体: kaitou.png が、きらりと光って shunichi.png に変わる */
+/* 怪盗Sの正体: img/chars/kaitou.png が、きらりと光って img/chars/shunichi.png に変わる */
 .end-stage{position:relative;width:128px;height:128px;margin:0 auto 18px;animation:rise 1s ease both}
 .end-stage[hidden]{display:none}
 .end-stage img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;transition:opacity .6s ease .12s,transform .8s ease .12s,filter .6s ease .12s}
@@ -378,7 +378,7 @@ h1{font-size:clamp(1.6rem,8vw,2.1rem);line-height:1.3;font-weight:800;letter-spa
 <!-- エンディング(最後の扉) -->
 <div id="ending" hidden>
   <div class="end-in">
-    <!-- 怪盗S(kaitou.png)が、きらりと光って正体(shunichi.png)に変わる -->
+    <!-- 怪盗S(img/chars/kaitou.png)が、きらりと光って正体(img/chars/shunichi.png)に変わる -->
     <div class="end-stage" id="endStage" hidden>
       <img class="end-char" id="endChar" alt="" hidden>
       <img class="end-true" id="endTrue" alt="" hidden>
@@ -433,7 +433,7 @@ h1{font-size:clamp(1.6rem,8vw,2.1rem);line-height:1.3;font-weight:800;letter-spa
     },
     {
       id:'p1', tag:'目撃', who:'通りすがりの会社員', when:'昨夜 21:47',
-      img:'saidaizi_01.png', alt:'大和西大寺駅を出て左へ進んだ先の景色。奥に、うっすらと黒い影',
+      img:'img/places/saidaizi_01.png', alt:'大和西大寺駅を出て左へ進んだ先の景色。奥に、うっすらと黒い影',
       text:[
         '大和西大寺の改札を出て、左へ歩いていたら、黒い影が見えました。',
         '写真を撮ったのですが、うっすらとしか写っていません。',
@@ -444,7 +444,7 @@ h1{font-size:clamp(1.6rem,8vw,2.1rem);line-height:1.3;font-weight:800;letter-spa
     },
     {
       id:'p2', tag:'続報', who:'買い物帰りの人', when:'昨夜 21:58',
-      img:'saidaizi_02.png', alt:'建物の屋上に黒い影。建物の名前は、大きな黒い「S」の影に隠されている',
+      img:'img/places/saidaizi_02.png', alt:'建物の屋上に黒い影。建物の名前は、大きな黒い「S」の影に隠されている',
       text:[
         'その先の大きな建物の屋上に、黒い影が立っていました。',
         '建物の名前が書いてあるところは、黒い「S」の影に隠されて、読めません。',
@@ -482,13 +482,13 @@ h1{font-size:clamp(1.6rem,8vw,2.1rem);line-height:1.3;font-weight:800;letter-spa
       hint:'管理人: 足元に何かあるようです。続報が入りました。'
     },
     {
-      // せんとくん → 710: 怪盗Sの予告状(画像 yokoku_omote_00.png)。iPhoneの数字キーボード(☆123)のフリックで出る記号から、キーの数字を探す
+      // せんとくん → 710: 怪盗Sの予告状(画像 img/cards/yokoku_omote_00.png)。iPhoneの数字キーボード(☆123)のフリックで出る記号から、キーの数字を探す
       //   「1 → = →」「2 ← = ¥」は、例。①「← = 〜」→ 0 / ②「↑ = ♪」→ 1 / ③「↑ = 」」→ 7。「③②①」の順 = 710 → 金庫①
       // 実物の予告状を、せんとくんの前(足元)に、先に置いておく。見つからないときのために、ボタンを押すと、同じ予告状が見られる(cardManual:true)
       // ※ 予告状の番号(挑戦状 ①/②)は、本人が決める。画像がない間は、card.text の文章版が出る
       id:'p3b', tag:'新着', who:'管理人', when:'昨夜 22:15',
       card:{
-        back:'yokoku_ura.png', front:'yokoku_omote_00.png',
+        back:'img/cards/yokoku_ura.png', front:'img/cards/yokoku_omote_00.png',
         text:['1 → = →','2 ← = ¥','① ← = 〜','② ↑ = ♪','③ ↑ = 」','1つ目の鍵: ③②①']
       },
       cardManual:true, cardLabel:'見つからないときは、ここをタップ',
@@ -525,9 +525,9 @@ h1{font-size:clamp(1.6rem,8vw,2.1rem);line-height:1.3;font-weight:800;letter-spa
       // ===== 奈良 → 難波: 移動中のプチ謎「しりとり」(答え: タイ)=====
       // 吹き出しの色つきの文字(一人称)を、その動物の名前に置き換える: おれ→ぶた / わたし→いたち / ぼく→ねこ(逆さ=こね) / わし→たい
       //   ぶたい → いたちょこ(板チョコ)→ こねた → たいぷらいたー(タイプライター)。「わし」を鷲と読むと、しりとりが切れる(おとり)
-      // 画像 petit_shiritori.png(本人が作成)。予告状の演出は使わず、画像として出す
+      // 画像 img/cards/petit_shiritori.png(本人が作成)。予告状の演出は使わず、画像として出す
       id:'p4s', tag:'移動中', who:'管理人', when:'昨夜 22:20',
-      img:'petit_shiritori.png', alt:'挑戦状。豚、イタチ、猫の絵と、それぞれの吹き出し。最後の生き物は、赤い「?」になっている',
+      img:'img/cards/petit_shiritori.png', alt:'挑戦状。豚、イタチ、猫の絵と、それぞれの吹き出し。最後の生き物は、赤い「?」になっている',
       text:[
         '難波まで、電車で約30分。その間に、怪盗Sが残した挑戦状が、1枚、見つかりました。',
         '最後の生き物を、投稿してください。'
@@ -635,7 +635,7 @@ h1{font-size:clamp(1.6rem,8vw,2.1rem);line-height:1.3;font-weight:800;letter-spa
           'これ何て建物か、わかる人おる?'
         ],
         tags:['#怪盗S','#難波'], likes:128, rt:34,
-        img:'namba_parks.png', alt:'大阪難波の駅の近くの大きな建物。屋上に黒い影。建物の名前は黒い「S」の影に隠されている'
+        img:'img/places/namba_parks.png', alt:'大阪難波の駅の近くの大きな建物。屋上に黒い影。建物の名前は黒い「S」の影に隠されている'
       },
       text:[
         'この建物の名前を、投稿してください。'
@@ -656,7 +656,7 @@ h1{font-size:clamp(1.6rem,8vw,2.1rem);line-height:1.3;font-weight:800;letter-spa
       attach:{
         type:'news', head:'怪盗S、パークスガーデンに出没!', sub:'屋上の緑の中で、黒い影が目撃される',
         body:['昨夜遅く、難波の大きな商業施設の屋上庭園で、黒い影が目撃された。','影は、ベンチの近くに、何かを置いていったという。'],
-        photo:'kaitou.png', cap:'目撃者の証言をもとに描かれた、黒い影',
+        photo:'img/chars/kaitou.png', cap:'目撃者の証言をもとに描かれた、黒い影',
         date:'昨夜 23:05'
       },
       text:['屋上庭園(パークスガーデン)に着いたら、ボタンを押してください。'],
@@ -665,11 +665,11 @@ h1{font-size:clamp(1.6rem,8vw,2.1rem);line-height:1.3;font-weight:800;letter-spa
     {
       // ===== 難波 ②-2: イラスト変換(絵を言葉にして、頭文字を並べる)=====
       // 怪盗Sが、謎(挑戦状)を送ってくる場面。難波の謎は、この1枚(二つの問い)にまとめる。
-      // 画像 yokoku_omote_02.png ができるまでは、card.text の文章版が出ます。
+      // 画像 img/cards/yokoku_omote_02.png ができるまでは、card.text の文章版が出ます。
       // card は、この投稿が新しく出たときに、右上から回って届く演出で出ます(あとから「予告状を見る」で見返せます)
       id:'p6c', tag:'新着', who:'管理人', when:'昨夜 23:10',
       card:{
-        back:'yokoku_ura.png', front:'yokoku_omote_02.png',
+        back:'img/cards/yokoku_ura.png', front:'img/cards/yokoku_omote_02.png',
         text:['【一】赤い丸の絵を、番号の順に言葉にし、','頭の一文字を、つなげよ。','【二】その言葉を、一文字ずつ分け、五十音の表の','右から何番目の列か数えよ。(右端の「あ」が1番目)','三つの数を、順につなげたものが、鍵の番号。','怪盗S']
       },
       text:['怪盗Sから、挑戦状が届きました。','二つの問いがあります。まず、一つ目の答えを、投稿してください。'],
@@ -701,7 +701,7 @@ h1{font-size:clamp(1.6rem,8vw,2.1rem);line-height:1.3;font-weight:800;letter-spa
       id:'p7', tag:'続報', who:'園内のスタッフ', when:'昨夜 23:20',
       attach:{
         type:'lost',
-        img:'pouch.jpg',
+        img:'img/props/pouch.jpg',
         alt:'黒いポーチ。3桁の南京錠がかかっている',
         item:'黒いポーチ(3桁の南京錠つき)', found:'庭園のベンチ', date:'昨夜 23:15'
       },
@@ -717,11 +717,11 @@ h1{font-size:clamp(1.6rem,8vw,2.1rem);line-height:1.3;font-weight:800;letter-spa
     },
     {
       // ===== 難波 → 心斎橋: ポーチの底の、滲んだレシート(カケラ②を取り戻すと出る)=====
-      // 画像: receipt.png(本人が作る。仕様は private/cards.html)。店名は、水で滲んで読めない。郵便番号・住所の一部・「9F」が読める
+      // 画像: img/props/receipt.png(本人が作る。仕様は private/cards.html)。店名は、水で滲んで読めない。郵便番号・住所の一部・「9F」が読める
       // 答え: 心斎橋(郵便番号 542-8501 = 大丸心斎橋店 ※要確認)。解けたら、その場所へ向かう
       id:'p8r', tag:'新着', who:'管理人', when:'昨夜 23:35',
       requires:{kakera:1},
-      img:'receipt.png', alt:'ポーチの底にあった、水で滲んだレシート。店の名前の部分は、読めない',
+      img:'img/props/receipt.png', alt:'ポーチの底にあった、水で滲んだレシート。店の名前の部分は、読めない',
       text:[
         'ポーチの底に、折りたたんだレシートが入っていました。',
         '水に濡れたのか、文字が滲んでいます。店の名前は、読めません。',
@@ -740,10 +740,10 @@ h1{font-size:clamp(1.6rem,8vw,2.1rem);line-height:1.3;font-weight:800;letter-spa
     },
     {
       // ===== 心斎橋 ③-1: 3羽の像の前に着く(場所の名前を答える形は、簡単すぎるのでやめた)=====
-      // 画像: shinsaibashi_01.jpg(大丸心斎橋 9階のポケモンセンターの前。左から、フリーザー144・サンダー145・ファイヤー146)
+      // 画像: img/places/shinsaibashi_01.jpg(大丸心斎橋 9階のポケモンセンターの前。左から、フリーザー144・サンダー145・ファイヤー146)
       id:'p8b', tag:'新着', who:'心斎橋の買い物客', when:'昨夜 23:40',
       requires:{kakera:1}, afterPost:'p8r',
-      img:'shinsaibashi_01.jpg', alt:'お店の前に並ぶ、3羽の鳥の像。左から、氷の鳥、電気の鳥、炎の鳥',
+      img:'img/places/shinsaibashi_01.jpg', alt:'お店の前に並ぶ、3羽の鳥の像。左から、氷の鳥、電気の鳥、炎の鳥',
       text:[
         'レシートの店に着いたら、売り場の近くに、この3羽の像が立っています。',
         '黒い影は、この3羽の前で、立ち止まっていたそうです。',
@@ -757,8 +757,8 @@ h1{font-size:clamp(1.6rem,8vw,2.1rem);line-height:1.3;font-weight:800;letter-spa
       id:'p8c', tag:'新着', who:'管理人', when:'昨夜 23:45',
       requires:{kakera:1}, afterPost:'p8b',
       card:{
-        back:'yokoku_ura.png', front:'yokoku_omote_03.png',
-        // 画像 yokoku_omote_03.png: 足跡の筋が4本(番号つき)。離れて見ると、漢字「火」になる(本人が描く。仕様は private/cards.html)
+        back:'img/cards/yokoku_ura.png', front:'img/cards/yokoku_omote_03.png',
+        // 画像 img/cards/yokoku_omote_03.png: 足跡の筋が4本(番号つき)。離れて見ると、漢字「火」になる(本人が描く。仕様は private/cards.html)
         text:['黒い影は、三羽の前で、足跡を残した。','足跡は、四度、道を変えた。番号の順に、たどれ。','そこに現れた字を名にもつ鳥を、記憶の金庫へ。','怪盗S']
       },
       text:[
@@ -807,11 +807,11 @@ h1{font-size:clamp(1.6rem,8vw,2.1rem);line-height:1.3;font-weight:800;letter-spa
     {
       // ===== 心斎橋 → 梅田: 移動中のプチ謎「鏡文字の式」(答え: 5)=====
       // 上下左右が反転した数字の式。4−1=3 / 2+3=5 / 1+5=6 / 平行四辺形(7)−2=? → 5
-      // 画像 petit_kigou.png(本人が作成)。予告状の演出は使わず、画像として出す
+      // 画像 img/cards/petit_kigou.png(本人が作成)。予告状の演出は使わず、画像として出す
       // ※ 平行四辺形が「7」だと、読み取れるかどうか(「8」なら6になる)。本人が確認すること
       id:'p8k', tag:'移動中', who:'管理人', when:'昨夜 23:54',
       requires:{kakera:2}, afterPost:'p8e',
-      img:'petit_kigou.png', alt:'挑戦状。上下左右が反転した数字の式が3つと、右に、平行四辺形を使った式。答えの欄は、赤い「?」',
+      img:'img/cards/petit_kigou.png', alt:'挑戦状。上下左右が反転した数字の式が3つと、右に、平行四辺形を使った式。答えの欄は、赤い「?」',
       text:[
         '梅田まで、あと少し。車内で、また、挑戦状が、1枚、見つかりました。',
         '「?」の記号は、何でしょう。答えを、投稿してください。'
@@ -836,11 +836,11 @@ h1{font-size:clamp(1.6rem,8vw,2.1rem);line-height:1.3;font-weight:800;letter-spa
     },
     {
       // ===== 梅田 ④-1: 管理人の案内。南改札を出て、右の通路へ。四つ葉の看板(阪神)を確かめる =====
-      // 画像: umeda_01.png(通路の天井から下がる、四つ葉のマークと「HANSHIN」の看板)
+      // 画像: img/places/umeda_01.png(通路の天井から下がる、四つ葉のマークと「HANSHIN」の看板)
       // ここから書庫まで(p9〜p9c)は、予告状なし。管理人が、目撃情報をもとに案内する
       id:'p9', tag:'新着', who:'管理人', when:'昨夜 0:10',
       requires:{kakera:2}, afterPost:'p8f',
-      img:'umeda_01.png', alt:'地下の通路の天井から下がる看板。四つ葉のクローバーのマークと、英字の名前',
+      img:'img/places/umeda_01.png', alt:'地下の通路の天井から下がる看板。四つ葉のクローバーのマークと、英字の名前',
       text:[
         '梅田に着きましたね。ここからは、目撃情報をもとに、私が案内します。',
         'まず、地下鉄の「南改札」を出てください。黒い影は、右の通路へ向かったそうです。',
@@ -857,11 +857,11 @@ h1{font-size:clamp(1.6rem,8vw,2.1rem);line-height:1.3;font-weight:800;letter-spa
     },
     {
       // ===== 梅田 ④-2: 管理人の案内。銅像の広場で、通路を一つに絞る(三点を一直線に重ねる)=====
-      // 画像: umeda_02.png(植物をかかげた銅像。まわりはベンチ。通路が四方に広がる)
+      // 画像: img/places/umeda_02.png(植物をかかげた銅像。まわりはベンチ。通路が四方に広がる)
       // ※「どの位置から見ると、どの通路になるか」は、現地で確かめて、文面を直してください
       id:'p9b', tag:'続報', who:'管理人', when:'昨夜 0:20',
       requires:{kakera:2}, afterPost:'p9',
-      img:'umeda_02.png', alt:'植物をかかげた銅像。まわりにベンチ。来た道のほかに、三つの通路が広がっている',
+      img:'img/places/umeda_02.png', alt:'植物をかかげた銅像。まわりにベンチ。来た道のほかに、三つの通路が広がっている',
       text:[
         '二つ目の四つ葉で左に曲がると、植物をかかげた銅像の広場に出ます。',
         '銅像のまわりはベンチ。来た道のほかに、通路が三つ広がっています。',
@@ -879,11 +879,11 @@ h1{font-size:clamp(1.6rem,8vw,2.1rem);line-height:1.3;font-weight:800;letter-spa
     },
     {
       // ===== 梅田 ④-3: 怪盗Sの書庫。本から、怪盗Sの特徴をつかむ → つかんだ瞬間、怪盗Sから予告状が届く =====
-      // 画像: umeda_03.png(宙に浮かぶ本と、大きな本の飾り)/ umeda_04.png(書庫の棚)
+      // 画像: img/places/umeda_03.png(宙に浮かぶ本と、大きな本の飾り)/ img/places/umeda_04.png(書庫の棚)
       // mail = 怪盗Sからの予告状(次の謎: 床の紋章)。答えが合ったあとに、右上から回って届く
       id:'p9c', tag:'続報', who:'管理人', when:'昨夜 0:35',
       requires:{kakera:2}, afterPost:'p9b',
-      img:'umeda_04.png', alt:'同じ装丁の本が並ぶ棚。馬に乗った人物の絵の背表紙が、一冊だけある',
+      img:'img/places/umeda_04.png', alt:'同じ装丁の本が並ぶ棚。馬に乗った人物の絵の背表紙が、一冊だけある',
       text:[
         '宙を舞う本の世界を抜けると、書庫が現れます。ここは、怪盗Sの書庫だそうです。',
         '同じ装丁の本が並ぶ中に、一冊だけ、人物の絵が描かれた本があります。怪盗Sが、よく読んでいた本のようです。',
@@ -898,16 +898,16 @@ h1{font-size:clamp(1.6rem,8vw,2.1rem);line-height:1.3;font-weight:800;letter-spa
       answers:['なぽれおん','ナポレオン','napoleon'],
       replyWho:'管理人', ok:'……ナポレオン。不可能のない人に、あこがれる怪盗。特徴が見えてきました。……あっ、怪盗Sから、予告状が届いています。',
       mail:{
-        back:'yokoku_ura.png', front:'yokoku_omote_04.png',
+        back:'img/cards/yokoku_ura.png', front:'img/cards/yokoku_omote_04.png',
         text:['書庫の前の床に、紋章が刻まれている。','牛は、太陽を見つめている。','この牛が、夜空に昇ると、ある星座になる。','その名を、記憶の金庫へ。','怪盗S']
       }
     },
     {
       // ===== 梅田 ④-4: 床の紋章(牛と太陽)。予告状の謎を解いて、答えは金庫(カケラ④)へ =====
-      // 画像: umeda_05.png(床のモザイク。牛が、金色の太陽を見つめている)
+      // 画像: img/places/umeda_05.png(床のモザイク。牛が、金色の太陽を見つめている)
       id:'p9d', tag:'新着', who:'管理人', when:'昨夜 0:50',
       requires:{kakera:2}, afterPost:'p9c',
-      img:'umeda_05.png', alt:'床のモザイクの紋章。牛が、金色の太陽を見つめている',
+      img:'img/places/umeda_05.png', alt:'床のモザイクの紋章。牛が、金色の太陽を見つめている',
       text:['怪盗Sからの予告状にある、床の紋章を、書庫の前で探してください。','謎がわかったら、答えを、記憶の金庫へ。'],
       mailBtn:{label:'予告状を見る', postId:'p9c'},
       vaultBtn:'記憶の金庫を開く'
@@ -936,9 +936,9 @@ h1{font-size:clamp(1.6rem,8vw,2.1rem);line-height:1.3;font-weight:800;letter-spa
         text:['Instagramで「怪盗S」って検索したら、怪しいアカウント出てきた!','投稿見てみたら、なんか謎かけてくるんやけど…'],
         tags:['#怪盗S','#梅田'], likes:210, rt:58
       },
-      // 梅田の謎(カケラ④)。謎は予告状 yokoku_omote_04.png に書く。Instagram の5枚の写真の「赤丸の文字」を順に読む(中身は 仕様書 を見てください)
+      // 梅田の謎(カケラ④)。謎は予告状 img/cards/yokoku_omote_04.png に書く。Instagram の5枚の写真の「赤丸の文字」を順に読む(中身は 仕様書 を見てください)
       card:{
-        back:'yokoku_ura.png', front:'yokoku_omote_04.png',
+        back:'img/cards/yokoku_ura.png', front:'img/cards/yokoku_omote_04.png',
         text:['怪盗Sは、自分の足跡を、SNSに残した。','「怪盗S」を探し、5枚の写真の、','赤い丸の中の文字を、順に読め。','答えは、金庫へ。','怪盗S']
       },
       text:['Instagramで、「怪盗S」を検索してみてください。','見つけたら、予告状の謎を解いて、答えを金庫へ。'],
@@ -986,11 +986,11 @@ h1{font-size:clamp(1.6rem,8vw,2.1rem);line-height:1.3;font-weight:800;letter-spa
     },
     {
       // ===== 梅田 ④-5: JR北新地駅の東口。コインロッカー(カケラ④を取り戻すと出る)=====
-      // 紋章から、そのまま進み、突き当たりで右へ曲がると、JR北新地駅の東口。画像: kitashinchi_01.png(東口とコインロッカー)
+      // 紋章から、そのまま進み、突き当たりで右へ曲がると、JR北新地駅の東口。画像: img/places/kitashinchi_01.png(東口とコインロッカー)
       // ロッカーの鍵は、難波のポーチの中。中身は、あなたが前もって入れておく(予告状・招待状・プレゼントなど)
       id:'p9e', tag:'新着', who:'管理人', when:'昨夜 1:05',
       requires:{kakera:3},
-      img:'kitashinchi_01.png', alt:'JR北新地駅の東口の近く。コインロッカーが並んでいる',
+      img:'img/places/kitashinchi_01.png', alt:'JR北新地駅の東口の近く。コインロッカーが並んでいる',
       text:[
         '紋章を、そのまま進んでください。突き当たりで右へ曲がると、JR北新地駅の東口に着きます。',
         '目撃情報です。黒い影は、この東口の、コインロッカーの前で、立ち止まっていました。',
@@ -1033,7 +1033,7 @@ h1{font-size:clamp(1.6rem,8vw,2.1rem);line-height:1.3;font-weight:800;letter-spa
       id:'p15', tag:'新着', who:'管理人', when:'今朝',
       requires:{kakera:4},
       card:{
-        back:'yokoku_ura.png', front:'yokoku_omote_05.png',
+        back:'img/cards/yokoku_ura.png', front:'img/cards/yokoku_omote_05.png',
         text:['出会いの日を、日付として読め。','そこから、炎の鳥の番号の、下二桁だけ、日を進めよ。','着いた日の、月と日をつなげた、四つの数が、答え。','怪盗S']
       },
       text:['五つのカケラが、揃いました。','怪盗Sから、最後の挑戦状が届いています。','答えの4桁を、投稿してください。'],
@@ -1047,8 +1047,8 @@ h1{font-size:clamp(1.6rem,8vw,2.1rem);line-height:1.3;font-weight:800;letter-spa
       answers:['0517','517'],
       replyWho:'管理人', ok:'……あなたたちの、大切な日。最後の予告状が、届きます。',
       mail:{
-        back:'yokoku_ura.png',
-        front:'yokoku_omote_06.png',
+        back:'img/cards/yokoku_ura.png',
+        front:'img/cards/yokoku_omote_06.png',
         text:['よくここまで辿り着いたな。','最後に、私の正体を、見つけてみせよ。','怪盗S']
       }
     },
@@ -1134,7 +1134,7 @@ h1{font-size:clamp(1.6rem,8vw,2.1rem);line-height:1.3;font-weight:800;letter-spa
     {
       id:'d3', demo:true, tag:'見本', who:'号外風', when:'',
       attach:{type:'news', head:'怪盗S、難波に出没!', sub:'屋上庭園で目撃相次ぐ',
-        body:['昨夜遅く、難波の駅前で、黒い影を見たという情報が相次いだ。','影は、緑の多い大きな建物の屋上へ向かったという。'], photo:'kaitou.png', cap:'目撃者の証言をもとに描かれた、黒い影', date:'昨夜 23:05'},
+        body:['昨夜遅く、難波の駅前で、黒い影を見たという情報が相次いだ。','影は、緑の多い大きな建物の屋上へ向かったという。'], photo:'img/chars/kaitou.png', cap:'目撃者の証言をもとに描かれた、黒い影', date:'昨夜 23:05'},
       text:['号外が、掲示板に貼られました。見出しや本文から、場所を読み取る形にもできます。']
     },
     {
@@ -1174,8 +1174,8 @@ h1{font-size:clamp(1.6rem,8vw,2.1rem);line-height:1.3;font-weight:800;letter-spa
       hint:'次の目撃情報が、掲示板に届いた。',
       board:true,
       mail:{
-        back:'yokoku_ura.png',
-        front:'yokoku_omote_01.png',
+        back:'img/cards/yokoku_ura.png',
+        front:'img/cards/yokoku_omote_01.png',
         text:['最初のカケラは、返してやろう。','だが、記憶の続きは、人の波の向こうにある。','(南の街へ)','怪盗S']
       }
     },
@@ -1247,10 +1247,10 @@ h1{font-size:clamp(1.6rem,8vw,2.1rem);line-height:1.3;font-weight:800;letter-spa
     ]
   };
 
-  var CHAR_SRC='kaitou.png';    // 怪盗Sのイラスト
-  var TRUE_SRC='shunichi.png';  // 正体(あなた)の画像。怪盗Sがきらりと光って、これに変わる
-  var PHOTO_SRC='ending.jpg';   // 最後に出す写真(なければ表示しない)
-  var FAVICON_SRC='favicon.png'; // タブのアイコン(なければ赤丸のSのまま)
+  var CHAR_SRC='img/chars/kaitou.png';    // 怪盗Sのイラスト
+  var TRUE_SRC='img/chars/shunichi.png';  // 正体(あなた)の画像。怪盗Sがきらりと光って、これに変わる
+  var PHOTO_SRC='img/site/ending.jpg';   // 最後に出す写真(なければ表示しない)
+  var FAVICON_SRC='img/site/favicon.png'; // タブのアイコン(なければ赤丸のSのまま)
 
   var BFAILS=['管理人: その名前では、ないようです。','管理人: もう一度、写真をよく見てもらえますか?','管理人: 名前が違うようです。'];
   var BFIND=['……そこには、いないようです。','管理人: もう少し、よく探してみてください。','管理人: 人の少ないところも、見てみましょう。'];

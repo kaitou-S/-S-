@@ -20,18 +20,18 @@
 <meta property="og:type" content="website">
 <meta property="og:title" content="怪盗Sと消えた記憶">
 <meta property="og:description" content="期間限定・参加無料。モニター当選者限定の、関西周遊型リアル謎解き。">
-<meta property="og:image" content="https://kaitou-scrap.com/ogp.png">
+<meta property="og:image" content="https://kaitou-scrap.com/img/site/ogp.png">
 <meta property="og:url" content="https://kaitou-scrap.com/">
 <meta name="twitter:card" content="summary_large_image">
 
-<!-- ファビコン: favicon.png があればそれを使い、なければ下の赤丸Sを使います(切り替えはスクリプト内) -->
+<!-- ファビコン: img/site/favicon.png があればそれを使い、なければ下の赤丸Sを使います(切り替えはスクリプト内) -->
 <link id="favicon" rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%23c23232'/%3E%3Ctext x='32' y='45' font-size='38' font-family='serif' font-weight='700' text-anchor='middle' fill='white'%3ES%3C/text%3E%3C/svg%3E">
-<link rel="apple-touch-icon" href="favicon.png">
+<link rel="apple-touch-icon" href="img/site/favicon.png">
 
 <!-- 大事な画像を、先に読み込んでおく(ファイルがなくても、動作には影響しません) -->
-<link rel="preload" as="image" href="kaitou.png">
-<link rel="preload" as="image" href="seal.png">
-<link rel="preload" as="image" href="card.png">
+<link rel="preload" as="image" href="img/chars/kaitou.png">
+<link rel="preload" as="image" href="img/chars/seal.png">
+<link rel="preload" as="image" href="img/cards/card.png">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -88,7 +88,7 @@ h1{font-size:clamp(1.5rem,7.6vw,2.2rem);line-height:1.3;font-weight:800;letter-s
 .seal-area::before{content:"";position:absolute;left:50%;top:46%;width:300px;height:220px;transform:translate(-50%,-50%);background:radial-gradient(ellipse,rgba(201,162,75,.22),transparent 68%);pointer-events:none;animation:glow 3.2s ease-in-out infinite}
 
 /* ===== 封筒ボタン =====
-   envelope.png があれば画像、なければCSSで描いた封筒を表示します */
+   img/site/envelope.png があれば画像、なければCSSで描いた封筒を表示します */
 .envelope{position:relative;display:block;width:240px;height:156px;margin:0 auto;padding:0;border:none;background:none;cursor:pointer;animation:float 3.6s ease-in-out infinite;-webkit-tap-highlight-color:transparent}
 .envelope.open,.envelope:hover{animation-play-state:paused}
 .envelope:focus-visible{outline:3px solid var(--gold-l);outline-offset:8px}
@@ -115,7 +115,7 @@ h1{font-size:clamp(1.5rem,7.6vw,2.2rem);line-height:1.3;font-weight:800;letter-s
 .env-wax::after{content:"";position:absolute;inset:4px;border-radius:50%;border:1.5px solid rgba(255,255,255,.28)}
 .envelope.open .env-wax{opacity:0;transform:scale(.6);animation:crack .5s ease both}
 
-/* 封蝋の画像(seal.png)があるとき: CSS封筒の上に画像の封蝋を重ねる */
+/* 封蝋の画像(img/chars/seal.png)があるとき: CSS封筒の上に画像の封蝋を重ねる */
 .env-wax.has-seal{width:64px;height:64px;margin:-32px 0 0 -32px;background:center/contain no-repeat;border:none;border-radius:0;box-shadow:none}
 .env-wax.has-seal::before,.env-wax.has-seal::after{display:none}
 /* 封蝋の画像の背景が白く四角に見える時は、次の行のコメントを外してください */
@@ -190,11 +190,11 @@ body.intro .kaito{animation-play-state:paused}
 @keyframes kaitoIn{from{opacity:0}to{opacity:1}}
 @keyframes kaitoBreath{0%,100%{transform:scaleY(1)}50%{transform:scaleY(1.05)}}
 
-/* プロローグの背景: 傾けた怪盗Sのエンブレム(card.png)をうっすら敷く */
+/* プロローグの背景: 傾けた怪盗Sのエンブレム(img/cards/card.png)をうっすら敷く */
 .prologue{position:relative;overflow:hidden;padding-bottom:64px}
 /* 上下の端をなだらかに背景色へ溶かす(境目をなくす) */
 .prologue::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,var(--bg) 0,transparent 14%,transparent 70%,var(--bg) 100%);pointer-events:none;z-index:0}
-.prologue::before{content:"";position:absolute;left:50%;top:62%;width:150%;aspect-ratio:1075/650;background:url(card.png) center/cover no-repeat;opacity:.4;transform:translate(-50%,-50%) rotate(-12deg);-webkit-mask-image:radial-gradient(ellipse 58% 58% at 50% 50%,#000 30%,transparent 100%);mask-image:radial-gradient(ellipse 58% 58% at 50% 50%,#000 30%,transparent 100%);pointer-events:none;z-index:0;animation:cardDrift 18s ease-in-out infinite alternate}
+.prologue::before{content:"";position:absolute;left:50%;top:62%;width:150%;aspect-ratio:1075/650;background:url(img/cards/card.png) center/cover no-repeat;opacity:.4;transform:translate(-50%,-50%) rotate(-12deg);-webkit-mask-image:radial-gradient(ellipse 58% 58% at 50% 50%,#000 30%,transparent 100%);mask-image:radial-gradient(ellipse 58% 58% at 50% 50%,#000 30%,transparent 100%);pointer-events:none;z-index:0;animation:cardDrift 18s ease-in-out infinite alternate}
 .prologue .st,.prologue .story-fig,.prologue .story-text{position:relative;z-index:1}
 @keyframes cardDrift{from{transform:translate(-50%,-50%) rotate(-13deg)}to{transform:translate(-50%,-50%) rotate(-10deg)}}
 
@@ -385,11 +385,11 @@ body.intro .hero .kicker,body.intro .hero h1,body.intro .hero .sub,body.intro .h
           <rect x="454" y="72" width="28" height="58"/>
         </g>
 
-        <!-- 怪盗S(kaitou.png)。左のビルの屋上、赤い月の前に立つ。ファイルがなければ何も表示されません -->
+        <!-- 怪盗S(img/chars/kaitou.png)。左のビルの屋上、赤い月の前に立つ。ファイルがなければ何も表示されません -->
         <filter id="rim" x="-30%" y="-30%" width="160%" height="160%">
           <feDropShadow dx="0" dy="0" stdDeviation="1" flood-color="#ecd9a0" flood-opacity=".75"/>
         </filter>
-        <image class="kaito" href="kaitou.png" x="26" y="39" width="30" height="30" preserveAspectRatio="xMidYMax meet" filter="url(#rim)"/>
+        <image class="kaito" href="img/chars/kaitou.png" x="26" y="39" width="30" height="30" preserveAspectRatio="xMidYMax meet" filter="url(#rim)"/>
 
         <!-- 手前のビル -->
         <g fill="#182136">
@@ -437,7 +437,7 @@ body.intro .hero .kicker,body.intro .hero h1,body.intro .hero .sub,body.intro .h
 
   <section class="prologue">
     <div class="st"><h2 class="serif">プロローグ</h2><span>PROLOGUE</span></div>
-    <!-- 怪盗Sが記憶を盗む画像(prologue.png)。ファイルがなければ表示されません -->
+    <!-- 怪盗Sが記憶を盗む画像(img/site/prologue.png)。ファイルがなければ表示されません -->
     <figure class="story-fig" id="story-fig" hidden>
       <img id="story-img" alt="記憶を盗む怪盗Sのイラスト">
     </figure>
@@ -615,11 +615,11 @@ body.intro .hero .kicker,body.intro .hero h1,body.intro .hero .sub,body.intro .h
 <script>
 (function(){
   // ===== 設定(画像ファイル名はここで変えられます) =====
-  var NOTICE_SRC='invitation.png';        // 予告状の画像
+  var NOTICE_SRC='img/cards/invitation.png';        // 予告状の画像
   var ENVELOPE_CLOSED_SRC='';             // 封筒まるごとの画像。使わないので空にしています
-  var ENVELOPE_OPEN_SRC='envelope-open.png'; // 封筒(開いた状態)。ENVELOPE_CLOSED_SRCが空なら使われません
-  var SEAL_SRC='seal.png';                // 封蝋の画像(CSS封筒の上に重ねる)
-  var FAVICON_SRC='favicon.png';          // ファビコン
+  var ENVELOPE_OPEN_SRC='img/site/envelope-open.png'; // 封筒(開いた状態)。ENVELOPE_CLOSED_SRCが空なら使われません
+  var SEAL_SRC='img/chars/seal.png';                // 封蝋の画像(CSS封筒の上に重ねる)
+  var FAVICON_SRC='img/site/favicon.png';          // ファビコン
   var END_DATE=new Date(2026,9,25,23,59,59); // 開催終了日(月は0始まり: 9=10月)
 
   // ===== 予告状の画像(読み込めたら文章版を隠して画像を表示) =====
@@ -659,7 +659,7 @@ body.intro .hero .kicker,body.intro .hero h1,body.intro .hero .sub,body.intro .h
   }
 
   // ===== プロローグの画像(ファイルがなければ表示しない) =====
-  var STORY_SRC='prologue.png';
+  var STORY_SRC='img/site/prologue.png';
   var storyFig=document.getElementById('story-fig');
   var storyImg=document.getElementById('story-img');
   if(STORY_SRC){
@@ -776,7 +776,7 @@ body.intro .hero .kicker,body.intro .hero h1,body.intro .hero .sub,body.intro .h
   var whisperEl=document.getElementById('whisper');
 
   // ===== 怪盗Sのカードのアイコン(画像があれば、「S」の丸のかわりに表示) =====
-  var MOON_ICON_SRC='kaitou.png';   // 好きな画像のファイル名に変えられます(背景が透過のPNGがおすすめ)
+  var MOON_ICON_SRC='img/chars/kaitou.png';   // 好きな画像のファイル名に変えられます(背景が透過のPNGがおすすめ)
   var moonSeal=document.getElementById('moonSeal');
   if(MOON_ICON_SRC){
     var mi=new Image();
@@ -858,7 +858,7 @@ body.intro .hero .kicker,body.intro .hero h1,body.intro .hero .sub,body.intro .h
 
   // ===== 掲示板で使う画像を、先に読み込んでおく(電波が弱い場所でも、すぐ表示できるように) =====
   // 掲示板(answer.html)で使う画像を、ここに書き足せます。ファイルがなくても、動作には影響しません。
-  var WARM=['saidaizi_01.png','saidaizi_02.png','yokoku_ura.png','yokoku_omote_01.png','card.png','kaitou.png'];
+  var WARM=['img/places/saidaizi_01.png','img/places/saidaizi_02.png','img/cards/yokoku_ura.png','img/cards/yokoku_omote_01.png','img/cards/card.png','img/chars/kaitou.png'];
   setTimeout(function(){WARM.forEach(function(s){var w=new Image();w.src=s;});},reduce?0:4000);
 
   // ===== スクロールでふわっと表示 =====
